@@ -7,6 +7,8 @@
 - **7. Séquence emails J-7/J-2/J-1**: planification dans une file (`email_queue`) + envoi immédiat J-7 + traitement des emails dus via `/api/cron/email-sequence`.
 - **8. Dashboard analytics**: dashboard connecté aux leads, subscribers et événements analytics (fallback mock si aucune donnée).
 - **9. Audioguide immersif**: langue FR/EN, narration/audio par locale, swipe gauche/droite, progression, map verrouillée.
+- **Conformité footer**: liens `Confidentialité`, `Cookies`, `Mentions légales` actifs avec pages dédiées (`/privacy`, `/cookies`, `/legal`).
+- **Section lieu**: bloc "OÙ NOUS TROUVER ?" restauré avec adresse, accès transport, contact.
 
 ## Ce qu'il reste pour achever le projet (Go-Live)
 

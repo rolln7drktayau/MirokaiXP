@@ -13,6 +13,9 @@ Plateforme conversion B2B/B2C + PWA visiteurs immersive pour la Mirokai Experien
 - Admin: `/admin`
 - Dashboard: `/dashboard`
 - Experience visiteurs: `/experience`
+- Privacy: `/privacy`
+- Cookies: `/cookies`
+- Legal: `/legal`
 
 ## Repository propre
 
@@ -82,3 +85,9 @@ Instructions detaillees:
 
 - Avancement fonctionnel restant: [README_RESTANT.md](README_RESTANT.md)
 - Setup Supabase: [supabase/README.md](supabase/README.md)
+
+## Etat UI actuel
+
+- Section "Ils nous font confiance" active sur la landing
+- Section "Ou nous trouver" restauree avec informations d'acces
+- Liens footer conformite actifs et relies a des pages dediees
