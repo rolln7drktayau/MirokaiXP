@@ -42,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" data-theme="nimira-dark">
+    <html lang="fr" data-theme="nimira-light">
       <body className={`${outfit.variable} ${spaceGrotesk.variable} bg-background text-foreground antialiased`}>
         {gtmId ? (
           <Script id="gtm-base" strategy="afterInteractive">

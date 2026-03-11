@@ -25,25 +25,18 @@ interface AppPreferencesContextValue {
 
 const AppPreferencesContext = createContext<AppPreferencesContextValue | null>(null);
 
-const isTheme = (value: string | null): value is AppTheme =>
-  value === "nimira-dark" || value === "nimira-light";
 const isLocale = (value: string | null): value is AppLocale => value === "fr" || value === "en";
 
 export function AppPreferencesProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<AppTheme>("nimira-dark");
+  const [theme, setThemeState] = useState<AppTheme>("nimira-light");
   const [locale, setLocaleState] = useState<AppLocale>("fr");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem(THEME_KEY);
     const savedLocale = window.localStorage.getItem(LOCALE_KEY);
 
-    if (isTheme(savedTheme)) {
-      setThemeState(savedTheme);
-    } else {
-      const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-      setThemeState(prefersLight ? "nimira-light" : "nimira-dark");
-    }
+    // Force light as the default visual baseline for every new load.
+    setThemeState("nimira-light");
 
     if (isLocale(savedLocale)) {
       setLocaleState(savedLocale);

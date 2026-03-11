@@ -16,6 +16,12 @@ interface HeroProps {
   onPrimaryCTA: () => void;
 }
 
+const scenarioNodePositions = [
+  { x: 16, y: 72 },
+  { x: 50, y: 22 },
+  { x: 84, y: 68 },
+] as const;
+
 const heroCopy = {
   fr: {
     label: "Mirokaï Experience 2026 • Paris",
@@ -27,9 +33,12 @@ const heroCopy = {
     memory: "Memory Nimira",
     liveTitle: "Mirokaï en situation réelle",
     activeScenario: "Scénario actif",
-    capsule: "Capsule interactive démontrant l'orchestration robotique en environnement réel.",
+    capsule: "Capsule interactive montrant la fluidité des interactions robot-humain en contexte réel.",
     stat1: "Interactions fluides",
     stat2: "Moments wow",
+    tagA: "Proximité vocale",
+    tagB: "Narration vivante",
+    scenarioHint: "Touchez une bulle pour changer de scénario",
     headlines: {
       solo: "Vivez l'aventure Mirokaï en solo",
       team: "Faites vivre une sortie d'équipe mémorable",
@@ -60,9 +69,12 @@ const heroCopy = {
     memory: "Nimira Memory",
     liveTitle: "Mirokaï in real situations",
     activeScenario: "Active scenario",
-    capsule: "Interactive capsule showing robotic orchestration in real environments.",
+    capsule: "Interactive capsule showing smooth human-robot orchestration in real contexts.",
     stat1: "Smooth interactions",
     stat2: "Wow moments",
+    tagA: "Voice proximity",
+    tagB: "Live storytelling",
+    scenarioHint: "Tap a bubble to switch scenario",
     headlines: {
       solo: "Experience Mirokaï solo",
       team: "Create a memorable team outing",
@@ -110,9 +122,9 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
   return (
     <section className="section-wrap relative overflow-hidden pb-16 pt-10 sm:pt-14">
-      <div className="absolute inset-x-0 top-0 -z-10 h-80 bg-[radial-gradient(circle_at_top,rgba(83,179,255,0.34),transparent_60%)]" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(circle_at_top,rgba(123,47,255,0.26),transparent_62%)]" />
 
-      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
@@ -124,13 +136,9 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             {t.label}
           </p>
 
-          <h1 className="text-4xl leading-tight sm:text-5xl md:text-6xl">
-            {t.headlines[profile]}
-          </h1>
+          <h1 className="text-4xl leading-tight sm:text-5xl md:text-6xl">{t.headlines[profile]}</h1>
 
-          <p className="max-w-xl text-base text-white/80 sm:text-lg">
-            {t.description}
-          </p>
+          <p className="max-w-xl text-base text-white/80 sm:text-lg">{t.description}</p>
 
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={onPrimaryCTA} className="cta-primary">
@@ -165,18 +173,20 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeInOut", delay: 0.1 }}
-          className="glass-panel relative overflow-hidden rounded-3xl p-5 sm:p-6"
+          className="glass-panel relative overflow-hidden rounded-[30px] p-4 sm:p-5"
         >
           <motion.div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(245,200,66,0.22),transparent_30%),radial-gradient(circle_at_20%_80%,rgba(83,179,255,0.2),transparent_35%)]"
-            animate={prefersReducedMotion ? undefined : { scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85] }}
-            transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,209,102,0.2),transparent_33%),radial-gradient(circle_at_18%_82%,rgba(0,245,196,0.18),transparent_37%)]"
+            animate={prefersReducedMotion ? undefined : { scale: [1, 1.02, 1], opacity: [0.9, 1, 0.9] }}
+            transition={{ duration: 6.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
+
           <div className="relative space-y-4">
             <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
-            <div className="relative h-64 overflow-hidden rounded-2xl border border-white/15 bg-[linear-gradient(160deg,#15113a_0%,#0c0b1f_60%,#180e33_100%)] p-4 sm:h-72">
+
+            <div className="relative overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(165deg,#1a1647_0%,#111033_56%,#0d0b26_100%)] p-3 sm:p-4">
               <video
-                className="absolute inset-0 h-full w-full object-cover opacity-30"
+                className="absolute inset-0 h-full w-full object-cover opacity-24"
                 autoPlay
                 muted
                 loop
@@ -185,99 +195,112 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               >
                 <source src={heroVideoUrl} type="video/mp4" />
               </video>
-              <motion.div
-                className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-[#F5C842]/25 blur-2xl"
-                animate={prefersReducedMotion ? undefined : { x: [0, -6, 0], y: [0, 8, 0] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
-              <motion.div
-                className="absolute -left-8 bottom-8 h-28 w-28 rounded-full bg-[#53B3FF]/25 blur-2xl"
-                animate={prefersReducedMotion ? undefined : { x: [0, 6, 0], y: [0, -10, 0] }}
-                transition={{ duration: 4.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
-              <div className="pointer-events-none absolute inset-0">
-                {[0, 1, 2, 3, 4].map((dot) => (
-                  <motion.span
-                    key={dot}
-                    className="absolute h-1.5 w-1.5 rounded-full bg-[#F5C842]/75"
-                    style={{
-                      left: `${14 + dot * 18}%`,
-                      top: `${18 + (dot % 2) * 30}%`,
-                    }}
-                    animate={
-                      prefersReducedMotion
-                        ? undefined
-                        : {
-                            opacity: [0.15, 1, 0.15],
-                            y: [0, -8, 0],
-                            scale: [0.85, 1.1, 0.85],
-                          }
-                    }
-                    transition={{
-                      duration: 2.6 + dot * 0.5,
-                      repeat: Number.POSITIVE_INFINITY,
-                      ease: "easeInOut",
-                    }}
-                  />
-                ))}
-              </div>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,24,0.36),rgba(7,8,24,0.86))]" />
 
-              <div className="relative flex h-full flex-col justify-between">
-                <motion.div
-                  key={activeScenario}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="rounded-2xl border border-white/15 bg-[#0b0a20]/70 p-3"
-                >
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#53B3FF]">
-                    {t.activeScenario} • {scenarios[activeScenario].name}
-                  </p>
-                  <p className="mt-2 max-w-xs text-sm text-white/80">{scenarios[activeScenario].description}</p>
-                </motion.div>
+              <div className="relative z-10 flex min-h-[340px] flex-col">
+                <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+                  <motion.div
+                    key={activeScenario}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="rounded-2xl border border-white/15 bg-[#09071f]/70 p-3.5"
+                  >
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#53B3FF]">
+                      {t.activeScenario} • {scenarios[activeScenario].name}
+                    </p>
+                    <p className="mt-2 text-sm text-white/85">{scenarios[activeScenario].description}</p>
+                  </motion.div>
 
-                <div className="relative mx-auto mt-3 h-24 w-24">
-                  <motion.div
-                    className="absolute inset-0 rounded-full border border-[#53B3FF]/45"
-                    animate={prefersReducedMotion ? undefined : { rotate: 360 }}
-                    transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute inset-2 rounded-full border border-[#F5C842]/45"
-                    animate={prefersReducedMotion ? undefined : { rotate: -360 }}
-                    transition={{ duration: 9, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute inset-5 rounded-full bg-[radial-gradient(circle,#53B3FF_0%,#1f1b49_55%,#100e2a_100%)]"
-                    animate={prefersReducedMotion ? undefined : { scale: [1, 1.05, 1] }}
-                    transition={{ duration: 2.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                  />
+                  <div className="flex gap-2 sm:flex-col">
+                    <span className="rounded-full border border-[#00F5C4]/45 bg-[#00F5C4]/12 px-3 py-1.5 text-[11px] text-[#00F5C4]">
+                      {t.tagA}
+                    </span>
+                    <span className="rounded-full border border-[#FFD166]/45 bg-[#FFD166]/12 px-3 py-1.5 text-[11px] text-[#FFD166]">
+                      {t.tagB}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="relative mt-4 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#09081d]/55">
+                  <svg
+                    className="absolute inset-0 h-full w-full opacity-45"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                  >
+                    {scenarioNodePositions.map((node, index) => (
+                      <line
+                        key={`${node.x}-${node.y}-${index}`}
+                        x1="50"
+                        y1="52"
+                        x2={node.x}
+                        y2={node.y}
+                        stroke={index === activeScenario ? "#FFD166" : "#53B3FF"}
+                        strokeWidth="0.35"
+                        strokeDasharray="1.1 1.2"
+                        opacity={index === activeScenario ? 0.95 : 0.4}
+                      />
+                    ))}
+                  </svg>
+
+                  <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2">
+                    <motion.div
+                      className="absolute inset-0 rounded-full border border-[#53B3FF]/55"
+                      animate={prefersReducedMotion ? undefined : { rotate: 360 }}
+                      transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                    />
+                    <motion.div
+                      className="absolute inset-2 rounded-full border border-[#FFD166]/55"
+                      animate={prefersReducedMotion ? undefined : { rotate: -360 }}
+                      transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                    />
+                    <motion.div
+                      className="absolute inset-5 rounded-full bg-[radial-gradient(circle,#8fd1ff_0%,#2a2f76_45%,#17163d_100%)]"
+                      animate={prefersReducedMotion ? undefined : { scale: [1, 1.08, 1] }}
+                      transition={{ duration: 2.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                    />
+                  </div>
+
+                  {scenarios.map((item, index) => {
+                    const position = scenarioNodePositions[index % scenarioNodePositions.length];
+                    const isActive = index === activeScenario;
+                    return (
+                      <motion.button
+                        key={item.name}
+                        type="button"
+                        onClick={() => setActiveScenario(index)}
+                        className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-3 py-1.5 text-xs transition ${
+                          isActive
+                            ? "border-[#FFD166]/75 bg-[#FFD166]/20 text-[#FFD166]"
+                            : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
+                        }`}
+                        style={{ left: `${position.x}%`, top: `${position.y}%` }}
+                        animate={
+                          prefersReducedMotion
+                            ? undefined
+                            : {
+                                y: [0, -4, 0],
+                                scale: isActive ? [1, 1.08, 1] : [1, 1.04, 1],
+                              }
+                        }
+                        transition={{
+                          duration: 2.8 + index * 0.45,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        {item.name}
+                      </motion.button>
+                    );
+                  })}
                 </div>
 
                 <div className="mt-3 space-y-2">
-                  <div className="grid grid-cols-3 gap-2">
-                    {scenarios.map((item, index) => {
-                      const isActive = activeScenario === index;
-                      return (
-                        <button
-                          key={item.name}
-                          type="button"
-                          onClick={() => setActiveScenario(index)}
-                          className={`rounded-full border px-2 py-1 text-center text-xs transition ${
-                            isActive
-                              ? "border-[#F5C842]/70 bg-[#F5C842]/15 text-[#F5C842]"
-                              : "border-white/20 bg-white/5 text-white/85 hover:bg-white/10"
-                          }`}
-                        >
-                          {item.name}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-white/65">{t.scenarioHint}</p>
                   <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                     <motion.div
                       key={activeScenario}
-                      className="h-full bg-gradient-to-r from-[#53B3FF] via-[#8c6cff] to-[#F5C842]"
+                      className="h-full bg-gradient-to-r from-[#53B3FF] via-[#00F5C4] to-[#FFD166]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: 4.4, ease: "linear" }}
@@ -286,9 +309,8 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                 </div>
               </div>
             </div>
-            <p className="text-xs text-white/65">
-              {t.capsule}
-            </p>
+
+            <p className="text-xs text-white/70">{t.capsule}</p>
           </div>
         </motion.div>
       </div>
