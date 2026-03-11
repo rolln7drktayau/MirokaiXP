@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
@@ -37,7 +38,11 @@ export function LocationSection() {
       email: "📧 bonjour@enchanted-tools.com",
       phone: "📞 +33 1 84 80 00 00",
       copyright: "© 2026 Enchanted Tools Paris. Tous droits réservés.",
-      footerLinks: ["Confidentialité", "Mentions légales", "Cookies"],
+      footerLinks: [
+        { label: "Confidentialité", href: "/privacy" },
+        { label: "Mentions légales", href: "/legal" },
+        { label: "Cookies", href: "/cookies" },
+      ],
     },
     en: {
       title: "WHERE TO FIND US?",
@@ -65,7 +70,11 @@ export function LocationSection() {
       email: "📧 bonjour@enchanted-tools.com",
       phone: "📞 +33 1 84 80 00 00",
       copyright: "© 2026 Enchanted Tools Paris. All rights reserved.",
-      footerLinks: ["Privacy", "Legal", "Cookies"],
+      footerLinks: [
+        { label: "Privacy", href: "/privacy" },
+        { label: "Legal", href: "/legal" },
+        { label: "Cookies", href: "/cookies" },
+      ],
     },
   } as const;
 
@@ -164,12 +173,13 @@ export function LocationSection() {
             <p>{t.copyright}</p>
             <div className="flex flex-wrap gap-2 sm:justify-end">
               {t.footerLinks.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs"
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs transition hover:bg-white/10"
                 >
-                  {item}
-                </span>
+                  {item.label}
+                </Link>
               ))}
             </div>
           </div>
