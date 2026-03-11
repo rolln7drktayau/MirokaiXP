@@ -3,6 +3,8 @@
 import { Bot, Cpu, Heart, Orbit, Radio, Sparkles, RotateCcw } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
+
 type CardKey = "spark" | "bot" | "cpu" | "heart" | "orbit" | "radio";
 
 type MemoryCard = {
@@ -39,6 +41,7 @@ const createDeck = () => {
 };
 
 export function NimiraMemory() {
+  const { locale } = useAppPreferences();
   const [deck, setDeck] = useState<MemoryCard[]>(() => createDeck());
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matchedKeys, setMatchedKeys] = useState<CardKey[]>([]);
@@ -47,6 +50,31 @@ export function NimiraMemory() {
 
   const allDone = matchedKeys.length === cardKeys.length;
   const score = useMemo(() => Math.max(100 - moves * 4, 20), [moves]);
+  const copy = {
+    fr: {
+      eyebrow: "Memory Nimira",
+      title: "Retrouvez les paires de modules",
+      intro: "Associez les symboles Nimira pour débloquer un badge de précision.",
+      replay: "Rejouer",
+      moves: "Coups",
+      pairs: "Paires trouvées",
+      score: "Score",
+      done: "Bravo, vous avez restauré les signaux de Nimira.",
+      hidden: "NIM",
+    },
+    en: {
+      eyebrow: "Nimira Memory",
+      title: "Find matching module pairs",
+      intro: "Match Nimira symbols to unlock a precision badge.",
+      replay: "Replay",
+      moves: "Moves",
+      pairs: "Pairs found",
+      score: "Score",
+      done: "Great, you restored Nimira signals.",
+      hidden: "NIM",
+    },
+  } as const;
+  const t = copy[locale];
 
   const restart = () => {
     setDeck(createDeck());
@@ -95,15 +123,15 @@ export function NimiraMemory() {
     <section className="rounded-2xl border border-white/15 bg-white/5 p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-[#00F5C4]">Memory Nimira</p>
-          <h2 className="mt-1 text-2xl">Retrouvez les paires de modules</h2>
+          <p className="text-xs uppercase tracking-[0.16em] text-[#00F5C4]">{t.eyebrow}</p>
+          <h2 className="mt-1 text-2xl">{t.title}</h2>
           <p className="mt-1 text-sm text-white/75">
-            Associez les symboles Nimira pour débloquer un badge de précision.
+            {t.intro}
           </p>
         </div>
         <button type="button" onClick={restart} className="cta-secondary inline-flex items-center gap-2">
           <RotateCcw size={16} />
-          Rejouer
+          {t.replay}
         </button>
       </div>
 
@@ -124,7 +152,7 @@ export function NimiraMemory() {
               }`}
             >
               <span className="inline-flex h-full w-full items-center justify-center">
-                {isVisible ? <Icon size={24} /> : <span className="text-xs tracking-[0.18em]">NIM</span>}
+                {isVisible ? <Icon size={24} /> : <span className="text-xs tracking-[0.18em]">{t.hidden}</span>}
               </span>
             </button>
           );
@@ -132,14 +160,14 @@ export function NimiraMemory() {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm text-white/80">
-        <span>Coups: {moves}</span>
-        <span>Paires trouvées: {matchedKeys.length} / {cardKeys.length}</span>
-        <span>Score: {score}</span>
+        <span>{t.moves}: {moves}</span>
+        <span>{t.pairs}: {matchedKeys.length} / {cardKeys.length}</span>
+        <span>{t.score}: {score}</span>
       </div>
 
       {allDone ? (
         <p className="mt-3 rounded-xl border border-[#FFD166]/40 bg-[#FFD166]/10 p-3 text-sm text-[#FFD166]">
-          Bravo, vous avez restauré les signaux de Nimira.
+          {t.done}
         </p>
       ) : null}
     </section>

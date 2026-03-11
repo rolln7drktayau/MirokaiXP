@@ -2,12 +2,21 @@
 
 import { motion } from "framer-motion";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
+
 interface MirokaiAvatarProps {
   guide: "miroki" | "miroka";
   prompt: string;
 }
 
 export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
+  const { locale } = useAppPreferences();
+  const copy = {
+    fr: { active: "Guide actif" },
+    en: { active: "Active guide" },
+  } as const;
+  const t = copy[locale];
+
   return (
     <div className="glass-panel rounded-2xl p-4">
       <div className="flex items-center gap-3">
@@ -19,7 +28,7 @@ export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
           <span className="text-xs uppercase tracking-[0.14em]">{guide}</span>
         </motion.div>
         <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-white/65">Guide actif</p>
+          <p className="text-xs uppercase tracking-[0.16em] text-white/65">{t.active}</p>
           <p className="font-medium">{guide === "miroki" ? "Miroki" : "Miroka"}</p>
         </div>
       </div>

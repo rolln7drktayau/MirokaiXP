@@ -2,6 +2,10 @@ import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 
+import { AppPreferencesProvider } from "@/components/providers/AppPreferencesProvider";
+import { MirokaiFloatingIcons } from "@/components/ui/MirokaiFloatingIcons";
+import { ThemeLangSwitcher } from "@/components/ui/ThemeLangSwitcher";
+
 import "./globals.css";
 
 const outfit = Outfit({
@@ -38,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" data-theme="nimira-dark">
       <body className={`${outfit.variable} ${spaceGrotesk.variable} bg-background text-foreground antialiased`}>
         {gtmId ? (
           <Script id="gtm-base" strategy="afterInteractive">
@@ -84,7 +88,11 @@ export default function RootLayout({
           </Script>
         ) : null}
 
-        {children}
+        <AppPreferencesProvider>
+          <ThemeLangSwitcher />
+          <MirokaiFloatingIcons />
+          {children}
+        </AppPreferencesProvider>
       </body>
     </html>
   );

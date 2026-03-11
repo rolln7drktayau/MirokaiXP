@@ -1,20 +1,36 @@
+"use client";
+
 import Link from "next/link";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import { NimiraMemory } from "@/components/game/NimiraMemory";
 import { NavBackHome } from "@/components/ui/NavBackHome";
 
 export default function MemoryGamePage() {
+  const { locale } = useAppPreferences();
+  const copy = {
+    fr: {
+      quiz: "Aller au Quiz Mission Nimira",
+      experience: "Retourner à l'expérience",
+    },
+    en: {
+      quiz: "Go to Mission Nimira quiz",
+      experience: "Back to experience",
+    },
+  } as const;
+  const t = copy[locale];
+
   return (
     <main className="section-wrap py-8">
       <div className="mx-auto max-w-3xl space-y-4">
-        <NavBackHome backLabel="Page précédente" homeLabel="Accueil" />
+        <NavBackHome />
         <NimiraMemory />
         <div className="flex flex-wrap gap-2">
           <Link href="/game" className="cta-secondary">
-            Aller au Quiz Mission Nimira
+            {t.quiz}
           </Link>
           <Link href="/experience" className="cta-primary">
-            Retourner à l&apos;expérience
+            {t.experience}
           </Link>
         </div>
       </div>

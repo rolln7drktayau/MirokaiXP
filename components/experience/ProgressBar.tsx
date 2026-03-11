@@ -1,18 +1,25 @@
 "use client";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
+
 interface ProgressBarProps {
   completed: number;
   total: number;
 }
 
 export function ProgressBar({ completed, total }: ProgressBarProps) {
+  const { locale } = useAppPreferences();
   const safeTotal = Math.max(total, 1);
   const ratio = Math.round((completed / safeTotal) * 100);
+  const copy = {
+    fr: "Progression visite",
+    en: "Tour progress",
+  } as const;
 
   return (
     <div className="rounded-2xl border border-white/15 bg-white/5 p-3">
       <div className="flex items-center justify-between text-xs uppercase tracking-[0.12em] text-white/65">
-        <span>Progression visite</span>
+        <span>{copy[locale]}</span>
         <span>{ratio}%</span>
       </div>
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/10">

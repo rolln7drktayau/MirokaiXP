@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import { useModules } from "@/hooks/useModules";
 import { usePWA } from "@/hooks/usePWA";
 import type { Module } from "@/types/module";
@@ -18,12 +19,44 @@ import { ProgressBar } from "./ProgressBar";
 const COMPLETED_STORAGE_KEY = "mirokai_completed_modules";
 
 export function AudioguideShell() {
+  const { locale } = useAppPreferences();
   const { modules, loading, error, refresh } = useModules();
   const { canInstall, isOnline, promptInstall } = usePWA();
 
   const [selectedGuide, setSelectedGuide] = useState<"miroki" | "miroka">("miroki");
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
   const [completedModules, setCompletedModules] = useState<string[]>([]);
+
+  const copy = {
+    fr: {
+      loading: "Chargement de l'expérience immersive...",
+      eyebrow: "Mirokaï Experience • PWA visiteurs",
+      title: "Explorez l'espace Nimira",
+      online: "En ligne",
+      offline: "Hors ligne",
+      install: "Installer la PWA",
+      refresh: "Rafraîchir modules",
+      complete: "Marquer comme complété",
+      detail: "Voir détail module",
+      selectPrompt: "Sélectionnez un module sur la carte pour démarrer.",
+      errorFallback: "Erreur de chargement.",
+    },
+    en: {
+      loading: "Loading immersive experience...",
+      eyebrow: "Mirokaï Experience • Visitor PWA",
+      title: "Explore the Nimira space",
+      online: "Online",
+      offline: "Offline",
+      install: "Install PWA",
+      refresh: "Refresh modules",
+      complete: "Mark as completed",
+      detail: "Open module details",
+      selectPrompt: "Select a module on the map to start.",
+      errorFallback: "Loading error.",
+    },
+  } as const;
+
+  const t = copy[locale];
 
   useEffect(() => {
     const stored = window.localStorage.getItem(COMPLETED_STORAGE_KEY);
@@ -65,20 +98,20 @@ export function AudioguideShell() {
   if (loading) {
     return (
       <main className="section-wrap py-8">
-        <div className="glass-panel rounded-3xl p-6">Chargement de l&apos;expérience immersive...</div>
+        <div className="glass-panel rounded-3xl p-6">{t.loading}</div>
       </main>
     );
   }
 
   return (
     <main className="section-wrap py-8 space-y-4">
-      <NavBackHome backLabel="Page précédente" homeLabel="Accueil" />
+      <NavBackHome />
 
       <header className="glass-panel rounded-3xl p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.16em] text-white/70">Mirokaï Experience • PWA visiteurs</p>
-            <h1 className="mt-1 text-2xl sm:text-3xl">Explorez l&apos;espace Nimira</h1>
+            <p className="text-xs uppercase tracking-[0.16em] text-white/70">{t.eyebrow}</p>
+            <h1 className="mt-1 text-2xl sm:text-3xl">{t.title}</h1>
           </div>
           <div className="flex gap-2">
             <button
@@ -112,15 +145,15 @@ export function AudioguideShell() {
               isOnline ? "border-[#06D6A0]/50 bg-[#06D6A0]/15 text-[#06D6A0]" : "border-[#FFD166]/50 bg-[#FFD166]/15 text-[#FFD166]"
             }`}
           >
-            {isOnline ? "En ligne" : "Hors ligne"}
+            {isOnline ? t.online : t.offline}
           </span>
           {canInstall ? (
             <button type="button" onClick={() => void promptInstall()} className="cta-secondary">
-              Installer la PWA
+              {t.install}
             </button>
           ) : null}
           <button type="button" onClick={() => void refresh()} className="cta-secondary">
-            Rafraîchir modules
+            {t.refresh}
           </button>
         </div>
       </header>
@@ -147,16 +180,16 @@ export function AudioguideShell() {
 
             <div className="flex flex-wrap gap-2">
               <button type="button" onClick={completeCurrentModule} className="cta-primary">
-                Marquer comme complété
+                {t.complete}
               </button>
               <Link href={`/experience/${activeModule.id}`} className="cta-secondary">
-                Voir détail module
+                {t.detail}
               </Link>
             </div>
           </section>
         ) : (
           <section className="glass-panel rounded-3xl p-5">
-            <p>Sélectionnez un module sur la carte pour démarrer.</p>
+            <p>{t.selectPrompt}</p>
           </section>
         )}
       </div>
@@ -173,7 +206,7 @@ export function AudioguideShell() {
       </section>
 
       {error ? (
-        <p className="rounded-xl border border-red-300/35 bg-red-500/10 p-3 text-sm text-red-200">{error}</p>
+        <p className="rounded-xl border border-red-300/35 bg-red-500/10 p-3 text-sm text-red-200">{error || t.errorFallback}</p>
       ) : null}
     </main>
   );

@@ -1,9 +1,11 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { Bot, Sparkles, WandSparkles } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { VisitorProfile } from "@/types/profile";
 
 import { SlotCounter } from "./SlotCounter";
@@ -14,33 +16,85 @@ interface HeroProps {
   onPrimaryCTA: () => void;
 }
 
-const profileHeadline: Record<VisitorProfile, string> = {
-  solo: "Vivez l'aventure Mirokaï en solo",
-  team: "Faites vivre une sortie d'équipe mémorable",
-  b2b: "Découvrez comment Mirokaï peut transformer votre entreprise",
-};
-
-const scenarios = [
-  {
-    name: "Accueil",
-    description: "Orientation proactive, prise de parole naturelle et réduction de l'attente perçue.",
+const heroCopy = {
+  fr: {
+    label: "Mirokaï Experience 2026 • Paris",
+    description:
+      "Venez vivre une expérience immersive où robotique sociale, IA émotionnelle et narration Nimira convergent pour créer un moment à fort impact humain.",
+    reserve: "Réserver un créneau",
+    pwa: "Lancer la visite PWA",
+    quiz: "Quiz Nimira",
+    memory: "Memory Nimira",
+    liveTitle: "Mirokaï en situation réelle",
+    activeScenario: "Scénario actif",
+    capsule: "Capsule interactive démontrant l'orchestration robotique en environnement réel.",
+    stat1: "Interactions fluides",
+    stat2: "Moments wow",
+    headlines: {
+      solo: "Vivez l'aventure Mirokaï en solo",
+      team: "Faites vivre une sortie d'équipe mémorable",
+      b2b: "Découvrez comment Mirokaï peut transformer votre entreprise",
+    } as Record<VisitorProfile, string>,
+    scenarios: [
+      {
+        name: "Accueil",
+        description: "Orientation proactive, prise de parole naturelle et réduction de l'attente perçue.",
+      },
+      {
+        name: "Onboarding",
+        description: "Parcours guidé des nouveaux arrivants avec narration contextuelle et réponses dynamiques.",
+      },
+      {
+        name: "Retail",
+        description: "Médiation produit, accompagnement client et collecte de signaux d'intérêt en temps réel.",
+      },
+    ],
   },
-  {
-    name: "Onboarding",
-    description: "Parcours guidé des nouveaux arrivants avec narration contextuelle et réponses dynamiques.",
+  en: {
+    label: "Mirokaï Experience 2026 • Paris",
+    description:
+      "Live an immersive journey where social robotics, emotional AI, and Nimira storytelling create a memorable human-first experience.",
+    reserve: "Book a slot",
+    pwa: "Launch PWA tour",
+    quiz: "Nimira Quiz",
+    memory: "Nimira Memory",
+    liveTitle: "Mirokaï in real situations",
+    activeScenario: "Active scenario",
+    capsule: "Interactive capsule showing robotic orchestration in real environments.",
+    stat1: "Smooth interactions",
+    stat2: "Wow moments",
+    headlines: {
+      solo: "Experience Mirokaï solo",
+      team: "Create a memorable team outing",
+      b2b: "See how Mirokaï can transform your business",
+    } as Record<VisitorProfile, string>,
+    scenarios: [
+      {
+        name: "Front desk",
+        description: "Proactive orientation, natural conversation, and lower perceived waiting time.",
+      },
+      {
+        name: "Onboarding",
+        description: "Guided newcomer journey with contextual storytelling and dynamic answers.",
+      },
+      {
+        name: "Retail",
+        description: "Product mediation, customer support, and real-time intent signals.",
+      },
+    ],
   },
-  {
-    name: "Retail",
-    description: "Médiation produit, accompagnement client et collecte de signaux d'intérêt en temps réel.",
-  },
-] as const;
+} as const;
 
 const heroVideoUrl =
   process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/media/video/mirokai-hero-loop.mp4";
 
 export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
+  const { locale } = useAppPreferences();
   const [activeScenario, setActiveScenario] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+  const t = heroCopy[locale];
+  const scenarios = t.scenarios;
+  const scenarioCount = scenarios.length;
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -48,11 +102,11 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
     }
 
     const timer = window.setInterval(() => {
-      setActiveScenario((current) => (current + 1) % scenarios.length);
+      setActiveScenario((current) => (current + 1) % scenarioCount);
     }, 4700);
 
     return () => window.clearInterval(timer);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, scenarioCount]);
 
   return (
     <section className="section-wrap relative overflow-hidden pb-16 pt-10 sm:pt-14">
@@ -63,37 +117,48 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeInOut" }}
-          className="space-y-6"
+          className="section-shell space-y-6"
         >
-          <p className="inline-flex rounded-full border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/75">
-            Mirokaï Experience 2026 • Paris
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/75">
+            <Sparkles size={12} className="text-[#FFD166]" />
+            {t.label}
           </p>
 
           <h1 className="text-4xl leading-tight sm:text-5xl md:text-6xl">
-            {profileHeadline[profile]}
+            {t.headlines[profile]}
           </h1>
 
           <p className="max-w-xl text-base text-white/80 sm:text-lg">
-            Venez vivre une expérience immersive où robotique sociale, IA émotionnelle et narration Nimira
-            convergent pour créer un moment à fort impact humain.
+            {t.description}
           </p>
 
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={onPrimaryCTA} className="cta-primary">
-              Réserver un créneau
+              <WandSparkles size={16} />
+              {t.reserve}
             </button>
             <Link href="/experience" className="cta-secondary">
-              Lancer la visite PWA
+              {t.pwa}
             </Link>
             <Link href="/game" className="cta-secondary">
-              Quiz Nimira
+              {t.quiz}
             </Link>
             <Link href="/game/memory" className="cta-secondary">
-              Memory Nimira
+              {t.memory}
             </Link>
           </div>
 
-          <SlotCounter remaining={remainingSlots} />
+          <div className="grid gap-3 sm:grid-cols-[1fr_1fr]">
+            <SlotCounter remaining={remainingSlots} />
+            <div className="glass-panel rounded-2xl p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs uppercase tracking-[0.16em] text-white/70">{t.stat1}</span>
+                <Bot size={16} className="text-[#00F5C4] nimira-pulse" />
+              </div>
+              <p className="mt-2 text-2xl font-semibold text-[#00F5C4]">98%</p>
+              <p className="mt-2 text-xs text-white/70">{t.stat2}: 4.9 / 5</p>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
@@ -108,7 +173,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
           <div className="relative space-y-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/70">Mirokaï en situation réelle</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
             <div className="relative h-64 overflow-hidden rounded-2xl border border-white/15 bg-[linear-gradient(160deg,#15113a_0%,#0c0b1f_60%,#180e33_100%)] p-4 sm:h-72">
               <video
                 className="absolute inset-0 h-full w-full object-cover opacity-30"
@@ -166,7 +231,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                   className="rounded-2xl border border-white/15 bg-[#0b0a20]/70 p-3"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-[#53B3FF]">
-                    Scénario actif • {scenarios[activeScenario].name}
+                    {t.activeScenario} • {scenarios[activeScenario].name}
                   </p>
                   <p className="mt-2 max-w-xs text-sm text-white/80">{scenarios[activeScenario].description}</p>
                 </motion.div>
@@ -222,7 +287,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               </div>
             </div>
             <p className="text-xs text-white/65">
-              Capsule interactive démontrant l&apos;orchestration robotique en environnement réel.
+              {t.capsule}
             </p>
           </div>
         </motion.div>

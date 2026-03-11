@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { trackEvent } from "@/lib/analytics";
 import type { VisitorProfile } from "@/types/profile";
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
 import { useExitIntent } from "@/hooks/useExitIntent";
 
@@ -12,10 +13,38 @@ interface ExitPopupProps {
 }
 
 export function ExitPopup({ profile }: ExitPopupProps) {
+  const { locale } = useAppPreferences();
   const { isTriggered, dismiss } = useExitIntent(true);
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(true);
   const [status, setStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+
+  const copy = {
+    fr: {
+      title: "Avant de partir...",
+      intro: "Recevez nos cas d'usage, actualités robotique et contenus Nimira.",
+      placeholder: "votre@email.com",
+      consent: "J'accepte de recevoir les emails de préparation et d'actualités.",
+      send: "Recevoir les infos",
+      sending: "Envoi...",
+      close: "Fermer",
+      success: "Inscription confirmée.",
+      error: "Erreur, réessayez.",
+    },
+    en: {
+      title: "Before you leave...",
+      intro: "Get our use cases, robotics updates, and Nimira content.",
+      placeholder: "your@email.com",
+      consent: "I agree to receive preparation and update emails.",
+      send: "Get updates",
+      sending: "Sending...",
+      close: "Close",
+      success: "Subscription confirmed.",
+      error: "Error, please try again.",
+    },
+  } as const;
+
+  const t = copy[locale];
 
   if (!isTriggered) {
     return null;
@@ -52,9 +81,9 @@ export function ExitPopup({ profile }: ExitPopupProps) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4">
       <div className="glass-panel w-full max-w-md rounded-3xl p-5">
-        <h3 className="text-xl">Avant de partir...</h3>
+        <h3 className="text-xl">{t.title}</h3>
         <p className="mt-2 text-sm text-white/75">
-          Recevez nos cas d&apos;usage, actualités robotique et contenus Nimira.
+          {t.intro}
         </p>
 
         <form className="mt-4 space-y-3" onSubmit={onSubmit}>
@@ -63,7 +92,7 @@ export function ExitPopup({ profile }: ExitPopupProps) {
             required
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="votre@email.com"
+            placeholder={t.placeholder}
             className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#53B3FF]"
           />
           <label className="flex items-center gap-2 text-xs text-white/80">
@@ -73,7 +102,7 @@ export function ExitPopup({ profile }: ExitPopupProps) {
               onChange={(event) => setConsent(event.target.checked)}
               className="h-4 w-4 rounded border-white/40 bg-transparent"
             />
-            J&apos;accepte de recevoir les emails de préparation et d&apos;actualités.
+            {t.consent}
           </label>
           <div className="flex gap-2">
             <button
@@ -81,14 +110,14 @@ export function ExitPopup({ profile }: ExitPopupProps) {
               disabled={!consent || status === "saving"}
               className="cta-primary disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {status === "saving" ? "Envoi..." : "Recevoir les infos"}
+              {status === "saving" ? t.sending : t.send}
             </button>
             <button type="button" onClick={dismiss} className="cta-secondary">
-              Fermer
+              {t.close}
             </button>
           </div>
-          {status === "success" ? <p className="text-xs text-green-300">Inscription confirmée.</p> : null}
-          {status === "error" ? <p className="text-xs text-red-300">Erreur, réessayez.</p> : null}
+          {status === "success" ? <p className="text-xs text-green-300">{t.success}</p> : null}
+          {status === "error" ? <p className="text-xs text-red-300">{t.error}</p> : null}
         </form>
       </div>
     </div>

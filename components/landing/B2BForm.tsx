@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { trackEvent } from "@/lib/analytics";
 import { b2bFormSchema } from "@/lib/validators";
 import type { B2BFormData } from "@/types/profile";
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
 import { useUTM } from "@/hooks/useUTM";
 
@@ -17,10 +18,50 @@ interface B2BFormProps {
 const companySizes = ["1-10", "11-50", "51-200", "201-500", "500+"] as const;
 
 export function B2BForm({ onQualified }: B2BFormProps) {
+  const { locale } = useAppPreferences();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasStarted, setHasStarted] = useState(false);
   const { utm } = useUTM();
+
+  const copy = {
+    fr: {
+      title: "Pré-qualification entreprise",
+      intro:
+        "Un court formulaire pour personnaliser votre parcours et générer votre redirection Eventbrite pré-remplie.",
+      company: "Entreprise",
+      companyPlaceholder: "Enchanted Tools",
+      size: "Taille de l'entreprise",
+      sector: "Secteur d'activité",
+      sectorPlaceholder: "Retail, santé, transport...",
+      attendees: "Nombre de personnes",
+      contact: "Nom du contact",
+      contactPlaceholder: "Nom et prénom",
+      email: "Email professionnel",
+      emailPlaceholder: "prenom.nom@entreprise.com",
+      submit: "Accéder à Eventbrite avec code B2B2026",
+      submitting: "Validation...",
+    },
+    en: {
+      title: "Business qualification",
+      intro:
+        "A short form to personalize your journey and generate your pre-filled Eventbrite redirect.",
+      company: "Company",
+      companyPlaceholder: "Enchanted Tools",
+      size: "Company size",
+      sector: "Industry",
+      sectorPlaceholder: "Retail, healthcare, transport...",
+      attendees: "Number of attendees",
+      contact: "Contact name",
+      contactPlaceholder: "Full name",
+      email: "Business email",
+      emailPlaceholder: "first.last@company.com",
+      submit: "Go to Eventbrite with B2B2026",
+      submitting: "Validating...",
+    },
+  } as const;
+
+  const t = copy[locale];
 
   const {
     register,
@@ -79,25 +120,25 @@ export function B2BForm({ onQualified }: B2BFormProps) {
   return (
     <section className="section-wrap py-8" id="b2b-form">
       <div className="glass-panel rounded-3xl p-4 sm:p-6">
-        <h2 className="text-2xl sm:text-3xl">Pré-qualification entreprise</h2>
+        <h2 className="text-2xl sm:text-3xl">{t.title}</h2>
         <p className="mt-2 text-sm text-white/75">
-          Un court formulaire pour personnaliser votre parcours et générer votre redirection Eventbrite pré-remplie.
+          {t.intro}
         </p>
 
         <form onSubmit={onSubmit} className="mt-5 grid gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1 text-sm">
-            Entreprise
+            {t.company}
             <input
               {...register("company")}
               onFocus={handleStart}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 outline-none ring-0 focus:border-[#53B3FF]"
-              placeholder="Enchanted Tools"
+              placeholder={t.companyPlaceholder}
             />
             {errors.company ? <span className="text-xs text-red-300">{errors.company.message}</span> : null}
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            Taille de l&apos;entreprise
+            {t.size}
             <select
               {...register("companySize")}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 outline-none ring-0 focus:border-[#53B3FF]"
@@ -111,17 +152,17 @@ export function B2BForm({ onQualified }: B2BFormProps) {
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            Secteur d&apos;activité
+            {t.sector}
             <input
               {...register("sector")}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 outline-none ring-0 focus:border-[#53B3FF]"
-              placeholder="Retail, santé, transport..."
+              placeholder={t.sectorPlaceholder}
             />
             {errors.sector ? <span className="text-xs text-red-300">{errors.sector.message}</span> : null}
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            Nombre de personnes
+            {t.attendees}
             <input
               type="number"
               min={1}
@@ -133,29 +174,29 @@ export function B2BForm({ onQualified }: B2BFormProps) {
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            Nom du contact
+            {t.contact}
             <input
               {...register("contactName")}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 outline-none ring-0 focus:border-[#53B3FF]"
-              placeholder="Nom et prénom"
+              placeholder={t.contactPlaceholder}
             />
             {errors.contactName ? <span className="text-xs text-red-300">{errors.contactName.message}</span> : null}
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            Email professionnel
+            {t.email}
             <input
               type="email"
               {...register("email")}
               className="rounded-xl border border-white/20 bg-white/5 px-3 py-2 outline-none ring-0 focus:border-[#53B3FF]"
-              placeholder="prenom.nom@entreprise.com"
+              placeholder={t.emailPlaceholder}
             />
             {errors.email ? <span className="text-xs text-red-300">{errors.email.message}</span> : null}
           </label>
 
           <div className="sm:col-span-2">
             <button type="submit" disabled={isSubmitting} className="cta-primary">
-              {isSubmitting ? "Validation..." : "Accéder à Eventbrite avec code B2B2026"}
+              {isSubmitting ? t.submitting : t.submit}
             </button>
             {errorMessage ? <p className="mt-2 text-sm text-red-300">{errorMessage}</p> : null}
           </div>

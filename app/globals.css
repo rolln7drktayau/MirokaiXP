@@ -3,14 +3,57 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a1a;
-  --foreground: #f0eef8;
-  --surface: #100f2c;
-  --surface-2: #1a1740;
-  --accent: #3d1a6e;
-  --accent-2: #f5c842;
-  --electric: #53b3ff;
-  --border-soft: rgba(240, 238, 248, 0.18);
+  --background: #090913;
+  --foreground: #f1edff;
+  --surface: #100f2d;
+  --surface-2: #1a1644;
+  --accent: #7b2fff;
+  --accent-2: #ffd166;
+  --electric: #00f5c4;
+  --border-soft: rgba(241, 237, 255, 0.2);
+  --glass-bg: rgba(18, 15, 50, 0.5);
+  --glass-border: rgba(120, 97, 189, 0.35);
+  --bg-mesh:
+    radial-gradient(80% 60% at 15% 15%, rgba(123, 47, 255, 0.28), transparent 65%),
+    radial-gradient(90% 70% at 85% 22%, rgba(0, 245, 196, 0.2), transparent 66%),
+    radial-gradient(70% 55% at 50% 88%, rgba(255, 209, 102, 0.16), transparent 68%),
+    linear-gradient(150deg, #070710 0%, #0c0b1f 50%, #150f36 100%);
+}
+
+html[data-theme="nimira-dark"] {
+  --background: #090913;
+  --foreground: #f1edff;
+  --surface: #100f2d;
+  --surface-2: #1a1644;
+  --accent: #7b2fff;
+  --accent-2: #ffd166;
+  --electric: #00f5c4;
+  --border-soft: rgba(241, 237, 255, 0.2);
+  --glass-bg: rgba(18, 15, 50, 0.5);
+  --glass-border: rgba(120, 97, 189, 0.35);
+  --bg-mesh:
+    radial-gradient(80% 60% at 15% 15%, rgba(123, 47, 255, 0.28), transparent 65%),
+    radial-gradient(90% 70% at 85% 22%, rgba(0, 245, 196, 0.2), transparent 66%),
+    radial-gradient(70% 55% at 50% 88%, rgba(255, 209, 102, 0.16), transparent 68%),
+    linear-gradient(150deg, #070710 0%, #0c0b1f 50%, #150f36 100%);
+}
+
+html[data-theme="nimira-light"] {
+  --background: #f5efff;
+  --foreground: #22144d;
+  --surface: #ffffff;
+  --surface-2: #eee6ff;
+  --accent: #7b2fff;
+  --accent-2: #ffb800;
+  --electric: #00ad8b;
+  --border-soft: rgba(45, 30, 92, 0.18);
+  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(84, 62, 151, 0.24);
+  --bg-mesh:
+    radial-gradient(70% 60% at 10% 18%, rgba(143, 102, 255, 0.28), transparent 68%),
+    radial-gradient(80% 65% at 85% 12%, rgba(0, 211, 166, 0.18), transparent 66%),
+    radial-gradient(90% 72% at 52% 92%, rgba(255, 198, 88, 0.18), transparent 75%),
+    linear-gradient(160deg, #efe7ff 0%, #f7f3ff 52%, #e8fff8 100%);
 }
 
 body {
@@ -18,11 +61,22 @@ body {
   background: var(--background);
   font-family: var(--font-outfit), sans-serif;
   min-height: 100vh;
-  background-image:
-    radial-gradient(circle at 12% 10%, rgba(83, 179, 255, 0.14), transparent 42%),
-    radial-gradient(circle at 85% 25%, rgba(245, 200, 66, 0.14), transparent 34%),
-    linear-gradient(150deg, #090914 0%, #0a0a1a 45%, #130d2b 100%);
+  background-image: var(--bg-mesh);
   background-attachment: fixed;
+  transition: background-color 0.35s ease, color 0.35s ease, background-image 0.35s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image:
+    radial-gradient(circle at 20% 40%, rgba(255, 255, 255, 0.35) 0.6px, transparent 0.6px),
+    radial-gradient(circle at 60% 80%, rgba(255, 255, 255, 0.3) 0.6px, transparent 0.6px);
+  background-size: 2.8px 2.8px, 3.6px 3.6px;
+  z-index: 0;
 }
 
 h1,
@@ -35,23 +89,102 @@ h4 {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(240, 238, 248, 0.3) transparent;
+  scrollbar-color: color-mix(in srgb, var(--foreground) 30%, transparent) transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nimira-float {
+    animation: nimira-float 4.8s ease-in-out infinite;
+  }
+
+  .nimira-pulse {
+    animation: nimira-pulse 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes nimira-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes nimira-pulse {
+  0%,
+  100% {
+    opacity: 0.58;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @layer components {
   .glass-panel {
-    @apply border border-white/15 bg-white/5 backdrop-blur-lg;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    box-shadow:
+      0 16px 34px rgba(9, 7, 24, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   .section-wrap {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+    @apply relative z-20 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-shell {
+    @apply rounded-3xl border p-5 sm:p-6;
+    border-color: var(--border-soft);
+    background: color-mix(in srgb, var(--surface) 65%, transparent);
+    box-shadow: 0 14px 30px rgba(8, 6, 20, 0.18);
   }
 
   .cta-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-[#F5C842] px-5 py-2.5 text-sm font-semibold text-[#0A0A1A] transition hover:bg-[#f7d364];
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition;
+    color: #101028;
+    background: linear-gradient(95deg, #ffd166 0%, #ffefad 32%, #00f5c4 100%);
+    box-shadow: 0 8px 24px rgba(0, 245, 196, 0.28);
+  }
+
+  .cta-primary:hover {
+    transform: translateY(-1px);
+    filter: saturate(1.08);
   }
 
   .cta-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-[#F0EEF8] transition hover:bg-white/10;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition;
+    border-color: color-mix(in srgb, var(--foreground) 22%, transparent);
+    color: var(--foreground);
+    background: color-mix(in srgb, var(--surface-2) 48%, transparent);
   }
+
+  .cta-secondary:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--surface-2) 64%, transparent);
+  }
+}
+
+html[data-theme="nimira-light"] .text-white\/85,
+html[data-theme="nimira-light"] .text-white\/80,
+html[data-theme="nimira-light"] .text-white\/75,
+html[data-theme="nimira-light"] .text-white\/70,
+html[data-theme="nimira-light"] .text-white\/65,
+html[data-theme="nimira-light"] .text-white\/60 {
+  color: rgba(34, 20, 77, 0.84) !important;
+}
+
+html[data-theme="nimira-light"] .border-white\/25,
+html[data-theme="nimira-light"] .border-white\/20,
+html[data-theme="nimira-light"] .border-white\/15,
+html[data-theme="nimira-light"] .border-white\/10 {
+  border-color: rgba(63, 44, 128, 0.22) !important;
+}
+
+html[data-theme="nimira-light"] .bg-white\/10,
+html[data-theme="nimira-light"] .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.65) !important;
 }
