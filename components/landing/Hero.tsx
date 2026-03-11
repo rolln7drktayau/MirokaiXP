@@ -16,19 +16,7 @@ interface HeroProps {
   onPrimaryCTA: () => void;
 }
 
-const scenarioNodePositions = [
-  { x: 16, y: 72 },
-  { x: 50, y: 22 },
-  { x: 84, y: 68 },
-] as const;
-
-const buildConnectionPath = (target: { x: number; y: number }) => {
-  const startX = 50;
-  const startY = 52;
-  const controlX = (startX + target.x) / 2;
-  const controlY = Math.min(startY, target.y) - 10;
-  return `M ${startX} ${startY} Q ${controlX} ${controlY} ${target.x} ${target.y}`;
-};
+const scenarioKeywords = ["Front desk", "Onboarding", "Retail"] as const;
 
 const heroCopy = {
   fr: {
@@ -46,7 +34,9 @@ const heroCopy = {
     stat2: "Moments wow",
     tagA: "Proximité vocale",
     tagB: "Narration vivante",
-    scenarioHint: "Touchez une bulle pour changer de scénario",
+    scenarioHint: "La bulle de pensée évolue selon le scénario",
+    thoughtTitle: "Bulle de pensée",
+    moods: ["accueillant", "focus", "joueur"],
     headlines: {
       solo: "Vivez l'aventure Mirokaï en solo",
       team: "Faites vivre une sortie d'équipe mémorable",
@@ -82,7 +72,9 @@ const heroCopy = {
     stat2: "Wow moments",
     tagA: "Voice proximity",
     tagB: "Live storytelling",
-    scenarioHint: "Tap a bubble to switch scenario",
+    scenarioHint: "Thought bubble evolves with each scenario",
+    thoughtTitle: "Thought bubble",
+    moods: ["welcoming", "focused", "playful"],
     headlines: {
       solo: "Experience Mirokaï solo",
       team: "Create a memorable team outing",
@@ -123,7 +115,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
     const timer = window.setInterval(() => {
       setActiveScenario((current) => (current + 1) % scenarioCount);
-    }, 6400);
+    }, 7600);
 
     return () => window.clearInterval(timer);
   }, [prefersReducedMotion, scenarioCount]);
@@ -231,94 +223,56 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                 </div>
 
                 <div className="relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#1f2030]/50 sm:min-h-[240px]">
-                  <svg
-                    className="absolute inset-0 h-full w-full opacity-45"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                  >
-                    {scenarioNodePositions.map((node, index) => {
-                      const isActive = index === activeScenario;
-                      return (
-                        <motion.path
-                          key={`${node.x}-${node.y}-${index}`}
-                          d={buildConnectionPath(node)}
-                          fill="none"
-                          stroke={isActive ? "#f09803" : "#4c73b8"}
-                          strokeWidth={isActive ? 0.9 : 0.5}
-                          strokeLinecap="round"
-                          initial={false}
-                          animate={
-                            prefersReducedMotion
-                              ? { opacity: isActive ? 0.82 : 0.28 }
-                              : isActive
-                                ? {
-                                    opacity: [0.38, 0.95, 0.38],
-                                    pathLength: [0.18, 1, 0.18],
-                                  }
-                                : { opacity: 0.28, pathLength: 1 }
-                          }
-                          transition={
-                            prefersReducedMotion
-                              ? { duration: 0.2 }
-                              : isActive
-                                ? { duration: 2.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
-                                : { duration: 0.35, ease: "easeOut" }
-                          }
-                        />
-                      );
-                    })}
-                  </svg>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,74,173,0.22),transparent_40%),radial-gradient(circle_at_75%_78%,rgba(163,51,124,0.18),transparent_45%)]" />
 
-                  <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2">
+                  <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-6 pt-4">
                     <motion.div
-                      className="absolute inset-0 rounded-full border border-[#004aad]/55"
-                      animate={prefersReducedMotion ? undefined : { rotate: 360 }}
-                      transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                    />
+                      key={`thought-${activeScenario}`}
+                      initial={{ opacity: 0, y: 8, scale: 0.94 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      className="relative rounded-2xl border border-white/20 bg-[#fff7ef] px-4 py-3 text-center text-[#202020] shadow-[0_10px_26px_rgba(0,0,0,0.26)]"
+                    >
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-[#5b5378]">{t.thoughtTitle}</p>
+                      <p className="mt-1 text-sm font-semibold text-[#202020]">{scenarioKeywords[activeScenario]}</p>
+                      <p className="mt-1 text-xs text-[#5b5378]">{t.moods[activeScenario]}</p>
+                      <span className="absolute -bottom-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-b border-r border-white/20 bg-[#fff7ef]" />
+                    </motion.div>
+
                     <motion.div
-                      className="absolute inset-2 rounded-full border border-[#f09803]/55"
-                      animate={prefersReducedMotion ? undefined : { rotate: -360 }}
-                      transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      className="mt-4 h-5 w-5 rounded-full bg-[#fff7ef]/70"
+                      animate={prefersReducedMotion ? undefined : { y: [0, 4, 0], opacity: [0.8, 0.5, 0.8] }}
+                      transition={{ duration: 2.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
                     />
+
                     <motion.div
-                      className="absolute inset-5 rounded-full bg-[radial-gradient(circle,#0eaa92_0%,#004aad_45%,#1f2030_100%)]"
-                      animate={prefersReducedMotion ? undefined : { scale: [1, 1.08, 1] }}
-                      transition={{ duration: 2.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                    />
+                      className="mt-2 grid h-28 w-28 place-items-center rounded-full border border-[#0eaa92]/45 bg-[radial-gradient(circle,#2f3560_0%,#1f2030_65%,#1a1a2b_100%)]"
+                      animate={prefersReducedMotion ? undefined : { y: [0, -6, 0], rotate: [0, 1.5, -1.5, 0] }}
+                      transition={{ duration: 3.1, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                    >
+                      <Bot size={46} className="text-[#0eaa92]" />
+                    </motion.div>
+
+                    <div className="mt-4 grid w-full max-w-sm grid-cols-3 gap-2">
+                      {scenarios.map((_, index) => {
+                        const isActive = index === activeScenario;
+                        return (
+                          <button
+                            key={scenarioKeywords[index]}
+                            type="button"
+                            onClick={() => setActiveScenario(index)}
+                            className={`rounded-full border px-2 py-1 text-center text-xs transition ${
+                              isActive
+                                ? "border-[#f09803]/75 bg-[#f09803]/20 text-[#f09803]"
+                                : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
+                            }`}
+                          >
+                            {scenarioKeywords[index]}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-
-                  {scenarios.map((item, index) => {
-                    const position = scenarioNodePositions[index % scenarioNodePositions.length];
-                    const isActive = index === activeScenario;
-                    return (
-                      <motion.button
-                        key={item.name}
-                        type="button"
-                        onClick={() => setActiveScenario(index)}
-                        className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-3 py-1.5 text-xs transition ${
-                          isActive
-                            ? "border-[#f09803]/75 bg-[#f09803]/20 text-[#f09803]"
-                            : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
-                        }`}
-                        style={{ left: `${position.x}%`, top: `${position.y}%` }}
-                        animate={
-                          prefersReducedMotion
-                            ? undefined
-                            : {
-                                y: [0, -4, 0],
-                                scale: isActive ? [1, 1.08, 1] : [1, 1.04, 1],
-                              }
-                        }
-                        transition={{
-                          duration: 2.8 + index * 0.45,
-                          repeat: Number.POSITIVE_INFINITY,
-                          ease: "easeInOut",
-                        }}
-                      >
-                        {item.name}
-                      </motion.button>
-                    );
-                  })}
                 </div>
 
                 <div className="mt-3 space-y-2">
@@ -329,7 +283,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                       className="h-full bg-gradient-to-r from-[#004aad] via-[#a3337c] to-[#f09803]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
-                      transition={{ duration: 6.1, ease: "linear" }}
+                      transition={{ duration: 7.3, ease: "linear" }}
                     />
                   </div>
                 </div>
