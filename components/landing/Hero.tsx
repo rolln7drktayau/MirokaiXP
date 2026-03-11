@@ -22,6 +22,14 @@ const scenarioNodePositions = [
   { x: 84, y: 68 },
 ] as const;
 
+const buildConnectionPath = (target: { x: number; y: number }) => {
+  const startX = 50;
+  const startY = 52;
+  const controlX = (startX + target.x) / 2;
+  const controlY = Math.min(startY, target.y) - 10;
+  return `M ${startX} ${startY} Q ${controlX} ${controlY} ${target.x} ${target.y}`;
+};
+
 const heroCopy = {
   fr: {
     label: "Mirokaï Experience 2026 • Paris",
@@ -115,7 +123,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
     const timer = window.setInterval(() => {
       setActiveScenario((current) => (current + 1) % scenarioCount);
-    }, 4700);
+    }, 6400);
 
     return () => window.clearInterval(timer);
   }, [prefersReducedMotion, scenarioCount]);
@@ -228,19 +236,37 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                     viewBox="0 0 100 100"
                     preserveAspectRatio="none"
                   >
-                    {scenarioNodePositions.map((node, index) => (
-                      <line
-                        key={`${node.x}-${node.y}-${index}`}
-                        x1="50"
-                        y1="52"
-                        x2={node.x}
-                        y2={node.y}
-                        stroke={index === activeScenario ? "#f09803" : "#004aad"}
-                        strokeWidth="0.35"
-                        strokeDasharray="1.1 1.2"
-                        opacity={index === activeScenario ? 0.95 : 0.4}
-                      />
-                    ))}
+                    {scenarioNodePositions.map((node, index) => {
+                      const isActive = index === activeScenario;
+                      return (
+                        <motion.path
+                          key={`${node.x}-${node.y}-${index}`}
+                          d={buildConnectionPath(node)}
+                          fill="none"
+                          stroke={isActive ? "#f09803" : "#4c73b8"}
+                          strokeWidth={isActive ? 0.9 : 0.5}
+                          strokeLinecap="round"
+                          initial={false}
+                          animate={
+                            prefersReducedMotion
+                              ? { opacity: isActive ? 0.82 : 0.28 }
+                              : isActive
+                                ? {
+                                    opacity: [0.38, 0.95, 0.38],
+                                    pathLength: [0.18, 1, 0.18],
+                                  }
+                                : { opacity: 0.28, pathLength: 1 }
+                          }
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0.2 }
+                              : isActive
+                                ? { duration: 2.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
+                                : { duration: 0.35, ease: "easeOut" }
+                          }
+                        />
+                      );
+                    })}
                   </svg>
 
                   <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2">
@@ -303,7 +329,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                       className="h-full bg-gradient-to-r from-[#004aad] via-[#a3337c] to-[#f09803]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
-                      transition={{ duration: 4.4, ease: "linear" }}
+                      transition={{ duration: 6.1, ease: "linear" }}
                     />
                   </div>
                 </div>

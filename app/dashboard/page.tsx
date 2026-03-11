@@ -1,5 +1,6 @@
 import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
 import { DashboardLogin } from "@/components/dashboard/DashboardLogin";
+import { NavBackHome } from "@/components/ui/NavBackHome";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getDashboardMetrics } from "@/services/dashboardService";
 
@@ -14,6 +15,8 @@ export default async function DashboardPage() {
 
   return (
     <main className="section-wrap py-8">
+      <NavBackHome className="mb-4" />
+
       <div className="mb-5">
         <p className="text-xs uppercase tracking-[0.2em] text-white/70">Dashboard Mirokaï Experience</p>
         <h1 className="mt-2 text-3xl">Suivi conversion et acquisition</h1>

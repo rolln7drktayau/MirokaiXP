@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { NavBackHome } from "@/components/ui/NavBackHome";
+
 export function DashboardLogin() {
   const router = useRouter();
   const [password, setPassword] = useState("");
@@ -28,7 +30,9 @@ export function DashboardLogin() {
 
   return (
     <main className="section-wrap py-16">
-      <div className="glass-panel mx-auto max-w-sm rounded-3xl p-6">
+      <div className="mx-auto max-w-sm space-y-3">
+        <NavBackHome />
+        <div className="glass-panel rounded-3xl p-6">
         <h1 className="text-2xl">Dashboard analytics</h1>
         <p className="mt-2 text-sm text-white/75">Accès protégé par variable d&apos;environnement.</p>
         <form onSubmit={submit} className="mt-4 space-y-3">
@@ -44,6 +48,7 @@ export function DashboardLogin() {
           </button>
           {status === "error" ? <p className="text-xs text-red-300">Mot de passe invalide.</p> : null}
         </form>
+        </div>
       </div>
     </main>
   );
