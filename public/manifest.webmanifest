@@ -1,6 +1,6 @@
 {
-  "name": "Mirokaï Experience",
-  "short_name": "Mirokaï",
+  "name": "Mirokai",
+  "short_name": "Mirokai",
   "description": "PWA immersive de visite Enchanted Tools × Nimira.",
   "start_url": "/experience",
   "display": "standalone",
@@ -9,7 +9,24 @@
   "lang": "fr",
   "icons": [
     {
-      "src": "/favicon.ico",
+      "src": "/icons/mirokai-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/mirokai-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/favicon.ico",
       "sizes": "48x48 64x64 128x128 256x256",
       "type": "image/x-icon"
     }

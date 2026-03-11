@@ -23,9 +23,18 @@ const hotjarSnippetVersion = process.env.NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION ?? "
 
 export const metadata: Metadata = {
   title: "Mirokaï Experience 2026 | Enchanted Tools",
+  applicationName: "Mirokai",
   description:
     "Landing de conversion et audioguide immersif pour la Mirokaï Experience 2026.",
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icons/favicon.ico" },
+      { url: "/icons/mirokai-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/mirokai-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = {
