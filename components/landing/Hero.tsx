@@ -181,7 +181,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             transition={{ duration: 6.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
 
-          <div className="relative flex h-full flex-col gap-4">
+          <div className="relative flex h-full min-h-[560px] flex-col gap-4 sm:min-h-[620px] lg:min-h-[680px]">
             <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
 
             <div className="relative flex-1 overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(165deg,#1a1647_0%,#111033_56%,#0d0b26_100%)] p-3 sm:p-4">
@@ -197,7 +197,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               </video>
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,24,0.36),rgba(7,8,24,0.86))]" />
 
-              <div className="relative z-10 flex h-full min-h-[420px] flex-col">
+              <div className="relative z-10 flex h-full min-h-[360px] flex-col sm:min-h-[420px]">
                 <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
                   <motion.div
                     key={activeScenario}
@@ -222,7 +222,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                   </div>
                 </div>
 
-                <div className="relative mt-4 flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#09081d]/55">
+                <div className="relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#09081d]/55 sm:min-h-[240px]">
                   <svg
                     className="absolute inset-0 h-full w-full opacity-45"
                     viewBox="0 0 100 100"
