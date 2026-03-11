@@ -14,6 +14,10 @@ export default function AdminModulesPage() {
       <div className="glass-panel rounded-3xl p-5">
         <p className="text-xs uppercase tracking-[0.16em] text-white/70">Admin / Modules</p>
         <h1 className="mt-2 text-3xl">Gestion des modules</h1>
+        <p className="mt-2 text-sm text-white/75">
+          Créez vos modules (numéro, nom, cartel, audio/vidéo, images) et placez-les en drag & drop
+          pour qu&apos;ils apparaissent sur la page expérience.
+        </p>
         <div className="mt-4">
           <Link href="/admin/floor-plan" className="cta-secondary">
             Aller à l&apos;éditeur floor plan

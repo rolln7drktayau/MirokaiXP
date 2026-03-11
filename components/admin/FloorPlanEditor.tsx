@@ -1,7 +1,7 @@
 "use client";
 
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { Module } from "@/types/module";
 
@@ -17,6 +17,10 @@ const clamp = (value: number, min: number, max: number) => Math.max(min, Math.mi
 export function FloorPlanEditor({ modules, onPositionChange }: FloorPlanEditorProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [localModules, setLocalModules] = useState<Module[]>(modules);
+
+  useEffect(() => {
+    setLocalModules(modules);
+  }, [modules]);
 
   const onDragEnd = async (event: DragEndEvent) => {
     const moduleId = String(event.active.id);

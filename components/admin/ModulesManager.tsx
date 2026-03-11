@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import type { Module, ModuleInput } from "@/types/module";
 
+import { FloorPlanEditor } from "./FloorPlanEditor";
 import { ModuleForm } from "./ModuleForm";
 
 export function ModulesManager() {
@@ -74,6 +75,25 @@ export function ModulesManager() {
     }
     setSelected((prev) => (prev?.id === moduleId ? null : prev));
     await loadModules();
+  };
+
+  const savePosition = async (moduleId: string, position: { x: number; y: number }) => {
+    const response = await fetch(`/api/modules/${moduleId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ position }),
+    });
+
+    if (!response.ok) {
+      setError("Position impossible à sauvegarder.");
+      return;
+    }
+
+    setError(null);
+    setModules((prev) =>
+      prev.map((module) => (module.id === moduleId ? { ...module, position } : module)),
+    );
+    setSelected((prev) => (prev?.id === moduleId ? { ...prev, position } : prev));
   };
 
   return (
@@ -149,6 +169,21 @@ export function ModulesManager() {
           />
         </section>
       ) : null}
+
+      <section className="glass-panel rounded-3xl p-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl">Plan interactif des modules</h2>
+            <p className="text-sm text-white/75">
+              Les nouveaux modules créés apparaissent ici immédiatement. Déplacez-les en drag & drop.
+            </p>
+          </div>
+          <button type="button" onClick={() => void loadModules()} className="cta-secondary">
+            Synchroniser le plan
+          </button>
+        </div>
+        <FloorPlanEditor modules={modules} onPositionChange={savePosition} />
+      </section>
     </div>
   );
 }
