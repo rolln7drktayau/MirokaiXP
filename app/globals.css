@@ -3,25 +3,55 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a1a;
+  --foreground: #f0eef8;
+  --surface: #100f2c;
+  --surface-2: #1a1740;
+  --accent: #3d1a6e;
+  --accent-2: #f5c842;
+  --electric: #53b3ff;
+  --border-soft: rgba(240, 238, 248, 0.18);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-outfit), sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 12% 10%, rgba(83, 179, 255, 0.14), transparent 42%),
+    radial-gradient(circle at 85% 25%, rgba(245, 200, 66, 0.14), transparent 34%),
+    linear-gradient(150deg, #090914 0%, #0a0a1a 45%, #130d2b 100%);
+  background-attachment: fixed;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  letter-spacing: 0.01em;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(240, 238, 248, 0.3) transparent;
+}
+
+@layer components {
+  .glass-panel {
+    @apply border border-white/15 bg-white/5 backdrop-blur-lg;
+  }
+
+  .section-wrap {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .cta-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-[#F5C842] px-5 py-2.5 text-sm font-semibold text-[#0A0A1A] transition hover:bg-[#f7d364];
+  }
+
+  .cta-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-[#F0EEF8] transition hover:bg-white/10;
   }
 }

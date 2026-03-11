@@ -11,6 +11,13 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        surface: "var(--surface)",
+        accent: "var(--accent)",
+        gold: "var(--accent-2)",
+      },
+      fontFamily: {
+        body: ["var(--font-outfit)", "sans-serif"],
+        display: ["var(--font-space-grotesk)", "sans-serif"],
       },
     },
   },
