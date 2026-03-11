@@ -17,6 +17,7 @@ import { ConfirmationBanner } from "./ConfirmationBanner";
 import { ExitPopup } from "./ExitPopup";
 import { FAQ } from "./FAQ";
 import { Hero } from "./Hero";
+import { LocationSection } from "./LocationSection";
 import { ProfileSelector } from "./ProfileSelector";
 import { Testimonials } from "./Testimonials";
 import { UseCases } from "./UseCases";
@@ -24,7 +25,7 @@ import { ArcadeSection } from "./ArcadeSection";
 
 const EVENTBRITE_URL =
   process.env.NEXT_PUBLIC_EVENTBRITE_URL ??
-  "https://www.eventbrite.com/e/mirokai-experience-2026";
+  "https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile";
 
 export function LandingExperience() {
   const { locale } = useAppPreferences();
@@ -139,6 +140,7 @@ export function LandingExperience() {
 
       <Testimonials />
       <FAQ />
+      <LocationSection />
       <ExitPopup profile={hydrated ? profile : "solo"} />
     </main>
   );

@@ -129,6 +129,7 @@ export function ThemeLangSwitcher() {
   const { locale, theme, setLocale, toggleTheme } = useAppPreferences();
   const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
+  const mobileBottomOffset = "calc(5.2rem + env(safe-area-inset-bottom))";
 
   useEffect(() => {
     const syncLayout = () => {
@@ -151,7 +152,7 @@ export function ThemeLangSwitcher() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-[70]">
+    <div className="fixed right-4 z-[70]" style={{ bottom: mobileBottomOffset }}>
       <AnimatePresence>
         {open ? (
           <div className="absolute bottom-14 right-0 w-[min(19rem,calc(100vw-1.5rem))]">

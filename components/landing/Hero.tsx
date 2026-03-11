@@ -103,13 +103,21 @@ const heroVideoUrl =
 export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
   const { locale } = useAppPreferences();
   const [activeScenario, setActiveScenario] = useState(0);
+  const [isDesktop, setIsDesktop] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const t = heroCopy[locale];
   const scenarios = t.scenarios;
   const scenarioCount = scenarios.length;
 
   useEffect(() => {
-    if (prefersReducedMotion) {
+    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !isDesktop) {
       return;
     }
 
@@ -118,7 +126,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
     }, 7600);
 
     return () => window.clearInterval(timer);
-  }, [prefersReducedMotion, scenarioCount]);
+  }, [isDesktop, prefersReducedMotion, scenarioCount]);
 
   return (
     <section className="section-wrap relative overflow-hidden pb-16 pt-10 sm:pt-14">

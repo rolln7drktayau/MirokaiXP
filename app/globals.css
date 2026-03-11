@@ -72,6 +72,12 @@ body {
   transition: background-color 0.35s ease, color 0.35s ease, background-image 0.35s ease;
 }
 
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 5.25rem;
+  }
+}
+
 body::before {
   content: "";
   position: fixed;
