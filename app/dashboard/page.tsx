@@ -1,14 +1,10 @@
-import { cookies } from "next/headers";
-
 import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
 import { DashboardLogin } from "@/components/dashboard/DashboardLogin";
+import { isAdminAuthenticated } from "@/lib/auth";
 import { getDashboardMetrics } from "@/services/dashboardService";
 
-const COOKIE_NAME = "dashboard_auth";
-
 export default async function DashboardPage() {
-  const cookieStore = cookies();
-  const isAuthenticated = cookieStore.get(COOKIE_NAME)?.value === "1";
+  const isAuthenticated = isAdminAuthenticated();
 
   if (!isAuthenticated) {
     return <DashboardLogin />;

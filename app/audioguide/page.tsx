@@ -1,6 +1,5 @@
-import { AudioguideShell } from "@/components/audioguide/AudioguideShell";
-import { audioguideSteps } from "@/lib/audioguideContent";
+import { redirect } from "next/navigation";
 
 export default function AudioguidePage() {
-  return <AudioguideShell steps={audioguideSteps} />;
+  redirect("/experience");
 }

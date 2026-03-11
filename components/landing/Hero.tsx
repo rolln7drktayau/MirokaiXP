@@ -82,8 +82,8 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             <button type="button" onClick={onPrimaryCTA} className="cta-primary">
               Réserver un créneau
             </button>
-            <Link href="/audioguide" className="cta-secondary">
-              Explorer l&apos;audioguide immersif
+            <Link href="/experience" className="cta-secondary">
+              Lancer la visite PWA
             </Link>
           </div>
 

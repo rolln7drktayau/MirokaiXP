@@ -16,6 +16,22 @@ create table if not exists public.leads (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.modules (
+  id uuid primary key default gen_random_uuid(),
+  number integer not null,
+  name text not null,
+  description text not null,
+  audio_url text,
+  video_url text,
+  images text[] not null default '{}',
+  position jsonb not null default '{"x":50,"y":50}'::jsonb,
+  mirokai_prompt text not null,
+  unlocked boolean not null default false,
+  theme text not null check (theme in ('nimira', 'tech', 'emotion', 'narration')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create table if not exists public.subscribers (
   id uuid primary key default gen_random_uuid(),
   email text not null,
@@ -64,6 +80,10 @@ create index if not exists idx_leads_created_at on public.leads (created_at desc
 create index if not exists idx_leads_profile on public.leads (profile);
 create index if not exists idx_leads_email on public.leads (lower(email));
 
+create unique index if not exists idx_modules_number_unique on public.modules (number);
+create index if not exists idx_modules_theme on public.modules (theme);
+create index if not exists idx_modules_unlocked on public.modules (unlocked);
+
 create index if not exists idx_subscribers_created_at on public.subscribers (created_at desc);
 create index if not exists idx_subscribers_profile on public.subscribers (profile);
 create index if not exists idx_subscribers_email on public.subscribers (lower(email));
@@ -77,6 +97,7 @@ create index if not exists idx_analytics_events_profile on public.analytics_even
 create index if not exists idx_analytics_events_source on public.analytics_events (source);
 
 alter table public.leads enable row level security;
+alter table public.modules enable row level security;
 alter table public.subscribers enable row level security;
 alter table public.email_queue enable row level security;
 alter table public.analytics_events enable row level security;

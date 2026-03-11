@@ -53,17 +53,24 @@ SUPABASE_SERVICE_ROLE_KEY=
 
 ```text
 /app
-  /page.tsx
-  /audioguide/page.tsx
-  /dashboard/page.tsx
-  /confirmation/page.tsx
+  /page.tsx                        -> Landing B2B/B2C
+  /experience/page.tsx             -> PWA visiteurs (plan + modules)
+  /experience/[moduleId]/page.tsx  -> Détail d'un module
+  /game/page.tsx                   -> Mini-jeu Nimira
+  /admin/page.tsx                  -> Hub admin protégé
+  /admin/modules/page.tsx          -> Gestion modules (CRUD)
+  /admin/floor-plan/page.tsx       -> Placement drag & drop
+  /dashboard/page.tsx              -> Dashboard analytics protégé
+  /confirmation/page.tsx           -> Confirmation post-réservation
   /api
-    /subscribe/route.ts
-    /book-private/route.ts
-    /leads/route.ts
-    /dashboard-auth/route.ts
-    /analytics/track/route.ts
-    /cron/email-sequence/route.ts
+    /subscribe/route.ts            -> Capture email + opt-in
+    /book-private/route.ts         -> Demande créneau privé
+    /leads/route.ts                -> Leads B2B
+    /modules/route.ts              -> CRUD modules (list/create)
+    /modules/[id]/route.ts         -> CRUD module (get/patch/delete)
+    /dashboard-auth/route.ts       -> Auth cookie admin/dashboard
+    /analytics/track/route.ts      -> Ingestion analytics événements
+    /cron/email-sequence/route.ts  -> Traitement queue emails
 
 /components
   /landing
@@ -78,34 +85,61 @@ SUPABASE_SERVICE_ROLE_KEY=
     ConfirmationBanner.tsx
     SlotCounter.tsx
     LandingExperience.tsx
-  /audioguide
+  /experience
     AudioguideShell.tsx
+    FloorPlan.tsx
+    ModuleCard.tsx
+    MirokaiAvatar.tsx
+    ProgressBar.tsx
+    AudioPlayer.tsx
+    NarrativeCard.tsx
+  /audioguide
+    AudioguideShell.tsx            -> Legacy route redirigée vers /experience
     NarrativeCard.tsx
     MirokaiAvatar.tsx
     ProgressBar.tsx
     AudioPlayer.tsx
     StoryMap.tsx
+  /admin
+    ModuleForm.tsx
+    DraggableModule.tsx
+    FloorPlanEditor.tsx
+    FloorPlanManager.tsx
+    ModulesManager.tsx
+  /game
+    GameShell.tsx
+    NimiraQuiz.tsx
   /dashboard
     AnalyticsCharts.tsx
     DashboardLogin.tsx
+  /ui
+    Button.tsx
+    Modal.tsx
+    Badge.tsx
+    Tooltip.tsx
 
 /hooks
   useProfile.ts
   useExitIntent.ts
   useUTM.ts
   useEventbrite.ts
+  usePWA.ts
+  useModules.ts
 
 /lib
+  auth.ts
   eventbrite.ts
   email.ts
   analytics.ts
   validators.ts
   audioguideContent.ts
+  moduleSeed.ts
 
 /services
   bookingService.ts
   leadService.ts
   emailService.ts
+  moduleService.ts
   subscriptionService.ts
   analyticsService.ts
   dashboardService.ts
@@ -114,6 +148,10 @@ SUPABASE_SERVICE_ROLE_KEY=
   profile.ts
   booking.ts
   audioguide.ts
+  module.ts
+  admin.ts
+  email.ts
+  analytics.ts
 ```
 
 ## Flux clés
@@ -127,18 +165,27 @@ SUPABASE_SERVICE_ROLE_KEY=
 5. Redirection Eventbrite avec UTM systématiques (`useUTM`, `buildEventbriteURL`).
 6. Exit intent popup avec capture email + séquence J-7/J-2/J-1.
 
-### Audioguide immersif
+### PWA visiteurs immersive
 
-1. Écran d'accueil (langue + choix guide Miroki/Miroka).
-2. StoryMap interactive avec étapes verrouillées/déverrouillées.
-3. Étape narrative avec avatar animé, audio, sous-titres et progression.
-4. Écran de fin avec CTA retour conversion.
+1. Plan interactif de l'espace avec points modules positionnés.
+2. Avatar Miroki/Miroka avec prompts courts (2-3 phrases max).
+3. Navigation module + progression persistée localement.
+4. Détail module avec audio/vidéo/images.
+5. Mode PWA installable (`next-pwa`) + détection online/offline.
 
 ### Dashboard analytics
 
 - Accès protégé par mot de passe (`DASHBOARD_PASSWORD`) via cookie HTTP-only.
 - KPIs: taux de remplissage, part B2B/B2C, emails capturés.
 - Graphiques Recharts: tunnel conversion + sources UTM.
+- Ingestion analytics serveur via `/api/analytics/track`.
+
+### Admin modules + floor plan
+
+1. CRUD modules via API `/api/modules`.
+2. Éditeur drag & drop du plan (`@dnd-kit/core`).
+3. Sauvegarde optimiste des positions modules.
+4. Accès protégé via cookie d'auth dashboard/admin.
 
 ## Intégrations externes
 
@@ -153,6 +200,13 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Design Nimira: bleu nuit / violet profond / or lumineux.
 - Composants découplés pour évolution rapide (A/B tests, nouveaux parcours, intégrations CRM).
 
+## Guide Admin (rapide)
+
+1. Ouvrir `/admin` et s'authentifier avec le mot de passe dashboard.
+2. Aller sur `/admin/modules` pour créer/éditer/supprimer un module.
+3. Aller sur `/admin/floor-plan` pour placer les modules en drag & drop.
+4. Vérifier le rendu côté visiteur sur `/experience`.
+
 ## Médias (audio/vidéo)
 
 - Vidéo hero: `public/media/video/mirokai-hero-loop.mp4`
@@ -166,4 +220,5 @@ SUPABASE_SERVICE_ROLE_KEY=
 ## Base de données Supabase
 
 - Migration SQL: `supabase/migrations/20260311_000001_init_mirokai.sql`
+- Seed modules: `supabase/seed/modules_seed.json`
 - Guide d'exécution: `supabase/README.md`

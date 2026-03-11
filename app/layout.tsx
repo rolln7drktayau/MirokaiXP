@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 
@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   title: "Mirokaï Experience 2026 | Enchanted Tools",
   description:
     "Landing de conversion et audioguide immersif pour la Mirokaï Experience 2026.",
+  manifest: "/manifest.webmanifest",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#7B2FFF",
 };
 
 export default function RootLayout({

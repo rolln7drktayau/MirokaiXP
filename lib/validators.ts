@@ -38,6 +38,29 @@ export const leadSchema = b2bFormSchema.extend({
   utm: z.record(z.string(), z.string()).optional(),
 });
 
+export const moduleThemeSchema = z.enum(["nimira", "tech", "emotion", "narration"]);
+
+export const moduleSchema = z.object({
+  number: z.number().int().min(1).max(999),
+  name: z.string().min(2).max(80),
+  description: z.string().min(8).max(1200),
+  audioUrl: z.string().trim().optional().or(z.literal("")),
+  videoUrl: z.string().trim().optional().or(z.literal("")),
+  images: z.array(z.string()),
+  position: z.object({
+    x: z.number().min(0).max(100),
+    y: z.number().min(0).max(100),
+  }),
+  mirokaiPrompt: z
+    .string()
+    .min(8)
+    .max(320, "Prompt trop long. Maximum 2-3 phrases recommandées."),
+  unlocked: z.boolean(),
+  theme: moduleThemeSchema,
+});
+
+export const modulePatchSchema = moduleSchema.partial();
+
 export const analyticsEventSchema = z.object({
   event: z.enum([
     "page_view",
@@ -57,4 +80,6 @@ export type B2BFormSchema = z.infer<typeof b2bFormSchema>;
 export type EmailCaptureSchema = z.infer<typeof emailCaptureSchema>;
 export type PrivateBookingSchema = z.infer<typeof privateBookingSchema>;
 export type LeadSchema = z.infer<typeof leadSchema>;
+export type ModuleSchema = z.infer<typeof moduleSchema>;
+export type ModulePatchSchema = z.infer<typeof modulePatchSchema>;
 export type AnalyticsEventSchema = z.infer<typeof analyticsEventSchema>;

@@ -35,8 +35,8 @@ export default function ConfirmationPage({ searchParams }: ConfirmationPageProps
           <Link href="/" className="cta-primary">
             Retour à la landing
           </Link>
-          <Link href="/audioguide" className="cta-secondary">
-            Lancer l&apos;audioguide
+          <Link href="/experience" className="cta-secondary">
+            Lancer la visite PWA
           </Link>
         </div>
       </div>

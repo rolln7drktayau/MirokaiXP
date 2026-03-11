@@ -5,9 +5,11 @@ Ce dossier contient la migration SQL de base pour la plateforme.
 ## Migration incluse
 
 - `migrations/20260311_000001_init_mirokai.sql`
+- Seed JSON modules: `seed/modules_seed.json`
 
 Tables créées:
 
+- `public.modules`
 - `public.leads`
 - `public.subscribers`
 - `public.email_queue`
