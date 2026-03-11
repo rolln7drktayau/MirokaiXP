@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import { BarChart3, Gamepad2, House, MapPinned, type LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useRef } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
@@ -46,8 +47,30 @@ const isPathActive = (pathname: string, href: string) => {
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const { locale } = useAppPreferences();
   const t = labels[locale];
+  const pressTimer = useRef<number | null>(null);
+  const longPressTriggered = useRef(false);
+
+  const startStatsPress = () => {
+    longPressTriggered.current = false;
+    pressTimer.current = window.setTimeout(() => {
+      longPressTriggered.current = true;
+      router.push("/admin");
+    }, 550);
+  };
+
+  const endStatsPress = () => {
+    if (pressTimer.current) {
+      window.clearTimeout(pressTimer.current);
+      pressTimer.current = null;
+    }
+
+    if (!longPressTriggered.current) {
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <nav
@@ -59,6 +82,42 @@ export function MobileBottomNav() {
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isPathActive(pathname, item.href);
+
+            if (item.key === "dashboard") {
+              return (
+                <li key={item.key}>
+                  <motion.div whileTap={{ scale: 0.96 }}>
+                    <button
+                      type="button"
+                      onPointerDown={startStatsPress}
+                      onPointerUp={endStatsPress}
+                      onPointerLeave={() => {
+                        if (pressTimer.current) {
+                          window.clearTimeout(pressTimer.current);
+                          pressTimer.current = null;
+                        }
+                      }}
+                      onPointerCancel={() => {
+                        if (pressTimer.current) {
+                          window.clearTimeout(pressTimer.current);
+                          pressTimer.current = null;
+                        }
+                      }}
+                      className={`flex w-full flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
+                        active
+                          ? "bg-[#00F5C4]/15 text-[#00F5C4]"
+                          : "text-white/75 hover:bg-white/10"
+                      }`}
+                      aria-label={`${t.dashboard} (long press admin)`}
+                    >
+                      <Icon size={16} />
+                      <span>{t[item.key]}</span>
+                    </button>
+                  </motion.div>
+                </li>
+              );
+            }
+
             return (
               <li key={item.key}>
                 <motion.div whileTap={{ scale: 0.96 }}>

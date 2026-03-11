@@ -28,12 +28,9 @@ export const metadata: Metadata = {
     "Landing de conversion et audioguide immersif pour la Mirokaï Experience 2026.",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: [
-      { url: "/icons/favicon.ico" },
-      { url: "/icons/mirokai-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/mirokai-512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [{ url: "/icons/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    icon: [{ url: "/icons/favicon.ico", type: "image/x-icon" }],
+    shortcut: [{ url: "/icons/favicon.ico", type: "image/x-icon" }],
+    apple: [{ url: "/icons/favicon.ico", type: "image/x-icon" }],
   },
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
@@ -109,9 +110,18 @@ export function AudioguideShell() {
 
       <header className="glass-panel rounded-3xl p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-[0.16em] text-white/70">{t.eyebrow}</p>
-            <h1 className="mt-1 text-2xl sm:text-3xl">{t.title}</h1>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/icons/favicon.ico"
+              alt="Mirokai"
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded-xl border border-white/20 bg-white/10 p-1"
+            />
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-white/70">{t.eyebrow}</p>
+              <h1 className="mt-1 text-2xl sm:text-3xl">{t.title}</h1>
+            </div>
           </div>
           <div className="flex gap-2">
             <button
