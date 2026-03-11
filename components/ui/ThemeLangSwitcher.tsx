@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import { Languages, MoonStar, Sparkles, SunMedium, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -129,13 +129,25 @@ export function ThemeLangSwitcher() {
   const { locale, theme, setLocale, toggleTheme } = useAppPreferences();
   const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
-  const mobileBottomOffset = "calc(5.2rem + env(safe-area-inset-bottom))";
+  const [dragBounds, setDragBounds] = useState({ left: -280, right: 0, top: 0, bottom: 560 });
+  const dragControls = useDragControls();
 
   useEffect(() => {
     const syncLayout = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
       setOpen((prev) => (mobile ? prev : true));
+
+      if (mobile) {
+        const margin = 16;
+        const bubbleSize = 48;
+        setDragBounds({
+          left: -(window.innerWidth - bubbleSize - margin * 2),
+          right: 0,
+          top: 0,
+          bottom: Math.max(0, window.innerHeight - bubbleSize - margin * 2),
+        });
+      }
     };
 
     syncLayout();
@@ -152,10 +164,19 @@ export function ThemeLangSwitcher() {
   }
 
   return (
-    <div className="fixed right-4 z-[70]" style={{ bottom: mobileBottomOffset }}>
+    <motion.div
+      className="fixed right-4 top-4 z-[70]"
+      drag
+      dragListener={false}
+      dragControls={dragControls}
+      dragMomentum={false}
+      dragElastic={0.08}
+      dragConstraints={dragBounds}
+      whileDrag={{ scale: 1.03 }}
+    >
       <AnimatePresence>
         {open ? (
-          <div className="absolute bottom-14 right-0 w-[min(19rem,calc(100vw-1.5rem))]">
+          <div className="absolute right-0 top-14 w-[min(19rem,calc(100vw-1.5rem))]">
             <ControlsPanel
               locale={locale}
               theme={theme}
@@ -171,12 +192,13 @@ export function ThemeLangSwitcher() {
       <motion.button
         type="button"
         onClick={() => setOpen((current) => !current)}
+        onPointerDown={(event) => dragControls.start(event)}
         whileTap={{ scale: 0.94 }}
-        className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-[#1f2030]/85 text-white shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur"
+        className="inline-flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full border border-white/25 bg-[#1f2030]/85 text-white shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur active:cursor-grabbing"
         aria-label={copy[locale].open}
       >
         {open ? <X size={18} /> : <Sparkles size={18} className="text-[#FFD166]" />}
       </motion.button>
-    </div>
+    </motion.div>
   );
 }
