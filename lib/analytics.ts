@@ -1,14 +1,6 @@
 "use client";
 
-import type { VisitorProfile } from "@/types/profile";
-
-export type AnalyticsEventName =
-  | "page_view"
-  | "profile_selected"
-  | "form_started"
-  | "form_submitted"
-  | "eventbrite_redirect"
-  | "email_captured";
+import type { AnalyticsEventInput, AnalyticsEventName } from "@/types/analytics";
 
 declare global {
   interface Window {
@@ -16,13 +8,9 @@ declare global {
   }
 }
 
-interface AnalyticsPayload {
-  profile?: VisitorProfile;
-  source?: string;
-  step?: string;
-  value?: string | number;
+type AnalyticsPayload = Omit<AnalyticsEventInput, "event"> & {
   [key: string]: string | number | boolean | undefined;
-}
+};
 
 export const trackEvent = (
   event: AnalyticsEventName,
@@ -36,6 +24,21 @@ export const trackEvent = (
   window.dataLayer.push({
     event,
     ...payload,
+  });
+
+  const body = JSON.stringify({ event, ...payload });
+
+  if (navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    navigator.sendBeacon("/api/analytics/track", blob);
+    return;
+  }
+
+  void fetch("/api/analytics/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+    keepalive: true,
   });
 };
 

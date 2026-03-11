@@ -36,8 +36,10 @@ NEXT_PUBLIC_GTM_ID=
 NEXT_PUBLIC_GA_MEASUREMENT_ID=
 NEXT_PUBLIC_HOTJAR_ID=
 NEXT_PUBLIC_HOTJAR_SNIPPET_VERSION=6
+NEXT_PUBLIC_HERO_VIDEO_URL=/media/video/mirokai-hero-loop.mp4
 
 DASHBOARD_PASSWORD=mirokai-dashboard-2026
+CRON_SECRET=change-me-cron-secret
 
 RESEND_API_KEY=
 MIROKAI_EMAIL_FROM="Mirokaï Experience <experience@enchanted.tools>"
@@ -60,6 +62,8 @@ SUPABASE_SERVICE_ROLE_KEY=
     /book-private/route.ts
     /leads/route.ts
     /dashboard-auth/route.ts
+    /analytics/track/route.ts
+    /cron/email-sequence/route.ts
 
 /components
   /landing
@@ -102,6 +106,9 @@ SUPABASE_SERVICE_ROLE_KEY=
   bookingService.ts
   leadService.ts
   emailService.ts
+  subscriptionService.ts
+  analyticsService.ts
+  dashboardService.ts
 
 /types
   profile.ts
@@ -145,3 +152,18 @@ SUPABASE_SERVICE_ROLE_KEY=
 - Mobile-first priorisé (landing et audioguide).
 - Design Nimira: bleu nuit / violet profond / or lumineux.
 - Composants découplés pour évolution rapide (A/B tests, nouveaux parcours, intégrations CRM).
+
+## Médias (audio/vidéo)
+
+- Vidéo hero: `public/media/video/mirokai-hero-loop.mp4`
+- Audios audioguide FR/EN: `public/media/audio/fr/*` et `public/media/audio/en/*`
+- Détails de mapping: `lib/audioguideContent.ts`
+
+## Détails restants
+
+- Voir `README_RESTANT.md` pour la checklist de finalisation complète.
+
+## Base de données Supabase
+
+- Migration SQL: `supabase/migrations/20260311_000001_init_mirokai.sql`
+- Guide d'exécution: `supabase/README.md`

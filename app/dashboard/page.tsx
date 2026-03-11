@@ -2,11 +2,11 @@ import { cookies } from "next/headers";
 
 import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
 import { DashboardLogin } from "@/components/dashboard/DashboardLogin";
-import { getDashboardMetrics } from "@/services/bookingService";
+import { getDashboardMetrics } from "@/services/dashboardService";
 
 const COOKIE_NAME = "dashboard_auth";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   const cookieStore = cookies();
   const isAuthenticated = cookieStore.get(COOKIE_NAME)?.value === "1";
 
@@ -14,7 +14,7 @@ export default function DashboardPage() {
     return <DashboardLogin />;
   }
 
-  const metrics = getDashboardMetrics();
+  const metrics = await getDashboardMetrics();
 
   return (
     <main className="section-wrap py-8">

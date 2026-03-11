@@ -8,6 +8,8 @@ import { trackEvent } from "@/lib/analytics";
 import { b2bFormSchema } from "@/lib/validators";
 import type { B2BFormData } from "@/types/profile";
 
+import { useUTM } from "@/hooks/useUTM";
+
 interface B2BFormProps {
   onQualified: (data: B2BFormData) => void;
 }
@@ -18,6 +20,7 @@ export function B2BForm({ onQualified }: B2BFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hasStarted, setHasStarted] = useState(false);
+  const { utm } = useUTM();
 
   const {
     register,
@@ -49,6 +52,7 @@ export function B2BForm({ onQualified }: B2BFormProps) {
         body: JSON.stringify({
           ...data,
           profile: "b2b",
+          utm,
         }),
       });
 

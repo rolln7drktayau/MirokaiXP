@@ -38,7 +38,23 @@ export const leadSchema = b2bFormSchema.extend({
   utm: z.record(z.string(), z.string()).optional(),
 });
 
+export const analyticsEventSchema = z.object({
+  event: z.enum([
+    "page_view",
+    "profile_selected",
+    "form_started",
+    "form_submitted",
+    "eventbrite_redirect",
+    "email_captured",
+  ]),
+  profile: profileSchema.optional(),
+  source: z.string().optional(),
+  step: z.string().optional(),
+  value: z.union([z.string(), z.number()]).optional(),
+});
+
 export type B2BFormSchema = z.infer<typeof b2bFormSchema>;
 export type EmailCaptureSchema = z.infer<typeof emailCaptureSchema>;
 export type PrivateBookingSchema = z.infer<typeof privateBookingSchema>;
 export type LeadSchema = z.infer<typeof leadSchema>;
+export type AnalyticsEventSchema = z.infer<typeof analyticsEventSchema>;

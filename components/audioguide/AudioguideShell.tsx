@@ -4,7 +4,12 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import type { AudioguideSession, AudioguideStep, MirokaiCharacter } from "@/types/audioguide";
+import type {
+  AudioguideLocale,
+  AudioguideSession,
+  AudioguideStep,
+  MirokaiCharacter,
+} from "@/types/audioguide";
 
 import { NarrativeCard } from "./NarrativeCard";
 import { ProgressBar } from "./ProgressBar";
@@ -15,22 +20,59 @@ interface AudioguideShellProps {
 }
 
 type Screen = "welcome" | "map" | "step" | "end";
-type Locale = "fr" | "en";
+
+const shellCopy: Record<
+  AudioguideLocale,
+  {
+    title: string;
+    intro: string;
+    chooseGuide: string;
+    start: string;
+    mapContinue: string;
+    endingTitle: string;
+    endingBody: string;
+    reserveNext: string;
+    share: string;
+  }
+> = {
+  fr: {
+    title: "Audioguide immersif Nimira",
+    intro: "Sélectionnez votre langue et votre guide pour démarrer l'aventure narrative.",
+    chooseGuide: "Choisissez votre guide",
+    start: "Commencer l'aventure",
+    mapContinue: "Continuer l'exploration",
+    endingTitle: "Merci d'avoir exploré Nimira",
+    endingBody: "Votre session guidée est terminée. Prochaine étape: réserver un autre événement Mirokaï.",
+    reserveNext: "Réserver votre prochain événement",
+    share: "Partager l'expérience",
+  },
+  en: {
+    title: "Nimira Immersive Audioguide",
+    intro: "Pick your language and guide to start the narrative journey.",
+    chooseGuide: "Choose your guide",
+    start: "Start the journey",
+    mapContinue: "Continue exploration",
+    endingTitle: "Thanks for exploring Nimira",
+    endingBody: "Your guided session is complete. Next step: book your next Mirokai event.",
+    reserveNext: "Book your next event",
+    share: "Share the experience",
+  },
+};
 
 export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
   const [screen, setScreen] = useState<Screen>("welcome");
-  const [locale, setLocale] = useState<Locale>("fr");
+  const [locale, setLocale] = useState<AudioguideLocale>("fr");
   const [guide, setGuide] = useState<MirokaiCharacter>("miroki");
   const [steps, setSteps] = useState<AudioguideStep[]>(initialSteps);
   const [currentStepId, setCurrentStepId] = useState(initialSteps[0]?.id ?? "");
   const [session, setSession] = useState<AudioguideSession | null>(null);
 
-  const currentStep = useMemo(
-    () => steps.find((step) => step.id === currentStepId) ?? steps[0],
-    [currentStepId, steps],
-  );
+  const sortedSteps = useMemo(() => [...steps].sort((a, b) => a.order - b.order), [steps]);
+  const currentStep = useMemo(() => sortedSteps.find((step) => step.id === currentStepId) ?? sortedSteps[0], [currentStepId, sortedSteps]);
+  const currentStepIndex = Math.max(0, sortedSteps.findIndex((step) => step.id === currentStep?.id));
 
   const completedCount = session?.completedSteps.length ?? 0;
+  const copy = shellCopy[locale];
 
   const startExperience = () => {
     setSession({
@@ -44,6 +86,10 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
   };
 
   const goToStep = (stepId: string) => {
+    const selected = steps.find((step) => step.id === stepId);
+    if (!selected?.unlocked) {
+      return;
+    }
     setCurrentStepId(stepId);
     setScreen("step");
   };
@@ -53,9 +99,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
       return;
     }
 
-    const sorted = [...steps].sort((a, b) => a.order - b.order);
-    const index = sorted.findIndex((step) => step.id === currentStep.id);
-    const nextStep = sorted[index + 1];
+    const nextStep = sortedSteps[currentStepIndex + 1];
 
     const completedSet = new Set(session.completedSteps);
     completedSet.add(currentStep.id);
@@ -67,7 +111,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
 
     setSession({
       ...session,
-      currentStep: nextStep ? nextStep.order : sorted.length,
+      currentStep: nextStep ? nextStep.order : sortedSteps.length,
       completedSteps: Array.from(completedSet),
     });
 
@@ -78,6 +122,16 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
     }
 
     setScreen("end");
+  };
+
+  const goPreviousStep = () => {
+    if (currentStepIndex <= 0) {
+      return;
+    }
+
+    const previousStep = sortedSteps[currentStepIndex - 1];
+    setCurrentStepId(previousStep.id);
+    setScreen("step");
   };
 
   return (
@@ -92,10 +146,8 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
             transition={{ duration: 0.35, ease: "easeInOut" }}
             className="glass-panel rounded-3xl p-5"
           >
-            <h1 className="text-3xl">Audioguide immersif Nimira</h1>
-            <p className="mt-2 text-sm text-white/75">
-              Sélectionnez votre langue et votre guide pour démarrer l&apos;aventure narrative.
-            </p>
+            <h1 className="text-3xl">{copy.title}</h1>
+            <p className="mt-2 text-sm text-white/75">{copy.intro}</p>
 
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               <button
@@ -118,7 +170,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
               </button>
             </div>
 
-            <p className="mt-4 text-xs uppercase tracking-[0.16em] text-white/70">Choisissez votre guide</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.16em] text-white/70">{copy.chooseGuide}</p>
             <div className="mt-2 grid gap-2 sm:grid-cols-2">
               <button
                 type="button"
@@ -141,7 +193,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
             </div>
 
             <button type="button" onClick={startExperience} className="cta-primary mt-5">
-              Commencer l&apos;aventure ({locale.toUpperCase()})
+              {copy.start} ({locale.toUpperCase()})
             </button>
           </motion.section>
         ) : null}
@@ -155,7 +207,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
           >
             <StoryMap steps={steps} currentStepId={currentStepId} onSelectStep={goToStep} />
             <button type="button" onClick={() => goToStep(currentStepId)} className="cta-primary mt-4 w-full">
-              Continuer l&apos;exploration
+              {copy.mapContinue}
             </button>
           </motion.section>
         ) : null}
@@ -167,7 +219,13 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.35, ease: "easeInOut" }}
           >
-            <NarrativeCard step={{ ...currentStep, mirokaiCharacter: guide }} onNext={completeStep} />
+            <NarrativeCard
+              step={{ ...currentStep, mirokaiCharacter: guide }}
+              locale={locale}
+              onNext={completeStep}
+              onPrevious={goPreviousStep}
+              canGoPrevious={currentStepIndex > 0}
+            />
           </motion.section>
         ) : null}
 
@@ -179,13 +237,11 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
             className="glass-panel rounded-3xl p-5 text-center"
           >
             <p className="text-xs uppercase tracking-[0.2em] text-white/70">Fin de parcours</p>
-            <h2 className="mt-2 text-3xl">Merci d&apos;avoir exploré Nimira</h2>
-            <p className="mt-3 text-sm text-white/75">
-              Votre session guidée par {guide} est terminée. Prochaine étape: réserver un autre événement Mirokaï.
-            </p>
+            <h2 className="mt-2 text-3xl">{copy.endingTitle}</h2>
+            <p className="mt-3 text-sm text-white/75">{copy.endingBody}</p>
             <div className="mt-5 flex flex-wrap justify-center gap-2">
               <Link href="/" className="cta-primary">
-                Réserver votre prochain événement
+                {copy.reserveNext}
               </Link>
               <Link
                 href="https://www.linkedin.com/company/enchanted-tools/"
@@ -193,7 +249,7 @@ export function AudioguideShell({ steps: initialSteps }: AudioguideShellProps) {
                 rel="noreferrer"
                 className="cta-secondary"
               >
-                Partager l&apos;expérience
+                {copy.share}
               </Link>
             </div>
           </motion.section>
