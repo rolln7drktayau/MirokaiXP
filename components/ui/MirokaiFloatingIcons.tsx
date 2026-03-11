@@ -10,7 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Bubble = {
   id: number;
@@ -28,14 +28,14 @@ type Bubble = {
 
 const colors = ["#00F5C4", "#7B2FFF", "#53B3FF", "#FFD166", "#FF6B9D"] as const;
 const icons: LucideIcon[] = [Bot, Sparkles, Orbit, HeartHandshake, Cpu, MessageCircleHeart];
-const bubbleCount = 26;
+const bubbleCount = 34;
 
 const randomBetween = (min: number, max: number) => min + Math.random() * (max - min);
 
 const createBubble = (id: number): Bubble => ({
   id,
-  x: randomBetween(4, 95),
-  y: randomBetween(8, 92),
+  x: randomBetween(2, 97),
+  y: randomBetween(4, 95),
   size: Math.round(randomBetween(24, 54)),
   color: colors[id % colors.length],
   drift: randomBetween(-10, 10),
@@ -48,6 +48,7 @@ const createBubble = (id: number): Bubble => ({
 
 export function MirokaiFloatingIcons() {
   const prefersReducedMotion = useReducedMotion();
+  const boundsRef = useRef<HTMLDivElement | null>(null);
   const [bubbles, setBubbles] = useState<Bubble[]>(
     () => Array.from({ length: bubbleCount }, (_, index) => createBubble(index)),
   );
@@ -82,7 +83,7 @@ export function MirokaiFloatingIcons() {
   };
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-10 overflow-hidden" aria-hidden>
+    <div ref={boundsRef} className="pointer-events-none fixed inset-0 z-[60] overflow-hidden" aria-hidden>
       {bubbles.map((bubble) => {
         const Icon = bubble.icon;
 
@@ -93,7 +94,7 @@ export function MirokaiFloatingIcons() {
             tabIndex={-1}
             onMouseEnter={() => pulseBubble(bubble.id)}
             onClick={() => popBubble(bubble.id)}
-            className="pointer-events-auto absolute grid place-items-center rounded-full border border-white/25 backdrop-blur-sm"
+            className="pointer-events-auto absolute grid touch-none place-items-center rounded-full border border-white/25 backdrop-blur-sm"
             style={{
               left: `${bubble.x}%`,
               top: `${bubble.y}%`,
@@ -103,6 +104,10 @@ export function MirokaiFloatingIcons() {
                 `radial-gradient(circle at 35% 30%, ${bubble.color}66 0%, ${bubble.color}22 35%, transparent 72%)`,
               boxShadow: `0 0 26px ${bubble.color}44`,
             }}
+            drag
+            dragConstraints={boundsRef}
+            dragElastic={0.35}
+            dragMomentum={false}
             initial={{ opacity: 0, scale: 0.4 }}
             animate={
               prefersReducedMotion

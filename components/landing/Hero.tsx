@@ -173,7 +173,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeInOut", delay: 0.1 }}
-          className="glass-panel relative overflow-hidden rounded-[30px] p-4 sm:p-5"
+          className="glass-panel relative h-full overflow-hidden rounded-[30px] p-4 sm:p-5"
         >
           <motion.div
             className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,209,102,0.2),transparent_33%),radial-gradient(circle_at_18%_82%,rgba(0,245,196,0.18),transparent_37%)]"
@@ -181,10 +181,10 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             transition={{ duration: 6.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
 
-          <div className="relative space-y-4">
+          <div className="relative flex h-full flex-col gap-4">
             <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
 
-            <div className="relative overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(165deg,#1a1647_0%,#111033_56%,#0d0b26_100%)] p-3 sm:p-4">
+            <div className="relative flex-1 overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(165deg,#1a1647_0%,#111033_56%,#0d0b26_100%)] p-3 sm:p-4">
               <video
                 className="absolute inset-0 h-full w-full object-cover opacity-24"
                 autoPlay
@@ -197,7 +197,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               </video>
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,24,0.36),rgba(7,8,24,0.86))]" />
 
-              <div className="relative z-10 flex min-h-[340px] flex-col">
+              <div className="relative z-10 flex h-full min-h-[420px] flex-col">
                 <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
                   <motion.div
                     key={activeScenario}
@@ -310,7 +310,9 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               </div>
             </div>
 
-            <p className="text-xs text-white/70">{t.capsule}</p>
+            <div className="rounded-2xl border border-white/15 bg-black/20 px-3 py-2 text-xs text-white/70">
+              {t.capsule}
+            </div>
           </div>
         </motion.div>
       </div>
