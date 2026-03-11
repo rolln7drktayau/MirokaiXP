@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Space_Grotesk } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 
 import { AppPreferencesProvider } from "@/components/providers/AppPreferencesProvider";
@@ -7,12 +7,6 @@ import { MirokaiFloatingIcons } from "@/components/ui/MirokaiFloatingIcons";
 import { ThemeLangSwitcher } from "@/components/ui/ThemeLangSwitcher";
 
 import "./globals.css";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-});
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -43,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" data-theme="nimira-dark">
-      <body className={`${outfit.variable} ${spaceGrotesk.variable} bg-background text-foreground antialiased`}>
+      <body className={`${spaceGrotesk.variable} bg-background text-foreground antialiased`}>
         {gtmId ? (
           <Script id="gtm-base" strategy="afterInteractive">
             {`

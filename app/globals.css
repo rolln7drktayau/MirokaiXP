@@ -3,63 +3,69 @@
 @tailwind utilities;
 
 :root {
-  --background: #090913;
-  --foreground: #f1edff;
-  --surface: #100f2d;
-  --surface-2: #1a1644;
-  --accent: #7b2fff;
-  --accent-2: #ffd166;
-  --electric: #00f5c4;
-  --border-soft: rgba(241, 237, 255, 0.2);
-  --glass-bg: rgba(18, 15, 50, 0.5);
-  --glass-border: rgba(120, 97, 189, 0.35);
+  --background: #1f2030;
+  --foreground: #f4f0e6;
+  --surface: #2a2b3d;
+  --surface-2: #343652;
+  --accent: #004aad;
+  --accent-2: #f09803;
+  --accent-3: #0eaa92;
+  --accent-4: #a3337c;
+  --accent-5: #9e63a5;
+  --border-soft: rgba(244, 240, 230, 0.22);
+  --glass-bg: rgba(35, 37, 56, 0.78);
+  --glass-border: rgba(165, 110, 177, 0.34);
   --bg-mesh:
-    radial-gradient(80% 60% at 15% 15%, rgba(123, 47, 255, 0.28), transparent 65%),
-    radial-gradient(90% 70% at 85% 22%, rgba(0, 245, 196, 0.2), transparent 66%),
-    radial-gradient(70% 55% at 50% 88%, rgba(255, 209, 102, 0.16), transparent 68%),
-    linear-gradient(150deg, #070710 0%, #0c0b1f 50%, #150f36 100%);
+    radial-gradient(72% 58% at 13% 15%, rgba(0, 74, 173, 0.28), transparent 64%),
+    radial-gradient(72% 58% at 88% 20%, rgba(163, 51, 124, 0.26), transparent 64%),
+    radial-gradient(85% 62% at 42% 88%, rgba(14, 170, 146, 0.18), transparent 70%),
+    linear-gradient(145deg, #1f2030 0%, #23263a 48%, #202534 100%);
 }
 
 html[data-theme="nimira-dark"] {
-  --background: #090913;
-  --foreground: #f1edff;
-  --surface: #100f2d;
-  --surface-2: #1a1644;
-  --accent: #7b2fff;
-  --accent-2: #ffd166;
-  --electric: #00f5c4;
-  --border-soft: rgba(241, 237, 255, 0.2);
-  --glass-bg: rgba(18, 15, 50, 0.5);
-  --glass-border: rgba(120, 97, 189, 0.35);
+  --background: #1f2030;
+  --foreground: #f4f0e6;
+  --surface: #2a2b3d;
+  --surface-2: #343652;
+  --accent: #004aad;
+  --accent-2: #f09803;
+  --accent-3: #0eaa92;
+  --accent-4: #a3337c;
+  --accent-5: #9e63a5;
+  --border-soft: rgba(244, 240, 230, 0.22);
+  --glass-bg: rgba(35, 37, 56, 0.78);
+  --glass-border: rgba(165, 110, 177, 0.34);
   --bg-mesh:
-    radial-gradient(80% 60% at 15% 15%, rgba(123, 47, 255, 0.28), transparent 65%),
-    radial-gradient(90% 70% at 85% 22%, rgba(0, 245, 196, 0.2), transparent 66%),
-    radial-gradient(70% 55% at 50% 88%, rgba(255, 209, 102, 0.16), transparent 68%),
-    linear-gradient(150deg, #070710 0%, #0c0b1f 50%, #150f36 100%);
+    radial-gradient(72% 58% at 13% 15%, rgba(0, 74, 173, 0.28), transparent 64%),
+    radial-gradient(72% 58% at 88% 20%, rgba(163, 51, 124, 0.26), transparent 64%),
+    radial-gradient(85% 62% at 42% 88%, rgba(14, 170, 146, 0.18), transparent 70%),
+    linear-gradient(145deg, #1f2030 0%, #23263a 48%, #202534 100%);
 }
 
 html[data-theme="nimira-light"] {
-  --background: #f5efff;
-  --foreground: #22144d;
-  --surface: #ffffff;
-  --surface-2: #eee6ff;
-  --accent: #7b2fff;
-  --accent-2: #ffb800;
-  --electric: #00ad8b;
-  --border-soft: rgba(45, 30, 92, 0.18);
-  --glass-bg: rgba(255, 255, 255, 0.78);
-  --glass-border: rgba(84, 62, 151, 0.24);
+  --background: #f3efe4;
+  --foreground: #202020;
+  --surface: #fff8ee;
+  --surface-2: #f8e9d6;
+  --accent: #004aad;
+  --accent-2: #f09803;
+  --accent-3: #0eaa92;
+  --accent-4: #a3337c;
+  --accent-5: #9e63a5;
+  --border-soft: rgba(32, 32, 32, 0.18);
+  --glass-bg: rgba(255, 248, 238, 0.84);
+  --glass-border: rgba(163, 51, 124, 0.24);
   --bg-mesh:
-    radial-gradient(70% 60% at 10% 18%, rgba(143, 102, 255, 0.28), transparent 68%),
-    radial-gradient(80% 65% at 85% 12%, rgba(0, 211, 166, 0.18), transparent 66%),
-    radial-gradient(90% 72% at 52% 92%, rgba(255, 198, 88, 0.18), transparent 75%),
-    linear-gradient(160deg, #efe7ff 0%, #f7f3ff 52%, #e8fff8 100%);
+    radial-gradient(70% 55% at 12% 18%, rgba(0, 74, 173, 0.14), transparent 68%),
+    radial-gradient(76% 58% at 90% 16%, rgba(163, 51, 124, 0.14), transparent 68%),
+    radial-gradient(86% 62% at 52% 90%, rgba(14, 170, 146, 0.12), transparent 72%),
+    linear-gradient(160deg, #f3efe4 0%, #f8f1e8 56%, #fbf5eb 100%);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   min-height: 100vh;
   background-image: var(--bg-mesh);
   background-attachment: fixed;
@@ -71,20 +77,26 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.08;
   background-image:
-    radial-gradient(circle at 20% 40%, rgba(255, 255, 255, 0.35) 0.6px, transparent 0.6px),
-    radial-gradient(circle at 60% 80%, rgba(255, 255, 255, 0.3) 0.6px, transparent 0.6px);
-  background-size: 2.8px 2.8px, 3.6px 3.6px;
+    radial-gradient(circle at 12% 20%, rgba(32, 32, 32, 0.2) 0.7px, transparent 0.7px),
+    radial-gradient(circle at 72% 82%, rgba(32, 32, 32, 0.15) 0.8px, transparent 0.8px);
+  background-size: 3px 3px, 4px 4px;
   z-index: 0;
 }
 
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6,
+p,
+button,
+input,
+select,
+textarea {
   font-family: var(--font-space-grotesk), sans-serif;
-  letter-spacing: 0.01em;
 }
 
 * {
@@ -126,10 +138,10 @@ h4 {
   .glass-panel {
     border: 1px solid var(--glass-border);
     background: var(--glass-bg);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(14px);
     box-shadow:
-      0 16px 34px rgba(9, 7, 24, 0.22),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      0 12px 28px rgba(18, 16, 33, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .section-wrap {
@@ -139,15 +151,15 @@ h4 {
   .section-shell {
     @apply rounded-3xl border p-5 sm:p-6;
     border-color: var(--border-soft);
-    background: color-mix(in srgb, var(--surface) 65%, transparent);
-    box-shadow: 0 14px 30px rgba(8, 6, 20, 0.18);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    box-shadow: 0 12px 24px rgba(14, 10, 22, 0.16);
   }
 
   .cta-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition;
-    color: #101028;
-    background: linear-gradient(95deg, #ffd166 0%, #ffefad 32%, #00f5c4 100%);
-    box-shadow: 0 8px 24px rgba(0, 245, 196, 0.28);
+    color: #f8f5eb;
+    background: linear-gradient(95deg, #004aad 0%, #a3337c 50%, #f09803 100%);
+    box-shadow: 0 8px 18px rgba(163, 51, 124, 0.26);
   }
 
   .cta-primary:hover {
@@ -159,12 +171,12 @@ h4 {
     @apply inline-flex items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition;
     border-color: color-mix(in srgb, var(--foreground) 22%, transparent);
     color: var(--foreground);
-    background: color-mix(in srgb, var(--surface-2) 48%, transparent);
+    background: color-mix(in srgb, var(--surface-2) 62%, transparent);
   }
 
   .cta-secondary:hover {
     transform: translateY(-1px);
-    background: color-mix(in srgb, var(--surface-2) 64%, transparent);
+    background: color-mix(in srgb, var(--surface-2) 76%, transparent);
   }
 }
 
@@ -174,17 +186,17 @@ html[data-theme="nimira-light"] .text-white\/75,
 html[data-theme="nimira-light"] .text-white\/70,
 html[data-theme="nimira-light"] .text-white\/65,
 html[data-theme="nimira-light"] .text-white\/60 {
-  color: rgba(34, 20, 77, 0.84) !important;
+  color: rgba(32, 32, 32, 0.82) !important;
 }
 
 html[data-theme="nimira-light"] .border-white\/25,
 html[data-theme="nimira-light"] .border-white\/20,
 html[data-theme="nimira-light"] .border-white\/15,
 html[data-theme="nimira-light"] .border-white\/10 {
-  border-color: rgba(63, 44, 128, 0.22) !important;
+  border-color: rgba(32, 32, 32, 0.2) !important;
 }
 
 html[data-theme="nimira-light"] .bg-white\/10,
 html[data-theme="nimira-light"] .bg-white\/5 {
-  background-color: rgba(255, 255, 255, 0.65) !important;
+  background-color: rgba(255, 248, 238, 0.72) !important;
 }

@@ -122,7 +122,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
   return (
     <section className="section-wrap relative overflow-hidden pb-16 pt-10 sm:pt-14">
-      <div className="absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(circle_at_top,rgba(123,47,255,0.26),transparent_62%)]" />
+      <div className="absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(circle_at_top,rgba(0,74,173,0.3),transparent_62%)]" />
 
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <motion.div
@@ -131,8 +131,8 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           transition={{ duration: 0.7, ease: "easeInOut" }}
           className="section-shell space-y-6"
         >
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/75">
-            <Sparkles size={12} className="text-[#FFD166]" />
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#a3337c]/25 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/85">
+            <Sparkles size={12} className="text-[#f09803]" />
             {t.label}
           </p>
 
@@ -161,9 +161,9 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             <div className="glass-panel rounded-2xl p-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs uppercase tracking-[0.16em] text-white/70">{t.stat1}</span>
-                <Bot size={16} className="text-[#00F5C4] nimira-pulse" />
+                <Bot size={16} className="text-[#0eaa92] nimira-pulse" />
               </div>
-              <p className="mt-2 text-2xl font-semibold text-[#00F5C4]">98%</p>
+              <p className="mt-2 text-2xl font-semibold text-[#0eaa92]">98%</p>
               <p className="mt-2 text-xs text-white/70">{t.stat2}: 4.9 / 5</p>
             </div>
           </div>
@@ -176,7 +176,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           className="glass-panel relative h-full overflow-hidden rounded-[30px] p-4 sm:p-5"
         >
           <motion.div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,209,102,0.2),transparent_33%),radial-gradient(circle_at_18%_82%,rgba(0,245,196,0.18),transparent_37%)]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(240,152,3,0.24),transparent_33%),radial-gradient(circle_at_18%_82%,rgba(14,170,146,0.22),transparent_37%)]"
             animate={prefersReducedMotion ? undefined : { scale: [1, 1.02, 1], opacity: [0.9, 1, 0.9] }}
             transition={{ duration: 6.2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
           />
@@ -184,7 +184,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           <div className="relative flex h-full min-h-[560px] flex-col gap-4 sm:min-h-[620px] lg:min-h-[680px]">
             <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
 
-            <div className="relative flex-1 overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(165deg,#1a1647_0%,#111033_56%,#0d0b26_100%)] p-3 sm:p-4">
+            <div className="relative flex-1 overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(160deg,#24334e_0%,#2a2752_45%,#332343_100%)] p-3 sm:p-4">
               <video
                 className="absolute inset-0 h-full w-full object-cover opacity-24"
                 autoPlay
@@ -204,25 +204,25 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="rounded-2xl border border-white/15 bg-[#09071f]/70 p-3.5"
+                    className="rounded-2xl border border-white/15 bg-[#1f2030]/70 p-3.5"
                   >
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#53B3FF]">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[#0eaa92]">
                       {t.activeScenario} • {scenarios[activeScenario].name}
                     </p>
                     <p className="mt-2 text-sm text-white/85">{scenarios[activeScenario].description}</p>
                   </motion.div>
 
                   <div className="flex gap-2 sm:flex-col">
-                    <span className="rounded-full border border-[#00F5C4]/45 bg-[#00F5C4]/12 px-3 py-1.5 text-[11px] text-[#00F5C4]">
+                    <span className="rounded-full border border-[#0eaa92]/45 bg-[#0eaa92]/16 px-3 py-1.5 text-[11px] text-[#0eaa92]">
                       {t.tagA}
                     </span>
-                    <span className="rounded-full border border-[#FFD166]/45 bg-[#FFD166]/12 px-3 py-1.5 text-[11px] text-[#FFD166]">
+                    <span className="rounded-full border border-[#f09803]/45 bg-[#f09803]/16 px-3 py-1.5 text-[11px] text-[#f09803]">
                       {t.tagB}
                     </span>
                   </div>
                 </div>
 
-                <div className="relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#09081d]/55 sm:min-h-[240px]">
+                <div className="relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#1f2030]/50 sm:min-h-[240px]">
                   <svg
                     className="absolute inset-0 h-full w-full opacity-45"
                     viewBox="0 0 100 100"
@@ -235,7 +235,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                         y1="52"
                         x2={node.x}
                         y2={node.y}
-                        stroke={index === activeScenario ? "#FFD166" : "#53B3FF"}
+                        stroke={index === activeScenario ? "#f09803" : "#004aad"}
                         strokeWidth="0.35"
                         strokeDasharray="1.1 1.2"
                         opacity={index === activeScenario ? 0.95 : 0.4}
@@ -245,17 +245,17 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
                   <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2">
                     <motion.div
-                      className="absolute inset-0 rounded-full border border-[#53B3FF]/55"
+                      className="absolute inset-0 rounded-full border border-[#004aad]/55"
                       animate={prefersReducedMotion ? undefined : { rotate: 360 }}
                       transition={{ duration: 12, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                     />
                     <motion.div
-                      className="absolute inset-2 rounded-full border border-[#FFD166]/55"
+                      className="absolute inset-2 rounded-full border border-[#f09803]/55"
                       animate={prefersReducedMotion ? undefined : { rotate: -360 }}
                       transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                     />
                     <motion.div
-                      className="absolute inset-5 rounded-full bg-[radial-gradient(circle,#8fd1ff_0%,#2a2f76_45%,#17163d_100%)]"
+                      className="absolute inset-5 rounded-full bg-[radial-gradient(circle,#0eaa92_0%,#004aad_45%,#1f2030_100%)]"
                       animate={prefersReducedMotion ? undefined : { scale: [1, 1.08, 1] }}
                       transition={{ duration: 2.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
                     />
@@ -271,7 +271,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                         onClick={() => setActiveScenario(index)}
                         className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-3 py-1.5 text-xs transition ${
                           isActive
-                            ? "border-[#FFD166]/75 bg-[#FFD166]/20 text-[#FFD166]"
+                            ? "border-[#f09803]/75 bg-[#f09803]/20 text-[#f09803]"
                             : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
                         }`}
                         style={{ left: `${position.x}%`, top: `${position.y}%` }}
@@ -300,7 +300,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                   <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                     <motion.div
                       key={activeScenario}
-                      className="h-full bg-gradient-to-r from-[#53B3FF] via-[#00F5C4] to-[#FFD166]"
+                      className="h-full bg-gradient-to-r from-[#004aad] via-[#a3337c] to-[#f09803]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
                       transition={{ duration: 4.4, ease: "linear" }}
