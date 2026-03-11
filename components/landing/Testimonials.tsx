@@ -23,18 +23,29 @@ const testimonials = [
 
 export function Testimonials() {
   const [index, setIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) {
+      return;
+    }
+
     const timer = window.setInterval(() => {
       setIndex((current) => (current + 1) % testimonials.length);
-    }, 5000);
+    }, 8500);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   const item = testimonials[index];
 
   return (
-    <section className="section-wrap py-10">
+    <section
+      className="section-wrap py-10"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={() => setIsPaused(false)}
+    >
       <p className="text-xs uppercase tracking-[0.2em] text-white/70">Témoignages B2B</p>
       <motion.figure
         key={item.company}

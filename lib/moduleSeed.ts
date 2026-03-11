@@ -25,7 +25,7 @@ export const moduleSeed: Module[] = [
     position: { x: 32, y: 42 },
     mirokaiPrompt:
       "Je peux orienter un visiteur vers le bon rayon et répondre rapidement aux questions fréquentes.",
-    unlocked: false,
+    unlocked: true,
     theme: "tech",
   },
   {
@@ -38,7 +38,7 @@ export const moduleSeed: Module[] = [
     position: { x: 52, y: 36 },
     mirokaiPrompt:
       "Dans une entreprise, je facilite l'onboarding en apportant un guidage contextualisé.",
-    unlocked: false,
+    unlocked: true,
     theme: "emotion",
   },
   {
@@ -51,7 +51,7 @@ export const moduleSeed: Module[] = [
     position: { x: 64, y: 58 },
     mirokaiPrompt:
       "Dans les parcours sensibles, mes réponses restent courtes, claires et rassurantes.",
-    unlocked: false,
+    unlocked: true,
     theme: "emotion",
   },
   {
@@ -64,7 +64,7 @@ export const moduleSeed: Module[] = [
     position: { x: 76, y: 30 },
     mirokaiPrompt:
       "Je vous raconte une mission Nimira en moins de trois phrases pour garder votre attention.",
-    unlocked: false,
+    unlocked: true,
     theme: "nimira",
   },
   {
@@ -77,7 +77,7 @@ export const moduleSeed: Module[] = [
     position: { x: 86, y: 64 },
     mirokaiPrompt:
       "Le futur des interactions homme-robot se construit sur la confiance et la simplicité.",
-    unlocked: false,
+    unlocked: true,
     theme: "narration",
   },
 ];

@@ -26,8 +26,13 @@ export const useModules = () => {
         throw new Error("Réponse invalide.");
       }
 
-      setModules(payload.data);
-      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload.data));
+      const normalizedModules = payload.data.map((module) => ({
+        ...module,
+        unlocked: true,
+      }));
+
+      setModules(normalizedModules);
+      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(normalizedModules));
     } catch (err) {
       const cached = window.sessionStorage.getItem(STORAGE_KEY);
       if (cached) {

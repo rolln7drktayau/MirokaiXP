@@ -49,7 +49,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
 
     const timer = window.setInterval(() => {
       setActiveScenario((current) => (current + 1) % scenarios.length);
-    }, 3200);
+    }, 4700);
 
     return () => window.clearInterval(timer);
   }, [prefersReducedMotion]);
@@ -84,6 +84,12 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
             </button>
             <Link href="/experience" className="cta-secondary">
               Lancer la visite PWA
+            </Link>
+            <Link href="/game" className="cta-secondary">
+              Quiz Nimira
+            </Link>
+            <Link href="/game/memory" className="cta-secondary">
+              Memory Nimira
             </Link>
           </div>
 
@@ -124,6 +130,32 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                 animate={prefersReducedMotion ? undefined : { x: [0, 6, 0], y: [0, -10, 0] }}
                 transition={{ duration: 4.6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
               />
+              <div className="pointer-events-none absolute inset-0">
+                {[0, 1, 2, 3, 4].map((dot) => (
+                  <motion.span
+                    key={dot}
+                    className="absolute h-1.5 w-1.5 rounded-full bg-[#F5C842]/75"
+                    style={{
+                      left: `${14 + dot * 18}%`,
+                      top: `${18 + (dot % 2) * 30}%`,
+                    }}
+                    animate={
+                      prefersReducedMotion
+                        ? undefined
+                        : {
+                            opacity: [0.15, 1, 0.15],
+                            y: [0, -8, 0],
+                            scale: [0.85, 1.1, 0.85],
+                          }
+                    }
+                    transition={{
+                      duration: 2.6 + dot * 0.5,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
+                  />
+                ))}
+              </div>
 
               <div className="relative flex h-full flex-col justify-between">
                 <motion.div
@@ -183,7 +215,7 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                       className="h-full bg-gradient-to-r from-[#53B3FF] via-[#8c6cff] to-[#F5C842]"
                       initial={{ width: "0%" }}
                       animate={{ width: "100%" }}
-                      transition={{ duration: 3.1, ease: "linear" }}
+                      transition={{ duration: 4.4, ease: "linear" }}
                     />
                   </div>
                 </div>

@@ -17,6 +17,7 @@ import { Hero } from "./Hero";
 import { ProfileSelector } from "./ProfileSelector";
 import { Testimonials } from "./Testimonials";
 import { UseCases } from "./UseCases";
+import { ArcadeSection } from "./ArcadeSection";
 
 const EVENTBRITE_URL =
   process.env.NEXT_PUBLIC_EVENTBRITE_URL ??
@@ -67,6 +68,7 @@ export function LandingExperience() {
       <ProfileSelector profile={hydrated ? profile : "solo"} onSelect={handleProfileChange} />
 
       <UseCases />
+      <ArcadeSection />
 
       <section ref={bookingRef}>
         <BookingCalendar

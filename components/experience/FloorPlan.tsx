@@ -1,5 +1,6 @@
 "use client";
 
+import { getModuleThemeIcon } from "@/lib/moduleIcons";
 import type { Module } from "@/types/module";
 
 interface FloorPlanProps {
@@ -18,6 +19,9 @@ export function FloorPlan({ modules, activeModuleId, onSelectModule }: FloorPlan
 
       {modules.map((module) => {
         const isActive = activeModuleId === module.id;
+        const themeMeta = getModuleThemeIcon(module.theme);
+        const ThemeIcon = themeMeta.icon;
+
         return (
           <button
             key={module.id}
@@ -26,13 +30,15 @@ export function FloorPlan({ modules, activeModuleId, onSelectModule }: FloorPlan
             className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border px-2.5 py-1 text-xs font-semibold transition ${
               isActive
                 ? "border-[#FFD166] bg-[#FFD166]/20 text-[#FFD166]"
-                : module.unlocked
-                  ? "border-[#00F5C4]/60 bg-[#00F5C4]/15 text-[#00F5C4]"
-                  : "border-white/25 bg-white/10 text-white/60"
+                : "border-[#00F5C4]/60 bg-[#00F5C4]/15 text-[#00F5C4]"
             }`}
             style={{ left: `${module.position.x}%`, top: `${module.position.y}%` }}
+            aria-label={`Ouvrir le module ${module.number} ${module.name}`}
           >
-            #{module.number}
+            <span className="inline-flex items-center gap-1">
+              <ThemeIcon size={13} className={isActive ? "text-[#FFD166]" : themeMeta.colorClassName} />
+              #{module.number}
+            </span>
           </button>
         );
       })}

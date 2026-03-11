@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useModules } from "@/hooks/useModules";
 import { usePWA } from "@/hooks/usePWA";
 import type { Module } from "@/types/module";
+import { NavBackHome } from "@/components/ui/NavBackHome";
 
 import { AudioPlayer } from "./AudioPlayer";
 import { FloorPlan } from "./FloorPlan";
@@ -71,6 +72,8 @@ export function AudioguideShell() {
 
   return (
     <main className="section-wrap py-8 space-y-4">
+      <NavBackHome backLabel="Page précédente" homeLabel="Accueil" />
+
       <header className="glass-panel rounded-3xl p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
