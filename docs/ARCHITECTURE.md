@@ -23,10 +23,10 @@ flowchart LR
   API --> Analytics[GA4/GTM/Hotjar]
 
   NextApp --> PWA[PWA Shell + SW]
-  PWA --> LocalState[(localStorage/sessionStorage)]
+  PWA --> LocalState["localStorage / sessionStorage"]
 
-  API --> Cron[/api/cron/email-sequence]
-  Cron --> Queue[(email_queue)]
+  API --> Cron["/api/cron/email-sequence"]
+  Cron --> Queue["email_queue"]
   Queue --> Resend
 ```
 

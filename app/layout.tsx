@@ -3,6 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 
 import { AppPreferencesProvider } from "@/components/providers/AppPreferencesProvider";
+import { CookieConsentBanner } from "@/components/ui/CookieConsentBanner";
 import { MobileBottomNav } from "@/components/ui/MobileBottomNav";
 import { MirokaiFloatingIcons } from "@/components/ui/MirokaiFloatingIcons";
 import { ThemeLangSwitcher } from "@/components/ui/ThemeLangSwitcher";
@@ -87,6 +88,7 @@ export default function RootLayout({
           <ThemeLangSwitcher />
           <MirokaiFloatingIcons />
           <MobileBottomNav />
+          <CookieConsentBanner />
           {children}
         </AppPreferencesProvider>
       </body>
