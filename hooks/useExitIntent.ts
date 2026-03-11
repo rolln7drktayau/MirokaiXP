@@ -6,30 +6,30 @@ export const useExitIntent = (enabled = true) => {
   const [isTriggered, setIsTriggered] = useState(false);
 
   useEffect(() => {
-    if (!enabled || isTriggered) {
+    if (!enabled) {
       return;
     }
 
-    const onMouseOut = (event: MouseEvent) => {
-      if (event.clientY <= 0) {
-        setIsTriggered(true);
-      }
-    };
+    const navigationEntry = performance.getEntriesByType("navigation")[0] as
+      | PerformanceNavigationTiming
+      | undefined;
 
-    const onTouchEnd = () => {
-      if (window.scrollY < 12) {
-        setIsTriggered(true);
-      }
-    };
+    let isReload = navigationEntry?.type === "reload";
 
-    document.addEventListener("mouseout", onMouseOut);
-    document.addEventListener("touchend", onTouchEnd);
+    // Fallback for older browsers.
+    if (!navigationEntry && "navigation" in performance) {
+      const legacyNavigation = (
+        performance as Performance & {
+          navigation?: { type?: number };
+        }
+      ).navigation;
+      isReload = legacyNavigation?.type === 1;
+    }
 
-    return () => {
-      document.removeEventListener("mouseout", onMouseOut);
-      document.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [enabled, isTriggered]);
+    if (isReload) {
+      setIsTriggered(true);
+    }
+  }, [enabled]);
 
   return {
     isTriggered,

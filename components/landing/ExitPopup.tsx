@@ -79,8 +79,16 @@ export function ExitPopup({ profile }: ExitPopupProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4">
-      <div className="glass-panel w-full max-w-md rounded-3xl p-5">
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/70 px-4"
+      onClick={dismiss}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="glass-panel w-full max-w-md rounded-3xl p-5"
+        onClick={(event) => event.stopPropagation()}
+      >
         <h3 className="text-xl">{t.title}</h3>
         <p className="mt-2 text-sm text-white/75">
           {t.intro}
