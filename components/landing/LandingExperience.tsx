@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import { useProfile } from "@/hooks/useProfile";
 import { trackEvent, trackPageView } from "@/lib/analytics";
-import type { VisitorProfile, VisitorSession } from "@/types/profile";
+import type { VisitorProfile } from "@/types/profile";
 
 import { ConfirmationBanner } from "./ConfirmationBanner";
 import { ContactSection } from "./ContactSection";
@@ -23,11 +23,7 @@ import { ArcadeSection } from "./ArcadeSection";
 const DEPLOYED_ROBOTS = Number(process.env.NEXT_PUBLIC_DEPLOYED_ROBOTS ?? "24");
 const MOBILE_TAB_EVENT = "mirokai-mobile-tab-change";
 
-interface LandingExperienceProps {
-  visitorSession: VisitorSession | null;
-}
-
-export function LandingExperience({ visitorSession }: LandingExperienceProps) {
+export function LandingExperience() {
   const { locale } = useAppPreferences();
   const contactsRef = useRef<HTMLElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -140,7 +136,6 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
           <Hero
             profile={hydrated ? resolvedProfile : "team"}
             deployedRobots={DEPLOYED_ROBOTS}
-            visitorSession={visitorSession}
             onPrimaryCTA={scrollToContacts}
           />
 

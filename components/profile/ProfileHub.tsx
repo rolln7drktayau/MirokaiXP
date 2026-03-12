@@ -10,6 +10,7 @@ import { useAppPreferences } from "@/components/providers/AppPreferencesProvider
 import { NavBackHome } from "@/components/ui/NavBackHome";
 import { useVisitorSession } from "@/hooks/useVisitorSession";
 import type { VisitorSegment } from "@/types/profile";
+import { RobotScenarioPanel } from "./RobotScenarioPanel";
 
 interface ProfileHubProps {
   adminAuthenticated: boolean;
@@ -302,45 +303,49 @@ export function ProfileHub({ adminAuthenticated, nextPath, blockedReason }: Prof
             ) : null}
           </section>
 
-          <section className="glass-panel rounded-3xl p-5">
-            <p className="text-xs uppercase tracking-[0.14em] text-white/70">{t.adminTitle}</p>
-            <h2 className="mt-2 text-xl">{t.adminTitle}</h2>
-            <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>{t.adminDesc}</p>
+          <div className="space-y-4">
+            <RobotScenarioPanel visitorName={session?.name} visitorSegment={session?.segment} />
 
-            {adminAuthenticated ? (
-              <div className="mt-4 space-y-3">
-                <p className="inline-flex items-center gap-2 text-sm text-[#06D6A0]">
-                  <ShieldCheck size={16} />
-                  {t.adminReady}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <Link href="/admin" className="cta-primary">
-                    {t.openAdmin}
-                  </Link>
-                  <Link href="/dashboard" className="cta-secondary">
-                    {t.openDashboard}
-                  </Link>
+            <section className="glass-panel rounded-3xl p-5">
+              <p className="text-xs uppercase tracking-[0.14em] text-white/70">{t.adminTitle}</p>
+              <h2 className="mt-2 text-xl">{t.adminTitle}</h2>
+              <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>{t.adminDesc}</p>
+
+              {adminAuthenticated ? (
+                <div className="mt-4 space-y-3">
+                  <p className="inline-flex items-center gap-2 text-sm text-[#06D6A0]">
+                    <ShieldCheck size={16} />
+                    {t.adminReady}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/admin" className="cta-primary">
+                      {t.openAdmin}
+                    </Link>
+                    <Link href="/dashboard" className="cta-secondary">
+                      {t.openDashboard}
+                    </Link>
+                  </div>
+                  <button type="button" onClick={onAdminLogout} className="cta-secondary">
+                    {t.logoutAdmin}
+                  </button>
                 </div>
-                <button type="button" onClick={onAdminLogout} className="cta-secondary">
-                  {t.logoutAdmin}
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={onAdminSubmit} className="mt-4 space-y-3">
-                <input
-                  type="password"
-                  value={adminPassword}
-                  onChange={(event) => setAdminPassword(event.target.value)}
-                  placeholder={t.adminPassword}
-                  className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#53B3FF]"
-                />
-                <button type="submit" className="cta-primary w-full">
-                  {adminStatus === "loading" ? "..." : t.adminConnect}
-                </button>
-                {adminStatus === "error" ? <p className="text-xs text-red-300">{t.adminInvalid}</p> : null}
-              </form>
-            )}
-          </section>
+              ) : (
+                <form onSubmit={onAdminSubmit} className="mt-4 space-y-3">
+                  <input
+                    type="password"
+                    value={adminPassword}
+                    onChange={(event) => setAdminPassword(event.target.value)}
+                    placeholder={t.adminPassword}
+                    className="w-full rounded-xl border border-white/20 bg-white/5 px-3 py-2 text-sm outline-none focus:border-[#53B3FF]"
+                  />
+                  <button type="submit" className="cta-primary w-full">
+                    {adminStatus === "loading" ? "..." : t.adminConnect}
+                  </button>
+                  {adminStatus === "error" ? <p className="text-xs text-red-300">{t.adminInvalid}</p> : null}
+                </form>
+              )}
+            </section>
+          </div>
         </div>
       </div>
     </main>
