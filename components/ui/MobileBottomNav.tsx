@@ -59,6 +59,11 @@ export function MobileBottomNav() {
   }, []);
 
   useEffect(() => {
+    if (pathname === "/game" || pathname.startsWith("/game/")) {
+      setActiveTab("game");
+      return;
+    }
+
     if (pathname === "/profile" || pathname.startsWith("/profile/")) {
       setActiveTab("profile");
       return;
@@ -85,14 +90,15 @@ export function MobileBottomNav() {
       return;
     }
 
+    const nextHash = item.key === "home" ? "" : `#${item.key}`;
     setActiveTab(item.key);
+    setHash(nextHash);
 
     if (pathname !== "/") {
       router.push(item.href);
       return;
     }
 
-    const nextHash = item.key === "home" ? "" : `#${item.key}`;
     const nextUrl = `${window.location.pathname}${nextHash}`;
     window.history.replaceState(null, "", nextUrl);
     window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: item.key } }));
