@@ -1,7 +1,15 @@
 "use client";
 
-import { format } from "date-fns";
-import { useState } from "react";
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
+import { useEffect, useMemo, useState } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { BookingSlot } from "@/types/booking";
@@ -19,6 +27,12 @@ const slotColors: Record<BookingSlot["audience"], string> = {
   business: "border-[#F5C842]/45 bg-[#F5C842]/10",
 };
 
+const toDayKey = (date: Date) => format(date, "yyyy-MM-dd");
+const fromDayKey = (dayKey: string) => {
+  const [year, month, day] = dayKey.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
 export function BookingCalendar({
   profile,
   slots,
@@ -28,10 +42,16 @@ export function BookingCalendar({
   const { locale } = useAppPreferences();
   const [showPrivateForm, setShowPrivateForm] = useState(false);
   const [privateStatus, setPrivateStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
 
   const copy = {
     fr: {
       title: "Réservez votre créneau",
+      calendarTitle: "Calendrier des disponibilités",
+      calendarHint: "Cliquez sur un jour pour afficher les créneaux de réservation.",
+      selectDate: "Date sélectionnée",
+      noDateSelected: "Sélectionnez une date active dans le calendrier.",
+      noSlotsForDate: "Aucun créneau disponible pour ce jour.",
       public: "Grand public",
       business: "Groupe entreprise",
       seatsLeft: "places restantes",
@@ -50,10 +70,16 @@ export function BookingCalendar({
       success: "Demande envoyée, notre équipe revient vers vous.",
       error: "Erreur lors de l'envoi, merci de réessayer.",
       tip: "Astuce: sélectionnez le profil \"Je représente une entreprise\" pour activer le code promo B2B2026.",
+      weekdayLabels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
       weekdays: "fr-FR",
     },
     en: {
       title: "Book your slot",
+      calendarTitle: "Availability calendar",
+      calendarHint: "Click a day to reveal available booking cards.",
+      selectDate: "Selected date",
+      noDateSelected: "Select an active date in the calendar.",
+      noSlotsForDate: "No slots available for this day.",
       public: "Public",
       business: "Business group",
       seatsLeft: "spots left",
@@ -72,20 +98,52 @@ export function BookingCalendar({
       success: "Request sent, our team will contact you.",
       error: "Sending failed, please try again.",
       tip: "Tip: select the \"I represent a company\" profile to enable promo code B2B2026.",
+      weekdayLabels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       weekdays: "en-US",
     },
   } as const;
 
   const t = copy[locale];
 
-  const grouped = slots.reduce<Record<string, BookingSlot[]>>((acc, slot) => {
-    const dayKey = format(new Date(slot.startsAt), "yyyy-MM-dd");
-    acc[dayKey] = acc[dayKey] ?? [];
-    acc[dayKey].push(slot);
-    return acc;
-  }, {});
+  const grouped = useMemo(
+    () =>
+      slots.reduce<Record<string, BookingSlot[]>>((acc, slot) => {
+        const dayKey = toDayKey(new Date(slot.startsAt));
+        acc[dayKey] = acc[dayKey] ?? [];
+        acc[dayKey].push(slot);
+        return acc;
+      }, {}),
+    [slots],
+  );
 
-  const sortedDays = Object.keys(grouped).sort();
+  const sortedDays = useMemo(() => Object.keys(grouped).sort(), [grouped]);
+
+  useEffect(() => {
+    if (sortedDays.length === 0) {
+      setSelectedDay(null);
+      return;
+    }
+
+    if (!selectedDay || !sortedDays.includes(selectedDay)) {
+      setSelectedDay(sortedDays[0]);
+    }
+  }, [selectedDay, sortedDays]);
+
+  const calendarDays = useMemo(() => {
+    if (sortedDays.length === 0) {
+      return [];
+    }
+
+    const firstSlotDate = fromDayKey(sortedDays[0]);
+    const lastSlotDate = fromDayKey(sortedDays[sortedDays.length - 1]);
+    const intervalStart = startOfWeek(startOfMonth(firstSlotDate), { weekStartsOn: 1 });
+    const intervalEnd = endOfWeek(endOfMonth(lastSlotDate), { weekStartsOn: 1 });
+
+    return eachDayOfInterval({ start: intervalStart, end: intervalEnd });
+  }, [sortedDays]);
+
+  const selectedSlots = selectedDay ? grouped[selectedDay] ?? [] : [];
+  const activeMonthDate = selectedDay ? fromDayKey(selectedDay) : sortedDays[0] ? fromDayKey(sortedDays[0]) : new Date();
 
   const onPrivateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,41 +187,90 @@ export function BookingCalendar({
         </div>
       </div>
 
-      <div className="space-y-4">
-        {sortedDays.map((day) => (
-          <article key={day} className="glass-panel rounded-2xl p-4">
-            <p className="text-sm text-white/75">
-              {new Date(day).toLocaleDateString(t.weekdays, {
+      <div className="glass-panel rounded-2xl p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm uppercase tracking-[0.14em] text-white/75">{t.calendarTitle}</p>
+          <p className="text-sm text-white/75">
+            {activeMonthDate.toLocaleDateString(t.weekdays, { month: "long", year: "numeric" })}
+          </p>
+        </div>
+        <p className="mt-2 text-xs text-white/70">{t.calendarHint}</p>
+
+        <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] uppercase tracking-[0.14em] text-white/60">
+          {t.weekdayLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+
+        <div className="mt-2 grid grid-cols-7 gap-1.5">
+          {calendarDays.map((day) => {
+            const dayKey = toDayKey(day);
+            const daySlots = grouped[dayKey] ?? [];
+            const hasSlots = daySlots.length > 0;
+            const isSelected = selectedDay === dayKey;
+            const inActiveMonth = isSameMonth(day, activeMonthDate);
+
+            return (
+              <button
+                key={dayKey}
+                type="button"
+                disabled={!hasSlots}
+                onClick={() => setSelectedDay(dayKey)}
+                className={`min-h-[56px] rounded-xl border px-1 py-1 text-center transition ${
+                  isSelected
+                    ? "border-[#F5C842]/70 bg-[#F5C842]/18 text-[#F5C842]"
+                    : hasSlots
+                      ? "border-white/20 bg-white/5 text-white/85 hover:bg-white/10"
+                      : "border-white/10 bg-white/[0.03] text-white/35"
+                } ${inActiveMonth ? "" : "opacity-55"} disabled:cursor-not-allowed`}
+              >
+                <span className="block text-sm font-medium">{day.getDate()}</span>
+                {hasSlots ? <span className="text-[10px] text-white/65">{daySlots.length}</span> : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <p className="text-sm text-white/75">
+          {t.selectDate}:{" "}
+          {selectedDay
+            ? fromDayKey(selectedDay).toLocaleDateString(t.weekdays, {
                 weekday: "long",
                 day: "numeric",
                 month: "long",
-              })}
-            </p>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {grouped[day].map((slot) => (
-                <div key={slot.id} className={`rounded-xl border p-3 ${slotColors[slot.audience]}`}>
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium">
-                      {format(new Date(slot.startsAt), "HH:mm")} - {format(new Date(slot.endsAt), "HH:mm")}
-                    </p>
-                    <span className="text-xs uppercase tracking-[0.14em]">{slot.language}</span>
-                  </div>
-                  <p className="mt-1 text-sm text-white/75">
-                    {slot.seatsRemaining} / {slot.seatsTotal} {t.seatsLeft}
+              })
+            : t.noDateSelected}
+        </p>
+
+        {selectedDay && selectedSlots.length > 0 ? (
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {selectedSlots.map((slot) => (
+              <div key={slot.id} className={`rounded-xl border p-3 ${slotColors[slot.audience]}`}>
+                <div className="flex items-center justify-between">
+                  <p className="font-medium">
+                    {format(new Date(slot.startsAt), "HH:mm")} - {format(new Date(slot.endsAt), "HH:mm")}
                   </p>
-                  <button
-                    type="button"
-                    disabled={slot.seatsRemaining <= 0}
-                    onClick={() => onBookSlot(slot)}
-                    className="mt-3 w-full rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {t.bookSlot}
-                  </button>
+                  <span className="text-xs uppercase tracking-[0.14em]">{slot.language}</span>
                 </div>
-              ))}
-            </div>
-          </article>
-        ))}
+                <p className="mt-1 text-sm text-white/75">
+                  {slot.seatsRemaining} / {slot.seatsTotal} {t.seatsLeft}
+                </p>
+                <button
+                  type="button"
+                  disabled={slot.seatsRemaining <= 0}
+                  onClick={() => onBookSlot(slot)}
+                  className="mt-3 w-full rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {t.bookSlot}
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-2 text-sm text-white/70">{t.noSlotsForDate}</p>
+        )}
       </div>
 
       <div className="mt-6 glass-panel rounded-2xl p-4">

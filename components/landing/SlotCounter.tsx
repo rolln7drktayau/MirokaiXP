@@ -1,24 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Bot } from "lucide-react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
 interface SlotCounterProps {
   remaining: number;
+  deployedRobots: number;
 }
 
-export function SlotCounter({ remaining }: SlotCounterProps) {
+export function SlotCounter({ remaining, deployedRobots }: SlotCounterProps) {
   const { locale } = useAppPreferences();
   const ratio = Math.min(100, Math.round((remaining / 180) * 100));
   const copy = {
     fr: {
       scarcity: "Rareté en direct",
       left: "places restantes",
+      deployed: "robots déployés",
     },
     en: {
       scarcity: "Live scarcity",
       left: "spots left",
+      deployed: "robots deployed",
     },
   } as const;
   const t = copy[locale];
@@ -36,6 +40,13 @@ export function SlotCounter({ remaining }: SlotCounterProps) {
           animate={{ width: `${ratio}%` }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         />
+      </div>
+      <div className="mt-3 flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2">
+        <span className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.14em] text-white/70">
+          <Bot size={14} className="text-[#0eaa92]" />
+          {t.deployed}
+        </span>
+        <span className="text-lg font-semibold text-[#0eaa92]">{deployedRobots}</span>
       </div>
     </div>
   );

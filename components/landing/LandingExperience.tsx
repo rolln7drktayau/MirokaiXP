@@ -26,6 +26,7 @@ import { ArcadeSection } from "./ArcadeSection";
 const EVENTBRITE_URL =
   process.env.NEXT_PUBLIC_EVENTBRITE_URL ??
   "https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile";
+const DEPLOYED_ROBOTS = Number(process.env.NEXT_PUBLIC_DEPLOYED_ROBOTS ?? "24");
 
 export function LandingExperience() {
   const { locale } = useAppPreferences();
@@ -89,7 +90,12 @@ export function LandingExperience() {
   return (
     <main className="pb-14">
       <ConfirmationBanner />
-      <Hero profile={hydrated ? profile : "solo"} remainingSlots={remainingSlots} onPrimaryCTA={scrollToBooking} />
+      <Hero
+        profile={hydrated ? profile : "solo"}
+        remainingSlots={remainingSlots}
+        deployedRobots={DEPLOYED_ROBOTS}
+        onPrimaryCTA={scrollToBooking}
+      />
 
       <section className="section-wrap pb-1">
         <motion.div
