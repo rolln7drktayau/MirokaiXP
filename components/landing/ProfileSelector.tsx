@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { ProfileOption, VisitorProfile } from "@/types/profile";
@@ -9,6 +10,11 @@ interface ProfileSelectorProps {
   profile: VisitorProfile;
   onSelect: (profile: VisitorProfile) => void;
 }
+
+type ProfileVisualOption = ProfileOption & {
+  image: string;
+  imageAlt: string;
+};
 
 export function ProfileSelector({ profile, onSelect }: ProfileSelectorProps) {
   const { locale } = useAppPreferences();
@@ -19,46 +25,58 @@ export function ProfileSelector({ profile, onSelect }: ProfileSelectorProps) {
       options: [
         {
           id: "team",
-          label: "Je viens en équipe",
+          label: "Équipe",
           description: "Idéal pour les sorties d'équipe, onboarding et inspiration collective.",
           ctaLabel: "Voir les créneaux groupe",
+          image: "/media/profiles/team.svg",
+          imageAlt: "Visuel profil équipe",
         },
         {
           id: "solo",
-          label: "Je viens seul",
+          label: "Solo",
           description: "Parfait pour découvrir l'univers Mirokaï à votre rythme.",
           ctaLabel: "Voir les créneaux solo",
+          image: "/media/profiles/solo.svg",
+          imageAlt: "Visuel profil solo",
         },
         {
           id: "b2b",
-          label: "Je représente une entreprise",
+          label: "Entreprise",
           description: "Explorez les cas d'usage concrets pour votre activité.",
           ctaLabel: "Lancer ma pré-qualification",
+          image: "/media/profiles/enterprise.svg",
+          imageAlt: "Visuel profil entreprise",
         },
-      ] as ProfileOption[],
+      ] as ProfileVisualOption[],
     },
     en: {
       title: "Profile selector",
       options: [
         {
           id: "team",
-          label: "I come with my team",
+          label: "Team",
           description: "Great for team outings, onboarding, and collective inspiration.",
           ctaLabel: "View team slots",
+          image: "/media/profiles/team.svg",
+          imageAlt: "Team profile visual",
         },
         {
           id: "solo",
-          label: "I come solo",
+          label: "Solo",
           description: "Perfect to discover the Mirokaï universe at your own pace.",
           ctaLabel: "View solo slots",
+          image: "/media/profiles/solo.svg",
+          imageAlt: "Solo profile visual",
         },
         {
           id: "b2b",
-          label: "I represent a company",
+          label: "Business",
           description: "Explore concrete use cases for your business.",
           ctaLabel: "Start qualification",
+          image: "/media/profiles/enterprise.svg",
+          imageAlt: "Business profile visual",
         },
-      ] as ProfileOption[],
+      ] as ProfileVisualOption[],
     },
   } as const;
 
@@ -84,7 +102,16 @@ export function ProfileSelector({ profile, onSelect }: ProfileSelectorProps) {
                     : "border-white/15 bg-white/5 hover:bg-white/10"
                 }`}
               >
-                <p className="text-base font-medium">{option.label}</p>
+                <div className="relative overflow-hidden rounded-xl border border-white/15">
+                  <Image
+                    src={option.image}
+                    alt={option.imageAlt}
+                    width={640}
+                    height={360}
+                    className="h-28 w-full object-cover sm:h-32"
+                  />
+                </div>
+                <p className="mt-3 text-base font-medium">{option.label}</p>
                 <p className="mt-2 text-sm text-white/75">{option.description}</p>
                 <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[#53B3FF]">{option.ctaLabel}</p>
               </motion.button>

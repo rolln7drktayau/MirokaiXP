@@ -64,7 +64,7 @@ export function ArcadeSection() {
               </div>
               <h3 className="mt-3 text-lg">{t.quizTitle}</h3>
               <p className={`mt-1 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>{t.quizDesc}</p>
-              <Link href="/game" className="cta-secondary mt-4">
+              <Link href="/profile?next=/game" className="cta-secondary mt-4">
                 {t.quizCta}
               </Link>
             </motion.div>
@@ -78,7 +78,7 @@ export function ArcadeSection() {
               </div>
               <h3 className="mt-3 text-lg">{t.memoryTitle}</h3>
               <p className={`mt-1 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>{t.memoryDesc}</p>
-              <Link href="/game/memory" className="cta-secondary mt-4">
+              <Link href="/profile?next=/game/memory" className="cta-secondary mt-4">
                 {t.memoryCta}
               </Link>
             </motion.div>

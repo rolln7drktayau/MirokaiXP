@@ -8,6 +8,7 @@ import { useAppPreferences } from "@/components/providers/AppPreferencesProvider
 import { useModules } from "@/hooks/useModules";
 import { usePWA } from "@/hooks/usePWA";
 import type { Module } from "@/types/module";
+import type { VisitorSegment } from "@/types/profile";
 import { NavBackHome } from "@/components/ui/NavBackHome";
 
 import { AudioPlayer } from "./AudioPlayer";
@@ -19,7 +20,12 @@ import { ProgressBar } from "./ProgressBar";
 
 const COMPLETED_STORAGE_KEY = "mirokai_completed_modules";
 
-export function AudioguideShell() {
+interface AudioguideShellProps {
+  visitorName?: string;
+  visitorSegment?: VisitorSegment;
+}
+
+export function AudioguideShell({ visitorName, visitorSegment }: AudioguideShellProps) {
   const { locale, theme } = useAppPreferences();
   const isLight = theme === "nimira-light";
   const { modules, loading, error, refresh } = useModules();
@@ -176,7 +182,12 @@ export function AudioguideShell() {
 
         {activeModule ? (
           <section className="space-y-3">
-            <MirokaiAvatar guide={selectedGuide} prompt={activeModule.mirokaiPrompt} />
+            <MirokaiAvatar
+              guide={selectedGuide}
+              prompt={activeModule.mirokaiPrompt}
+              visitorName={visitorName}
+              visitorSegment={visitorSegment}
+            />
             <NarrativeCard module={activeModule} />
             <AudioPlayer src={activeModule.audioUrl} />
 

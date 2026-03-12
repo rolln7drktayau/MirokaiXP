@@ -9,7 +9,7 @@ import { useEventbrite } from "@/hooks/useEventbrite";
 import { useProfile } from "@/hooks/useProfile";
 import { trackEvent, trackPageView } from "@/lib/analytics";
 import { getRemainingSlotCount, getUpcomingSlots } from "@/services/bookingService";
-import type { B2BFormData, VisitorProfile } from "@/types/profile";
+import type { B2BFormData, VisitorProfile, VisitorSession } from "@/types/profile";
 
 import { B2BForm } from "./B2BForm";
 import { BookingCalendar } from "./BookingCalendar";
@@ -28,7 +28,11 @@ const EVENTBRITE_URL =
   "https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile";
 const DEPLOYED_ROBOTS = Number(process.env.NEXT_PUBLIC_DEPLOYED_ROBOTS ?? "24");
 
-export function LandingExperience() {
+interface LandingExperienceProps {
+  visitorSession: VisitorSession | null;
+}
+
+export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const { locale } = useAppPreferences();
   const bookingRef = useRef<HTMLElement | null>(null);
   const b2bFormRef = useRef<HTMLElement | null>(null);
@@ -94,6 +98,7 @@ export function LandingExperience() {
         profile={hydrated ? profile : "solo"}
         remainingSlots={remainingSlots}
         deployedRobots={DEPLOYED_ROBOTS}
+        visitorSession={visitorSession}
         onPrimaryCTA={scrollToBooking}
       />
 

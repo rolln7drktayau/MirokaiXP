@@ -3,20 +3,34 @@
 import { motion } from "framer-motion";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
+import type { VisitorSegment } from "@/types/profile";
 
 interface MirokaiAvatarProps {
   guide: "miroki" | "miroka";
   prompt: string;
+  visitorName?: string;
+  visitorSegment?: VisitorSegment;
 }
 
-export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
+export function MirokaiAvatar({ guide, prompt, visitorName, visitorSegment }: MirokaiAvatarProps) {
   const { locale, theme } = useAppPreferences();
   const isLight = theme === "nimira-light";
   const copy = {
-    fr: { active: "Guide actif" },
-    en: { active: "Active guide" },
+    fr: {
+      active: "Guide actif",
+      hello: "Bonjour",
+      b2cLine: "Je vous accompagne module par module avec une narration vivante.",
+      b2bLine: "Je vous présente des cas d'usage orientés entreprise et décision.",
+    },
+    en: {
+      active: "Active guide",
+      hello: "Hello",
+      b2cLine: "I guide you module by module with immersive narrative context.",
+      b2bLine: "I focus on enterprise-oriented use cases and decision points.",
+    },
   } as const;
   const t = copy[locale];
+  const personalLine = visitorSegment === "b2b" ? t.b2bLine : t.b2cLine;
 
   return (
     <div className="glass-panel rounded-2xl p-4">
@@ -35,6 +49,18 @@ export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
           <p className="font-medium">{guide === "miroki" ? "Miroki" : "Miroka"}</p>
         </div>
       </div>
+      {visitorName ? (
+        <p
+          className={`mt-3 rounded-xl border p-3 text-sm ${
+            isLight ? "border-[#202020]/12 bg-[#f3fbf8] text-[#202020]/86" : "border-[#00F5C4]/35 bg-[#00F5C4]/10 text-[#E7FFF8]"
+          }`}
+        >
+          <span className="font-medium">
+            {t.hello} {visitorName}.
+          </span>{" "}
+          {personalLine}
+        </p>
+      ) : null}
       <p
         className={`mt-3 rounded-xl border p-3 text-sm ${
           isLight ? "border-[#202020]/12 bg-white/80 text-[#202020]/85" : "border-white/10 bg-white/5 text-white/85"

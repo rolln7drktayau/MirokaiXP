@@ -1,4 +1,5 @@
 export type VisitorProfile = "solo" | "team" | "b2b";
+export type VisitorSegment = "b2c" | "b2b";
 
 export type CompanySize =
   | "1-10"
@@ -33,4 +34,10 @@ export interface EmailCaptureInput {
   profile: VisitorProfile;
   consent: boolean;
   source?: string;
+}
+
+export interface VisitorSession {
+  name: string;
+  segment: VisitorSegment;
+  createdAt: string;
 }

@@ -1,5 +1,7 @@
 import { LandingExperience } from "@/components/landing/LandingExperience";
+import { getVisitorSession } from "@/lib/visitorSession";
 
 export default function HomePage() {
-  return <LandingExperience />;
+  const visitorSession = getVisitorSession();
+  return <LandingExperience visitorSession={visitorSession} />;
 }

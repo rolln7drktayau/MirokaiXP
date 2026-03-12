@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
-import type { VisitorProfile } from "@/types/profile";
+import type { VisitorProfile, VisitorSession } from "@/types/profile";
 
 import { SlotCounter } from "./SlotCounter";
 
@@ -14,6 +14,7 @@ interface HeroProps {
   profile: VisitorProfile;
   remainingSlots: number;
   deployedRobots: number;
+  visitorSession: VisitorSession | null;
   onPrimaryCTA: () => void;
 }
 
@@ -25,9 +26,7 @@ const heroCopy = {
     description:
       "Venez vivre une expérience immersive où robotique sociale, IA émotionnelle et narration Nimira convergent pour créer un moment à fort impact humain.",
     reserve: "Réserver un créneau",
-    pwa: "Lancer la visite PWA",
-    quiz: "Quiz Nimira",
-    memory: "Memory Nimira",
+    profileAccess: "Mon profil & accès",
     liveTitle: "Mirokaï en situation réelle",
     activeScenario: "Scénario actif",
     capsule: "Capsule interactive montrant la fluidité des interactions robot-humain en contexte réel.",
@@ -37,6 +36,18 @@ const heroCopy = {
     tagB: "Narration vivante",
     scenarioHint: "La bulle de pensée évolue selon le scénario",
     thoughtTitle: "Bulle de pensée",
+    thoughtSubtitle: "Connexion profil requise pour personnaliser ce message",
+    hello: "Bonjour",
+    profileB2C: [
+      "On démarre par une visite immersive adaptée à votre rythme.",
+      "Je vous guide module par module avec une narration claire.",
+      "Vous pouvez ensuite lancer les mini-jeux pour prolonger l'expérience.",
+    ],
+    profileB2B: [
+      "Je prépare un parcours orienté cas d'usage métier et ROI.",
+      "Nous allons cibler onboarding, accueil et retail en conditions réelles.",
+      "Ensuite, je vous ouvre la zone admin pour configurer vos modules.",
+    ],
     moods: ["accueillant", "focus", "joueur"],
     headlines: {
       solo: "Vivez l'aventure Mirokaï en solo",
@@ -63,9 +74,7 @@ const heroCopy = {
     description:
       "Live an immersive journey where social robotics, emotional AI, and Nimira storytelling create a memorable human-first experience.",
     reserve: "Book a slot",
-    pwa: "Launch PWA tour",
-    quiz: "Nimira Quiz",
-    memory: "Nimira Memory",
+    profileAccess: "My profile & access",
     liveTitle: "Mirokaï in real situations",
     activeScenario: "Active scenario",
     capsule: "Interactive capsule showing smooth human-robot orchestration in real contexts.",
@@ -75,6 +84,18 @@ const heroCopy = {
     tagB: "Live storytelling",
     scenarioHint: "Thought bubble evolves with each scenario",
     thoughtTitle: "Thought bubble",
+    thoughtSubtitle: "Profile sign-in required to personalize this message",
+    hello: "Hello",
+    profileB2C: [
+      "We start with an immersive tour tailored to your pace.",
+      "I guide you module by module with clear narrative context.",
+      "Then you can launch mini-games to extend the experience.",
+    ],
+    profileB2B: [
+      "I am preparing a business-oriented path focused on use cases and ROI.",
+      "We will target onboarding, front desk, and retail in live conditions.",
+      "Then I unlock admin space so you can configure your modules.",
+    ],
     moods: ["welcoming", "focused", "playful"],
     headlines: {
       solo: "Experience Mirokaï solo",
@@ -101,7 +122,7 @@ const heroCopy = {
 const heroVideoUrl =
   process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/media/video/mirokai-hero-loop.mp4";
 
-export function Hero({ profile, remainingSlots, deployedRobots, onPrimaryCTA }: HeroProps) {
+export function Hero({ profile, remainingSlots, deployedRobots, visitorSession, onPrimaryCTA }: HeroProps) {
   const { locale, theme } = useAppPreferences();
   const [activeScenario, setActiveScenario] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -110,6 +131,8 @@ export function Hero({ profile, remainingSlots, deployedRobots, onPrimaryCTA }: 
   const isLight = theme === "nimira-light";
   const scenarios = t.scenarios;
   const scenarioCount = scenarios.length;
+  const personalizedThought =
+    visitorSession?.segment === "b2b" ? t.profileB2B[activeScenario] : t.profileB2C[activeScenario];
 
   useEffect(() => {
     const onResize = () => setIsDesktop(window.innerWidth >= 768);
@@ -161,14 +184,8 @@ export function Hero({ profile, remainingSlots, deployedRobots, onPrimaryCTA }: 
               <WandSparkles size={16} />
               {t.reserve}
             </button>
-            <Link href="/experience" className="cta-secondary">
-              {t.pwa}
-            </Link>
-            <Link href="/game" className="cta-secondary">
-              {t.quiz}
-            </Link>
-            <Link href="/game/memory" className="cta-secondary">
-              {t.memory}
+            <Link href="/profile" className="cta-secondary">
+              {t.profileAccess}
             </Link>
           </div>
 
@@ -268,8 +285,19 @@ export function Hero({ profile, remainingSlots, deployedRobots, onPrimaryCTA }: 
                       className="relative rounded-2xl border border-white/20 bg-[#fff7ef] px-4 py-3 text-center text-[#202020] shadow-[0_10px_26px_rgba(0,0,0,0.26)]"
                     >
                       <p className="text-[10px] uppercase tracking-[0.18em] text-[#5b5378]">{t.thoughtTitle}</p>
-                      <p className="mt-1 text-sm font-semibold text-[#202020]">{scenarioKeywords[activeScenario]}</p>
-                      <p className="mt-1 text-xs text-[#5b5378]">{t.moods[activeScenario]}</p>
+                      {visitorSession ? (
+                        <>
+                          <p className="mt-1 text-sm font-semibold text-[#202020]">
+                            {t.hello} {visitorSession.name}
+                          </p>
+                          <p className="mt-1 text-xs text-[#5b5378]">{personalizedThought}</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm font-semibold text-[#202020]">{scenarioKeywords[activeScenario]}</p>
+                          <p className="mt-1 text-xs text-[#5b5378]">{t.moods[activeScenario]}</p>
+                        </>
+                      )}
                       <span className="absolute -bottom-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-b border-r border-white/20 bg-[#fff7ef]" />
                     </motion.div>
 
@@ -316,7 +344,9 @@ export function Hero({ profile, remainingSlots, deployedRobots, onPrimaryCTA }: 
                 </div>
 
                 <div className="mt-3 space-y-2">
-                  <p className={`text-[11px] uppercase tracking-[0.16em] ${isLight ? "text-[#202020]/65" : "text-white/65"}`}>{t.scenarioHint}</p>
+                  <p className={`text-[11px] uppercase tracking-[0.16em] ${isLight ? "text-[#202020]/65" : "text-white/65"}`}>
+                    {visitorSession ? t.scenarioHint : t.thoughtSubtitle}
+                  </p>
                   <div className={`h-1.5 overflow-hidden rounded-full ${isLight ? "bg-[#202020]/12" : "bg-white/10"}`}>
                     <motion.div
                       key={activeScenario}

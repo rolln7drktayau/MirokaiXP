@@ -1,39 +1,16 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import Link from "next/link";
-
-import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
-import { NimiraMemory } from "@/components/game/NimiraMemory";
-import { NavBackHome } from "@/components/ui/NavBackHome";
+import { MemoryGameShell } from "@/components/game/MemoryGameShell";
+import { getVisitorSession } from "@/lib/visitorSession";
 
 export default function MemoryGamePage() {
-  const { locale } = useAppPreferences();
-  const copy = {
-    fr: {
-      quiz: "Aller au Quiz Mission Nimira",
-      experience: "Retourner à l'expérience",
-    },
-    en: {
-      quiz: "Go to Mission Nimira quiz",
-      experience: "Back to experience",
-    },
-  } as const;
-  const t = copy[locale];
+  const session = getVisitorSession();
+  if (!session) {
+    redirect("/profile?next=/game/memory");
+  }
+  if (session.segment === "b2b") {
+    redirect("/game");
+  }
 
-  return (
-    <main className="section-wrap py-8">
-      <div className="mx-auto max-w-3xl space-y-4">
-        <NavBackHome />
-        <NimiraMemory />
-        <div className="flex flex-wrap gap-2">
-          <Link href="/game" className="cta-secondary">
-            {t.quiz}
-          </Link>
-          <Link href="/experience" className="cta-primary">
-            {t.experience}
-          </Link>
-        </div>
-      </div>
-    </main>
-  );
+  return <MemoryGameShell />;
 }
