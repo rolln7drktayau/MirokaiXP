@@ -27,6 +27,7 @@ const EVENTBRITE_URL =
   process.env.NEXT_PUBLIC_EVENTBRITE_URL ??
   "https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile";
 const DEPLOYED_ROBOTS = Number(process.env.NEXT_PUBLIC_DEPLOYED_ROBOTS ?? "24");
+const MOBILE_TAB_EVENT = "mirokai-mobile-tab-change";
 
 interface LandingExperienceProps {
   visitorSession: VisitorSession | null;
@@ -63,22 +64,35 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
       return;
     }
 
-    const syncFromHash = () => {
+    const getTabFromHash = () => {
       const hash = window.location.hash;
       if (hash === "#booking") {
-        setActiveMobileTab("booking");
-        return;
+        return "booking" as const;
       }
       if (hash === "#game") {
-        setActiveMobileTab("game");
-        return;
+        return "game" as const;
       }
-      setActiveMobileTab("home");
+      return "home" as const;
+    };
+
+    const syncFromHash = () => {
+      setActiveMobileTab(getTabFromHash());
+    };
+
+    const syncFromEvent = (event: Event) => {
+      const customEvent = event as CustomEvent<{ tab?: "home" | "booking" | "game" }>;
+      if (customEvent.detail?.tab) {
+        setActiveMobileTab(customEvent.detail.tab);
+      }
     };
 
     syncFromHash();
+    window.addEventListener(MOBILE_TAB_EVENT, syncFromEvent);
     window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
+    return () => {
+      window.removeEventListener(MOBILE_TAB_EVENT, syncFromEvent);
+      window.removeEventListener("hashchange", syncFromHash);
+    };
   }, [isMobile]);
 
   useEffect(() => {
@@ -103,6 +117,8 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
 
   const scrollToBooking = () => {
     if (isMobile) {
+      setActiveMobileTab("booking");
+      window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: "booking" } }));
       window.location.hash = "booking";
       return;
     }
@@ -125,6 +141,8 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const onRequestPrivateSlot = () => {
     setProfile("b2b");
     if (isMobile) {
+      setActiveMobileTab("booking");
+      window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: "booking" } }));
       window.location.hash = "booking";
       return;
     }
@@ -157,8 +175,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   return (
     <main className="pb-14">
       <ConfirmationBanner />
-      {showHome ? (
-        <>
+      <div className={showHome ? undefined : "hidden"}>
           <Hero
             profile={hydrated ? resolvedProfile : "team"}
             deployedRobots={DEPLOYED_ROBOTS}
@@ -205,33 +222,28 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
           <FAQ />
           <LocationSection />
           <ExitPopup profile={hydrated ? resolvedProfile : "team"} />
-        </>
-      ) : null}
+      </div>
 
-      {showBooking ? (
-        <>
-          <section ref={bookingRef} id="booking">
+      <div className={showBooking ? undefined : "hidden"}>
+        <section ref={bookingRef} id="booking">
             <BookingCalendar
               profile={hydrated ? resolvedProfile : "team"}
               slots={slots}
               onBookSlot={onBookSlot}
               onRequestPrivateSlot={onRequestPrivateSlot}
             />
-          </section>
-
-          {resolvedProfile === "b2b" ? (
-            <section ref={b2bFormRef}>
-              <B2BForm onQualified={onB2BQualified} />
-            </section>
-          ) : null}
-        </>
-      ) : null}
-
-      {showGame ? (
-        <section id="game">
-          <ArcadeSection />
         </section>
-      ) : null}
+
+        {resolvedProfile === "b2b" ? (
+          <section ref={b2bFormRef}>
+            <B2BForm onQualified={onB2BQualified} />
+          </section>
+        ) : null}
+      </div>
+
+      <section id="game" className={showGame ? undefined : "hidden"}>
+          <ArcadeSection />
+      </section>
     </main>
   );
 }
