@@ -12,7 +12,6 @@ import { SlotCounter } from "./SlotCounter";
 
 interface HeroProps {
   profile: VisitorProfile;
-  remainingSlots: number;
   deployedRobots: number;
   visitorSession: VisitorSession | null;
   onPrimaryCTA: () => void;
@@ -122,7 +121,7 @@ const heroCopy = {
 const heroVideoUrl =
   process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/media/video/mirokai-hero-loop.mp4";
 
-export function Hero({ profile, remainingSlots, deployedRobots, visitorSession, onPrimaryCTA }: HeroProps) {
+export function Hero({ profile, deployedRobots, visitorSession, onPrimaryCTA }: HeroProps) {
   const { locale, theme } = useAppPreferences();
   const [activeScenario, setActiveScenario] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -190,7 +189,7 @@ export function Hero({ profile, remainingSlots, deployedRobots, visitorSession, 
           </div>
 
           <div className="grid gap-3 sm:grid-cols-[1fr_1fr]">
-            <SlotCounter remaining={remainingSlots} deployedRobots={deployedRobots} />
+            <SlotCounter deployedRobots={deployedRobots} />
             <div className="glass-panel rounded-2xl p-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs uppercase tracking-[0.16em] text-white/70">{t.stat1}</span>

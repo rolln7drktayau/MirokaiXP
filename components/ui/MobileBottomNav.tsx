@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarDays, House, Images, UserRound, type LucideIcon } from "lucide-react";
+import { CalendarDays, Gamepad2, House, UserRound, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
 type NavItem = {
-  key: "home" | "booking" | "gallery" | "profile";
+  key: "home" | "booking" | "game" | "profile";
   href: string;
   icon: LucideIcon;
 };
@@ -17,7 +17,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { key: "home", href: "/", icon: House },
   { key: "booking", href: "/#booking", icon: CalendarDays },
-  { key: "gallery", href: "/#gallery", icon: Images },
+  { key: "game", href: "/#game", icon: Gamepad2 },
   { key: "profile", href: "/profile", icon: UserRound },
 ];
 
@@ -25,14 +25,14 @@ const labels = {
   fr: {
     home: "Accueil",
     booking: "Réserver",
-    gallery: "Galerie",
+    game: "Jeu",
     profile: "Profil",
     nav: "Navigation mobile",
   },
   en: {
     home: "Home",
     booking: "Book",
-    gallery: "Gallery",
+    game: "Game",
     profile: "Profile",
     nav: "Mobile navigation",
   },
@@ -67,7 +67,7 @@ export function MobileBottomNav() {
     const itemHash = getHashFromHref(item.href);
 
     if (item.key === "home") {
-      return pathname === "/" && !hash;
+      return pathname === "/" && hash !== "#booking" && hash !== "#game";
     }
 
     if (itemHash) {

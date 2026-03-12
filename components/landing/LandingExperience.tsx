@@ -8,7 +8,7 @@ import { useAppPreferences } from "@/components/providers/AppPreferencesProvider
 import { useEventbrite } from "@/hooks/useEventbrite";
 import { useProfile } from "@/hooks/useProfile";
 import { trackEvent, trackPageView } from "@/lib/analytics";
-import { getRemainingSlotCount, getUpcomingSlots } from "@/services/bookingService";
+import { getUpcomingSlots } from "@/services/bookingService";
 import type { B2BFormData, VisitorProfile, VisitorSession } from "@/types/profile";
 
 import { B2BForm } from "./B2BForm";
@@ -16,7 +16,6 @@ import { BookingCalendar } from "./BookingCalendar";
 import { ConfirmationBanner } from "./ConfirmationBanner";
 import { ExitPopup } from "./ExitPopup";
 import { FAQ } from "./FAQ";
-import { GallerySection } from "./GallerySection";
 import { Hero } from "./Hero";
 import { LocationSection } from "./LocationSection";
 import { ProfileSelector } from "./ProfileSelector";
@@ -38,13 +37,12 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const bookingRef = useRef<HTMLElement | null>(null);
   const b2bFormRef = useRef<HTMLElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeMobileTab, setActiveMobileTab] = useState<"home" | "booking" | "gallery">("home");
+  const [activeMobileTab, setActiveMobileTab] = useState<"home" | "booking" | "game">("home");
 
   const { profile, hydrated, setProfile } = useProfile("team");
   const { redirectToEventbrite } = useEventbrite(EVENTBRITE_URL);
   const slots = useMemo(() => getUpcomingSlots(), []);
   const resolvedProfile: VisitorProfile = profile === "solo" ? "team" : profile;
-  const remainingSlots = useMemo(() => getRemainingSlotCount(resolvedProfile), [resolvedProfile]);
 
   useEffect(() => {
     trackPageView("/");
@@ -71,8 +69,8 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
         setActiveMobileTab("booking");
         return;
       }
-      if (hash === "#gallery") {
-        setActiveMobileTab("gallery");
+      if (hash === "#game") {
+        setActiveMobileTab("game");
         return;
       }
       setActiveMobileTab("home");
@@ -154,7 +152,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const showAll = !isMobile;
   const showHome = showAll || activeMobileTab === "home";
   const showBooking = showAll || activeMobileTab === "booking";
-  const showGallery = showAll || activeMobileTab === "gallery";
+  const showGame = showAll || activeMobileTab === "game";
 
   return (
     <main className="pb-14">
@@ -163,7 +161,6 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
         <>
           <Hero
             profile={hydrated ? resolvedProfile : "team"}
-            remainingSlots={remainingSlots}
             deployedRobots={DEPLOYED_ROBOTS}
             visitorSession={visitorSession}
             onPrimaryCTA={scrollToBooking}
@@ -203,7 +200,6 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
           />
 
           <UseCases />
-          <ArcadeSection />
 
           <Testimonials />
           <FAQ />
@@ -212,11 +208,9 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
         </>
       ) : null}
 
-      {showGallery ? <GallerySection /> : null}
-
       {showBooking ? (
         <>
-          <section ref={bookingRef}>
+          <section ref={bookingRef} id="booking">
             <BookingCalendar
               profile={hydrated ? resolvedProfile : "team"}
               slots={slots}
@@ -231,6 +225,12 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
             </section>
           ) : null}
         </>
+      ) : null}
+
+      {showGame ? (
+        <section id="game">
+          <ArcadeSection />
+        </section>
       ) : null}
     </main>
   );
