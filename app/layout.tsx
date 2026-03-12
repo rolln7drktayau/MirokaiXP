@@ -5,7 +5,6 @@ import Script from "next/script";
 import { AppPreferencesProvider } from "@/components/providers/AppPreferencesProvider";
 import { CookieConsentBanner } from "@/components/ui/CookieConsentBanner";
 import { MobileBottomNav } from "@/components/ui/MobileBottomNav";
-import { MirokaiFloatingIcons } from "@/components/ui/MirokaiFloatingIcons";
 import { ThemeLangSwitcher } from "@/components/ui/ThemeLangSwitcher";
 
 import "./globals.css";
@@ -95,7 +94,6 @@ export default function RootLayout({
 
         <AppPreferencesProvider>
           <ThemeLangSwitcher />
-          <MirokaiFloatingIcons />
           <MobileBottomNav />
           <CookieConsentBanner />
           {children}
