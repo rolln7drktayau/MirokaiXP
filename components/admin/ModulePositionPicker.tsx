@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
+
 interface ModulePositionPickerProps {
   value: { x: number; y: number };
   onChange: (position: { x: number; y: number }) => void;
@@ -10,6 +12,8 @@ interface ModulePositionPickerProps {
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function ModulePositionPicker({ value, onChange }: ModulePositionPickerProps) {
+  const { theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -60,12 +64,16 @@ export function ModulePositionPicker({ value, onChange }: ModulePositionPickerPr
 
   return (
     <div className="space-y-2">
-      <p className="text-xs uppercase tracking-[0.15em] text-white/70">
+      <p className={`text-xs uppercase tracking-[0.15em] ${isLight ? "text-[#202020]/70" : "text-white/70"}`}>
         Position du module (drag & drop)
       </p>
       <div
         ref={containerRef}
-        className="relative h-48 overflow-hidden rounded-2xl border border-white/15 bg-[linear-gradient(160deg,#0f0a2e_0%,#120f35_65%,#0d0b22_100%)]"
+        className={`relative h-48 overflow-hidden rounded-2xl border ${
+          isLight
+            ? "border-[#202020]/12 bg-[linear-gradient(160deg,#f8f2e8_0%,#f4ecdf_65%,#efe6db_100%)]"
+            : "border-white/15 bg-[linear-gradient(160deg,#0f0a2e_0%,#120f35_65%,#0d0b22_100%)]"
+        }`}
         onPointerDown={(event) => {
           updateFromPointer(event.clientX, event.clientY);
         }}
@@ -89,7 +97,7 @@ export function ModulePositionPicker({ value, onChange }: ModulePositionPickerPr
           Module
         </button>
       </div>
-      <p className="text-xs text-white/75">
+      <p className={`text-xs ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>
         X: {value.x.toFixed(2)}% • Y: {value.y.toFixed(2)}%
       </p>
     </div>

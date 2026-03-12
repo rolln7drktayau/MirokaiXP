@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { Module } from "@/types/module";
 
 import { FloorPlanEditor } from "./FloorPlanEditor";
 
 export function FloorPlanManager() {
+  const { theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<string | null>(null);
@@ -52,7 +55,7 @@ export function FloorPlanManager() {
   return (
     <div className="space-y-3">
       <FloorPlanEditor modules={modules} onPositionChange={savePosition} />
-      {status ? <p className="text-sm text-white/75">{status}</p> : null}
+      {status ? <p className={`text-sm ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>{status}</p> : null}
       <button type="button" onClick={() => void loadModules()} className="cta-secondary">
         Recharger les positions
       </button>

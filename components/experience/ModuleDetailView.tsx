@@ -12,7 +12,8 @@ interface ModuleDetailViewProps {
 }
 
 export function ModuleDetailView({ moduleData }: ModuleDetailViewProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const themeMeta = getModuleThemeIcon(moduleData.theme);
   const ThemeIcon = themeMeta.icon;
 
@@ -46,19 +47,29 @@ export function ModuleDetailView({ moduleData }: ModuleDetailViewProps) {
           {t.module} #{moduleData.number}
         </p>
         <h1 className="mt-1 text-3xl">{moduleData.name}</h1>
-        <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#120f30] px-3 py-1 text-xs text-white/75">
+        <div
+          className={`mt-2 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs ${
+            isLight ? "border-[#202020]/12 bg-[#efe8dc] text-[#202020]/78" : "border-white/15 bg-[#120f30] text-white/75"
+          }`}
+        >
           <ThemeIcon size={14} className={themeMeta.colorClassName} />
           {themeMeta.label}
         </div>
-        <p className="mt-3 text-white/80">{moduleData.description}</p>
+        <p className={`mt-3 ${isLight ? "text-[#202020]/82" : "text-white/80"}`}>{moduleData.description}</p>
 
-        <p className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/85">
+        <p
+          className={`mt-4 rounded-xl border p-3 text-sm ${
+            isLight ? "border-[#202020]/12 bg-white/80 text-[#202020]/86" : "border-white/10 bg-white/5 text-white/85"
+          }`}
+        >
           {moduleData.mirokaiPrompt}
         </p>
 
         {moduleData.videoUrl ? (
           <video
-            className="mt-4 w-full rounded-2xl border border-white/15 bg-black/40"
+            className={`mt-4 w-full rounded-2xl border ${
+              isLight ? "border-[#202020]/12 bg-[#f2ebdf]" : "border-white/15 bg-black/40"
+            }`}
             controls
             preload="metadata"
             src={moduleData.videoUrl}

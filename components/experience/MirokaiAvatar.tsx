@@ -10,7 +10,8 @@ interface MirokaiAvatarProps {
 }
 
 export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const copy = {
     fr: { active: "Guide actif" },
     en: { active: "Active guide" },
@@ -23,16 +24,24 @@ export function MirokaiAvatar({ guide, prompt }: MirokaiAvatarProps) {
         <motion.div
           animate={{ y: [0, -4, 0] }}
           transition={{ duration: 2.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-          className="flex h-14 w-14 items-center justify-center rounded-full border border-[#53B3FF]/50 bg-[#0f1030]"
+          className={`flex h-14 w-14 items-center justify-center rounded-full border border-[#53B3FF]/50 ${
+            isLight ? "bg-[#e9f1ff]" : "bg-[#0f1030]"
+          }`}
         >
           <span className="text-xs uppercase tracking-[0.14em]">{guide}</span>
         </motion.div>
         <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-white/65">{t.active}</p>
+          <p className={`text-xs uppercase tracking-[0.16em] ${isLight ? "text-[#202020]/65" : "text-white/65"}`}>{t.active}</p>
           <p className="font-medium">{guide === "miroki" ? "Miroki" : "Miroka"}</p>
         </div>
       </div>
-      <p className="mt-3 rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/85">{prompt}</p>
+      <p
+        className={`mt-3 rounded-xl border p-3 text-sm ${
+          isLight ? "border-[#202020]/12 bg-white/80 text-[#202020]/85" : "border-white/10 bg-white/5 text-white/85"
+        }`}
+      >
+        {prompt}
+      </p>
     </div>
   );
 }

@@ -13,7 +13,8 @@ interface ModuleCardProps {
 }
 
 export function ModuleCard({ module, isCompleted, onOpen }: ModuleCardProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const themeMeta = getModuleThemeIcon(module.theme);
   const ThemeIcon = themeMeta.icon;
   const copy = {
@@ -23,12 +24,22 @@ export function ModuleCard({ module, isCompleted, onOpen }: ModuleCardProps) {
   const t = copy[locale];
 
   return (
-    <article className="rounded-2xl border border-white/20 bg-white/5 p-4 transition hover:border-white/30 hover:bg-white/10">
+    <article
+      className={`rounded-2xl border p-4 transition ${
+        isLight
+          ? "border-[#202020]/12 bg-white/78 hover:border-[#202020]/20 hover:bg-white/90"
+          : "border-white/20 bg-white/5 hover:border-white/30 hover:bg-white/10"
+      }`}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.12em] text-[#00F5C4]">{t.module} #{module.number}</p>
           <h3 className="mt-1 text-lg">{module.name}</h3>
-          <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-[#110f2f] px-2 py-1 text-xs text-white/75">
+          <div
+            className={`mt-2 inline-flex items-center gap-2 rounded-full border px-2 py-1 text-xs ${
+              isLight ? "border-[#202020]/14 bg-[#efe8dc] text-[#202020]/78" : "border-white/15 bg-[#110f2f] text-white/75"
+            }`}
+          >
             <ThemeIcon size={14} className={themeMeta.colorClassName} />
             {themeMeta.label}
           </div>
@@ -39,7 +50,7 @@ export function ModuleCard({ module, isCompleted, onOpen }: ModuleCardProps) {
           </span>
         ) : null}
       </div>
-      <p className="mt-2 text-sm text-white/75">{module.description}</p>
+      <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>{module.description}</p>
       <button
         type="button"
         onClick={() => onOpen(module.id)}

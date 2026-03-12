@@ -3,6 +3,7 @@
 import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import { useEffect, useRef, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { Module } from "@/types/module";
 
 import { DraggableModule } from "./DraggableModule";
@@ -15,6 +16,8 @@ interface FloorPlanEditorProps {
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
 export function FloorPlanEditor({ modules, onPositionChange }: FloorPlanEditorProps) {
+  const { theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [localModules, setLocalModules] = useState<Module[]>(modules);
 
@@ -49,7 +52,11 @@ export function FloorPlanEditor({ modules, onPositionChange }: FloorPlanEditorPr
     <DndContext onDragEnd={onDragEnd}>
       <div
         ref={containerRef}
-        className="relative h-[420px] overflow-hidden rounded-3xl border border-white/15 bg-[linear-gradient(160deg,#0f0a2e_0%,#120f35_65%,#0d0b22_100%)]"
+        className={`relative h-[420px] overflow-hidden rounded-3xl border ${
+          isLight
+            ? "border-[#202020]/12 bg-[linear-gradient(160deg,#f8f2e8_0%,#f4ecdf_65%,#efe6db_100%)]"
+            : "border-white/15 bg-[linear-gradient(160deg,#0f0a2e_0%,#120f35_65%,#0d0b22_100%)]"
+        }`}
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_35%,rgba(123,47,255,0.2),transparent_38%),radial-gradient(circle_at_80%_70%,rgba(0,245,196,0.16),transparent_40%)]" />
         {localModules.map((module) => (

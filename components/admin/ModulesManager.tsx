@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import type { Module, ModuleInput } from "@/types/module";
 
 import { FloorPlanEditor } from "./FloorPlanEditor";
 import { ModuleForm } from "./ModuleForm";
 
 export function ModulesManager() {
+  const { theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Module | null>(null);
@@ -117,7 +120,7 @@ export function ModulesManager() {
             </button>
           </div>
 
-          {loading ? <p className="mt-3 text-sm text-white/70">Chargement...</p> : null}
+          {loading ? <p className={`mt-3 text-sm ${isLight ? "text-[#202020]/70" : "text-white/70"}`}>Chargement...</p> : null}
           {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
 
           <div className="mt-3 space-y-2">
@@ -125,12 +128,16 @@ export function ModulesManager() {
               <article
                 key={module.id}
                 className={`rounded-xl border p-3 ${
-                  selected?.id === module.id ? "border-[#FFD166]/60 bg-[#FFD166]/10" : "border-white/15 bg-white/5"
+                  selected?.id === module.id
+                    ? "border-[#FFD166]/60 bg-[#FFD166]/10"
+                    : isLight
+                      ? "border-[#202020]/12 bg-white/80"
+                      : "border-white/15 bg-white/5"
                 }`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <p className="text-xs text-white/70">#{module.number}</p>
+                    <p className={`text-xs ${isLight ? "text-[#202020]/70" : "text-white/70"}`}>#{module.number}</p>
                     <p className="font-medium">{module.name}</p>
                   </div>
                   <div className="flex gap-2">
@@ -174,7 +181,7 @@ export function ModulesManager() {
         <div className="mb-3 flex items-center justify-between gap-3">
           <div>
             <h2 className="text-xl">Plan interactif des modules</h2>
-            <p className="text-sm text-white/75">
+            <p className={`text-sm ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>
               Les nouveaux modules créés apparaissent ici immédiatement. Déplacez-les en drag & drop.
             </p>
           </div>

@@ -20,7 +20,8 @@ import { ProgressBar } from "./ProgressBar";
 const COMPLETED_STORAGE_KEY = "mirokai_completed_modules";
 
 export function AudioguideShell() {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const { modules, loading, error, refresh } = useModules();
   const { canInstall, isOnline, promptInstall } = usePWA();
 
@@ -181,7 +182,7 @@ export function AudioguideShell() {
 
             {activeModule.videoUrl ? (
               <video
-                className="w-full rounded-2xl border border-white/15 bg-black/40"
+                className={`w-full rounded-2xl border ${isLight ? "border-[#202020]/12 bg-[#f2ebdf]" : "border-white/15 bg-black/40"}`}
                 controls
                 preload="metadata"
                 src={activeModule.videoUrl}
