@@ -24,8 +24,9 @@ Payload API `POST /api/leads`:
 
 ```json
 {
-  "companySize": "50-200",
-  "industry": "Retail",
+  "company": "Renault Group",
+  "companySize": "51-200",
+  "sector": "Retail",
   "attendees": 12,
   "contactName": "Camille Martin",
   "email": "camille@entreprise.fr",
@@ -41,8 +42,8 @@ Payload API `POST /api/subscribe`:
 {
   "email": "visiteur@email.com",
   "profile": "solo",
-  "optIn": true,
-  "locale": "fr"
+  "consent": true,
+  "source": "exit_popup"
 }
 ```
 
@@ -52,11 +53,22 @@ Payload API `POST /api/analytics/track`:
 
 ```json
 {
-  "eventName": "eventbrite_redirect",
+  "event": "eventbrite_redirect",
   "profile": "b2b",
-  "utm_source": "landing_page",
-  "utm_medium": "b2b_form",
-  "utm_campaign": "mirokai_experience_2026"
+  "source": "landing_page",
+  "step": "booking_calendar",
+  "value": "b2b_form"
+}
+```
+
+## Session visiteur
+
+Payload API `POST /api/profile-session`:
+
+```json
+{
+  "name": "Oceane",
+  "segment": "b2b"
 }
 ```
 
@@ -66,3 +78,5 @@ Payload API `POST /api/analytics/track`:
 - Audios FR: `public/media/audio/fr/*`
 - Audios EN: `public/media/audio/en/*`
 - Mapping audio guide: `lib/audioguideContent.ts`
+- Galerie landing: `public/media/gallery/*`
+- Visuels profils: `public/media/profiles/*`

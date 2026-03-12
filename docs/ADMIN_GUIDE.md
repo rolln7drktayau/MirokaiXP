@@ -2,9 +2,15 @@
 
 ## Acces
 
-1. Ouvrir `/admin` ou `/dashboard`.
-2. Saisir `DASHBOARD_PASSWORD`.
-3. Un cookie HTTP-only permet l'acces aux pages protegees.
+1. Ouvrir `/profile`.
+2. Utiliser la section **Connexion admin**.
+3. Saisir `DASHBOARD_PASSWORD`.
+4. Un cookie HTTP-only permet l'acces aux pages protegees (`/admin`, `/dashboard`).
+
+Raccourcis ensuite disponibles:
+
+- `/admin` pour la gestion experience
+- `/dashboard` pour les analytics
 
 ## Gestion des modules
 
@@ -40,8 +46,9 @@ Workflow:
 ## Verification apres edition
 
 1. Aller sur `/experience`.
-2. Cliquer le module sur le plan.
-3. Controler affichage:
+2. Si necessaire, se connecter d'abord sur `/profile`.
+3. Cliquer le module sur le plan.
+4. Controler affichage:
 - titre
 - description
 - audio/video
@@ -54,3 +61,5 @@ Workflow:
 - Uniformiser le style des cartels
 - Compresser les medias (mobile-first)
 - Tester en mode smartphone avant publication
+- Verifier le rendu des couleurs en mode clair et nuit
+- Controler les textes FR/EN avant publication

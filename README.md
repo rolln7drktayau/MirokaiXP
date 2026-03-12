@@ -10,9 +10,11 @@ Plateforme conversion B2B/B2C + PWA visiteurs immersive pour la Mirokai Experien
 ## Liens utiles
 
 - Production: https://mirokai-experience-2026.vercel.app
-- Admin: `/admin`
-- Dashboard: `/dashboard`
+- Profil (gateway): `/profile`
+- Admin (via profil): `/admin`
+- Dashboard (via profil/admin): `/dashboard`
 - Experience visiteurs: `/experience`
+- Jeux: `/game` et `/game/memory`
 - Privacy: `/privacy`
 - Cookies: `/cookies`
 - Legal: `/legal`
@@ -24,9 +26,25 @@ Plateforme conversion B2B/B2C + PWA visiteurs immersive pour la Mirokai Experien
 - Endpoints API isoles par use-case
 - Documentation de reprise dans `docs/`
 
-## README clair - Index documentation
+## Fonctionnalites clefs
 
-## Documentation technique
+- Landing conversion B2B/B2C avec UTM Eventbrite
+- Section galerie immersive (images moodboard)
+- Profil gateway `/profile`:
+  - Connexion visiteur (segment `b2c` / `b2b`)
+  - Connexion admin
+- PWA experience protegee par session visiteur
+- Personnalisation robot (nom utilisateur + message par segment)
+- Jeux segmentes:
+  - B2C: quiz + memory
+  - B2B: simulation decisionnelle KPI/ROI
+- Admin modules + drag and drop floor plan
+- Dashboard analytics protegee par mot de passe
+- Consentement cookies persistant
+
+## Documentation
+
+### Documentation technique
 
 - [Documentation technique detaillee](docs/TECHNICAL_DOCUMENTATION.md)
 - [Architecture](docs/ARCHITECTURE.md)
@@ -36,7 +54,7 @@ Plateforme conversion B2B/B2C + PWA visiteurs immersive pour la Mirokai Experien
 - [Guide deploiement](docs/DEPLOYMENT.md)
 - [Justification technique (livrable referent)](docs/TECHNICAL_RATIONALE.md)
 
-## Schéma d'architecture
+### Schéma d'architecture
 
 Le schema complet (Mermaid) est dans [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
@@ -66,6 +84,7 @@ Variables importantes:
 
 - `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
 - `NEXT_PUBLIC_EVENTBRITE_URL=https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile`
+- `NEXT_PUBLIC_DEPLOYED_ROBOTS=24`
 - `DASHBOARD_PASSWORD=...`
 - `CRON_SECRET=...`
 
@@ -74,12 +93,18 @@ Variables importantes:
 - Seed modules: `supabase/seed/modules_seed.json`
 - Migration SQL: `supabase/migrations/20260311_000001_init_mirokai.sql`
 - Videos/audios: `public/media/` et mapping `lib/audioguideContent.ts`
+- Galerie landing: `public/media/gallery/*`
+- Visuels profils: `public/media/profiles/*`
 
 ## Deploiement
 
 Instructions detaillees:
 
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
+
+## Livrable PDF
+
+- PDF referent mis a jour: `RAKOTOMALALA_Océane_M2TL_Compétition.pdf`
 
 ## Checklist finale
 

@@ -8,6 +8,7 @@
 - Convertir les visites en reservations Eventbrite
 - Proposer une experience narrative mobile immersive pendant la visite
 - Permettre a l'equipe interne de faire evoluer les modules sans redevelopper
+- Proposer un parcours ludique adapte au segment B2B sans casser le discours business
 
 ## Contraintes
 
@@ -22,10 +23,11 @@
 - Taux completion parcours experience
 - Part B2B/B2C
 - Taux no-show (via sequence emails)
+- Taux d'activation profil (`/profile` -> `/experience`)
 
 ## 2) Conception d'architecture
 
-Architecture retenue: **JAMstack pragmatique en monolithe modulaire Next.js + APIs serverless**.
+Architecture retenue: **JAMstack pragmatique en monolithe modulaire Next.js + APIs serverless + profile gateway**.
 
 Raisons:
 
@@ -67,6 +69,7 @@ Chaque choix est relie a une contrainte objective:
 - **Reprise par un tiers**: typage fort + documentation + structure modulaire
 - **Experience utilisateur**: mobile-first, PWA, performances web
 - **Conversion business**: UTM stricts Eventbrite + funnel analytics
+- **Segmentation UX**: gateway profil + messages personnalises + jeu B2B KPI
 
 ## 5) Risques et plans de mitigation
 
@@ -76,6 +79,7 @@ Chaque choix est relie a une contrainte objective:
 | Variables env manquantes | Fonctionnalites inactives | Checklist deploy + `.env.example` |
 | Contenus media lourds | UX mobile degradee | Compression/streaming + preload metadata |
 | Donnees analytics incomplètes | Pilotage biaisé | Events types + fallback serveur |
+| Session visiteur invalide | Parcours bloque | Fallback `/profile` + recreation session |
 
 ## 6) Roadmap post-MVP
 
@@ -84,6 +88,7 @@ Chaque choix est relie a une contrainte objective:
 3. Ajouter erreurs/monitoring (Sentry)
 4. Automatiser seeds et migrations Supabase en CI
 5. A/B tests landing (hero, CTA, social proof)
+6. Ajouter RBAC admin (roles) au-dela du mot de passe unique
 
 ## 7) Conclusion
 

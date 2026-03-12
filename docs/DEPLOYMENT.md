@@ -52,7 +52,12 @@ Verifier:
 
 1. Landing charge sans erreur.
 2. CTA booking redirige vers Eventbrite avec UTM.
-3. Login admin/dashboard fonctionne.
+3. Page `/profile`:
+   - connexion visiteur fonctionne
+   - connexion admin fonctionne
 4. CRUD modules et drag/drop position OK.
-5. Experience PWA accessible en mobile.
-6. Email subscribe/leads traces en base (si Supabase configure).
+5. Experience PWA accessible en mobile (apres passage profil).
+6. Jeux:
+   - B2C: quiz + memory
+   - B2B: simulation KPI/ROI
+7. Email subscribe/leads traces en base (si Supabase configure).

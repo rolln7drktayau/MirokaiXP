@@ -31,6 +31,7 @@ Renseigner au minimum:
 
 - `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
 - `NEXT_PUBLIC_EVENTBRITE_URL` (lien event Eventbrite)
+- `NEXT_PUBLIC_DEPLOYED_ROBOTS=24`
 - `DASHBOARD_PASSWORD`
 
 Variables optionnelles selon integration:
@@ -48,9 +49,16 @@ npm run dev
 Acces utiles:
 
 - Landing: `http://localhost:3000`
+- Profil gateway: `http://localhost:3000/profile`
 - Experience PWA: `http://localhost:3000/experience`
 - Admin: `http://localhost:3000/admin`
 - Dashboard: `http://localhost:3000/dashboard`
+- Jeux: `http://localhost:3000/game`
+
+Note:
+
+- `/experience` et `/game*` redirigent vers `/profile` si aucune session visiteur n'est active.
+- Segment `b2b` ouvre un jeu dedie KPI/ROI sur `/game`.
 
 ## 5) Verification qualite
 

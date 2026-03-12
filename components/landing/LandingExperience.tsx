@@ -16,6 +16,7 @@ import { BookingCalendar } from "./BookingCalendar";
 import { ConfirmationBanner } from "./ConfirmationBanner";
 import { ExitPopup } from "./ExitPopup";
 import { FAQ } from "./FAQ";
+import { GallerySection } from "./GallerySection";
 import { Hero } from "./Hero";
 import { LocationSection } from "./LocationSection";
 import { ProfileSelector } from "./ProfileSelector";
@@ -132,6 +133,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
       <ProfileSelector profile={hydrated ? profile : "solo"} onSelect={handleProfileChange} />
 
       <UseCases />
+      <GallerySection />
       <ArcadeSection />
 
       <section ref={bookingRef}>
