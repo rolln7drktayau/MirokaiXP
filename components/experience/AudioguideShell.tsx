@@ -112,11 +112,11 @@ export function AudioguideShell() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <Image
-              src="/icons/favicon.ico"
+              src="/icons/icon0.svg"
               alt="Mirokai"
               width={40}
               height={40}
-              className="h-10 w-10 rounded-xl border border-white/20 bg-white/10 p-1"
+              className="h-10 w-10 rounded-xl border border-white/20 p-1"
             />
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-white/70">{t.eyebrow}</p>
