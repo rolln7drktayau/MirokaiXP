@@ -13,7 +13,7 @@ interface ExitPopupProps {
 }
 
 export function ExitPopup({ profile }: ExitPopupProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
   const { isTriggered, dismiss } = useExitIntent(true);
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(true);
@@ -45,6 +45,7 @@ export function ExitPopup({ profile }: ExitPopupProps) {
   } as const;
 
   const t = copy[locale];
+  const isLight = theme === "nimira-light";
 
   if (!isTriggered) {
     return null;
@@ -86,11 +87,15 @@ export function ExitPopup({ profile }: ExitPopupProps) {
       aria-modal="true"
     >
       <div
-        className="w-full max-w-md rounded-3xl border border-[#f0eef8]/20 bg-[#1f2030]/92 p-5 text-[#f0eef8] shadow-[0_18px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+        className={`w-full max-w-md rounded-3xl border p-5 shadow-[0_18px_34px_rgba(0,0,0,0.35)] backdrop-blur-xl ${
+          isLight
+            ? "border-[#202020]/16 bg-[#f8f3ea]/96 text-[#202020]"
+            : "border-[#f0eef8]/20 bg-[#1f2030]/92 text-[#f0eef8]"
+        }`}
         onClick={(event) => event.stopPropagation()}
       >
         <h3 className="text-xl">{t.title}</h3>
-        <p className="mt-2 text-sm text-[#f0eef8]/80">
+        <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/78" : "text-[#f0eef8]/80"}`}>
           {t.intro}
         </p>
 
@@ -101,14 +106,18 @@ export function ExitPopup({ profile }: ExitPopupProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder={t.placeholder}
-            className="w-full rounded-xl border border-[#f0eef8]/20 bg-[#111323]/55 px-3 py-2 text-sm text-[#f0eef8] outline-none placeholder:text-[#f0eef8]/45 focus:border-[#53B3FF]"
+            className={`w-full rounded-xl border px-3 py-2 text-sm outline-none focus:border-[#53B3FF] ${
+              isLight
+                ? "border-[#202020]/20 bg-white/70 text-[#202020] placeholder:text-[#202020]/45"
+                : "border-[#f0eef8]/20 bg-[#111323]/55 text-[#f0eef8] placeholder:text-[#f0eef8]/45"
+            }`}
           />
-          <label className="flex items-center gap-2 text-xs text-[#f0eef8]/80">
+          <label className={`flex items-center gap-2 text-xs ${isLight ? "text-[#202020]/78" : "text-[#f0eef8]/80"}`}>
             <input
               type="checkbox"
               checked={consent}
               onChange={(event) => setConsent(event.target.checked)}
-              className="h-4 w-4 rounded border-[#f0eef8]/40 bg-transparent"
+              className={`h-4 w-4 rounded bg-transparent ${isLight ? "border-[#202020]/35" : "border-[#f0eef8]/40"}`}
             />
             {t.consent}
           </label>

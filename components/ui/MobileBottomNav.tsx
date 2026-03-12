@@ -48,8 +48,9 @@ const isPathActive = (pathname: string, href: string) => {
 export function MobileBottomNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
   const t = labels[locale];
+  const isLight = theme === "nimira-light";
   const pressTimer = useRef<number | null>(null);
   const longPressTriggered = useRef(false);
 
@@ -74,11 +75,17 @@ export function MobileBottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-[65] border-t border-[#f0eef8]/15 bg-[#101528]/35 backdrop-blur-xl md:hidden"
+      className={`fixed inset-x-0 bottom-0 z-[65] border-t backdrop-blur-xl md:hidden ${
+        isLight ? "border-[#202020]/12 bg-[#fff8ef]/85" : "border-[#f0eef8]/15 bg-[#101528]/35"
+      }`}
       aria-label={t.nav}
     >
       <div className="mx-auto max-w-3xl px-3 pt-2 [padding-bottom:calc(0.5rem+env(safe-area-inset-bottom))]">
-        <ul className="grid grid-cols-4 gap-1 rounded-2xl border border-[#f0eef8]/15 bg-[#1f2030]/88 p-1.5">
+        <ul
+          className={`grid grid-cols-4 gap-1 rounded-2xl border p-1.5 ${
+            isLight ? "border-[#202020]/12 bg-white/95" : "border-[#f0eef8]/15 bg-[#1f2030]/88"
+          }`}
+        >
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isPathActive(pathname, item.href);
@@ -106,7 +113,9 @@ export function MobileBottomNav() {
                       className={`flex w-full flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
                         active
                           ? "bg-[#00F5C4]/15 text-[#00F5C4]"
-                          : "text-[#f0eef8]/72 hover:bg-[#f0eef8]/10"
+                          : isLight
+                            ? "text-[#202020]/72 hover:bg-[#202020]/10"
+                            : "text-[#f0eef8]/72 hover:bg-[#f0eef8]/10"
                       }`}
                       aria-label={`${t.dashboard} (long press admin)`}
                     >
@@ -126,7 +135,9 @@ export function MobileBottomNav() {
                     className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-[11px] transition ${
                       active
                         ? "bg-[#00F5C4]/15 text-[#00F5C4]"
-                        : "text-[#f0eef8]/72 hover:bg-[#f0eef8]/10"
+                        : isLight
+                          ? "text-[#202020]/72 hover:bg-[#202020]/10"
+                          : "text-[#f0eef8]/72 hover:bg-[#f0eef8]/10"
                     }`}
                   >
                     <Icon size={16} />

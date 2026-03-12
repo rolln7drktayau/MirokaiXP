@@ -9,8 +9,9 @@ const CONSENT_KEY = "mirokai_cookie_consent";
 const ACCEPTED_VALUE = "accepted";
 
 export function CookieConsentBanner() {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
   const [visible, setVisible] = useState(false);
+  const isLight = theme === "nimira-light";
 
   const copy = {
     fr: {
@@ -54,9 +55,15 @@ export function CookieConsentBanner() {
   }
 
   return (
-    <aside className="fixed bottom-[5.8rem] left-1/2 z-[80] w-[min(95vw,42rem)] -translate-x-1/2 rounded-2xl border border-[#f0eef8]/20 bg-[#1f2030]/92 p-4 shadow-[0_18px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl md:bottom-4">
-      <h2 className="text-sm font-semibold text-[#f0eef8]/95">{t.title}</h2>
-      <p className="mt-1 text-sm text-[#f0eef8]/80">{t.description}</p>
+    <aside
+      className={`fixed bottom-[5.8rem] left-1/2 z-[80] w-[min(95vw,42rem)] -translate-x-1/2 rounded-2xl border p-4 shadow-[0_18px_34px_rgba(0,0,0,0.35)] backdrop-blur-xl md:bottom-4 ${
+        isLight
+          ? "border-[#202020]/15 bg-[#f8f3ea]/95 text-[#202020]"
+          : "border-[#f0eef8]/20 bg-[#1f2030]/92 text-[#f0eef8]"
+      }`}
+    >
+      <h2 className={`text-sm font-semibold ${isLight ? "text-[#202020]/95" : "text-[#f0eef8]/95"}`}>{t.title}</h2>
+      <p className={`mt-1 text-sm ${isLight ? "text-[#202020]/80" : "text-[#f0eef8]/80"}`}>{t.description}</p>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button type="button" onClick={acceptCookies} className="cta-primary">
@@ -67,13 +74,21 @@ export function CookieConsentBanner() {
         </button>
         <Link
           href="/cookies"
-          className="rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1.5 text-xs text-[#f0eef8]/85 transition hover:bg-[#f0eef8]/18"
+          className={`rounded-full border px-3 py-1.5 text-xs transition ${
+            isLight
+              ? "border-[#202020]/20 bg-[#202020]/10 text-[#202020]/85 hover:bg-[#202020]/15"
+              : "border-[#f0eef8]/20 bg-[#f0eef8]/10 text-[#f0eef8]/85 hover:bg-[#f0eef8]/18"
+          }`}
         >
           {t.policy}
         </Link>
         <Link
           href="/privacy"
-          className="rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1.5 text-xs text-[#f0eef8]/85 transition hover:bg-[#f0eef8]/18"
+          className={`rounded-full border px-3 py-1.5 text-xs transition ${
+            isLight
+              ? "border-[#202020]/20 bg-[#202020]/10 text-[#202020]/85 hover:bg-[#202020]/15"
+              : "border-[#f0eef8]/20 bg-[#f0eef8]/10 text-[#f0eef8]/85 hover:bg-[#f0eef8]/18"
+          }`}
         >
           {t.privacy}
         </Link>

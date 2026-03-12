@@ -41,6 +41,7 @@ function ControlsPanel({
   showClose?: boolean;
 }) {
   const t = copy[locale];
+  const isLight = theme === "nimira-light";
 
   return (
     <motion.div
@@ -48,9 +49,17 @@ function ControlsPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.96 }}
       transition={{ duration: 0.22, ease: "easeInOut" }}
-      className="rounded-2xl border border-[#f0eef8]/20 bg-[#1f2030]/92 p-2 text-[#f0eef8] backdrop-blur-xl"
+      className={`rounded-2xl border p-2 backdrop-blur-xl ${
+        isLight
+          ? "border-[#202020]/20 bg-[#f8f3ea]/95 text-[#202020] shadow-[0_12px_24px_rgba(32,32,32,0.16)]"
+          : "border-[#f0eef8]/20 bg-[#1f2030]/92 text-[#f0eef8]"
+      }`}
     >
-      <div className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-[0.12em] text-[#f0eef8]/75">
+      <div
+        className={`flex items-center justify-between gap-2 text-[11px] uppercase tracking-[0.12em] ${
+          isLight ? "text-[#202020]/72" : "text-[#f0eef8]/75"
+        }`}
+      >
         <span className="inline-flex items-center gap-2">
           <Sparkles size={12} className="text-[#FFD166]" />
           Mirokai controls
@@ -59,7 +68,11 @@ function ControlsPanel({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1 rounded-full border border-[#f0eef8]/25 bg-[#f0eef8]/10 px-2 py-1 text-[10px] text-[#f0eef8]/90"
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10px] ${
+              isLight
+                ? "border-[#202020]/20 bg-[#202020]/10 text-[#202020]/90"
+                : "border-[#f0eef8]/25 bg-[#f0eef8]/10 text-[#f0eef8]/90"
+            }`}
           >
             <X size={11} />
             {t.close}
@@ -69,16 +82,24 @@ function ControlsPanel({
 
       <div className="mt-2 grid gap-2">
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 text-xs text-[#f0eef8]/70">
+          <span className={`inline-flex items-center gap-1 text-xs ${isLight ? "text-[#202020]/72" : "text-[#f0eef8]/70"}`}>
             <Languages size={14} />
             {t.language}
           </span>
-          <div className="ml-auto inline-flex rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 p-0.5">
+          <div
+            className={`ml-auto inline-flex rounded-full border p-0.5 ${
+              isLight ? "border-[#202020]/20 bg-[#202020]/10" : "border-[#f0eef8]/20 bg-[#f0eef8]/10"
+            }`}
+          >
             <button
               type="button"
               onClick={() => setLocale("fr")}
               className={`rounded-full px-2.5 py-1 text-xs ${
-                locale === "fr" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-[#f0eef8]/70"
+                locale === "fr"
+                  ? "bg-[#00F5C4]/20 text-[#00a68a]"
+                  : isLight
+                    ? "text-[#202020]/70"
+                    : "text-[#f0eef8]/70"
               }`}
             >
               FR
@@ -87,7 +108,11 @@ function ControlsPanel({
               type="button"
               onClick={() => setLocale("en")}
               className={`rounded-full px-2.5 py-1 text-xs ${
-                locale === "en" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-[#f0eef8]/70"
+                locale === "en"
+                  ? "bg-[#00F5C4]/20 text-[#00a68a]"
+                  : isLight
+                    ? "text-[#202020]/70"
+                    : "text-[#f0eef8]/70"
               }`}
             >
               EN
@@ -96,14 +121,18 @@ function ControlsPanel({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 text-xs text-[#f0eef8]/70">
+          <span className={`inline-flex items-center gap-1 text-xs ${isLight ? "text-[#202020]/72" : "text-[#f0eef8]/70"}`}>
             {theme === "nimira-dark" ? <MoonStar size={14} /> : <SunMedium size={14} />}
             {t.theme}
           </span>
           <button
             type="button"
             onClick={toggleTheme}
-            className="ml-auto inline-flex items-center gap-2 rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1 text-xs text-[#f0eef8]/90"
+            className={`ml-auto inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs ${
+              isLight
+                ? "border-[#202020]/20 bg-[#202020]/10 text-[#202020]/90"
+                : "border-[#f0eef8]/20 bg-[#f0eef8]/10 text-[#f0eef8]/90"
+            }`}
           >
             <motion.span
               key={theme}
@@ -161,6 +190,8 @@ export function ThemeLangSwitcher() {
     );
   }
 
+  const isLight = theme === "nimira-light";
+
   return (
     <motion.div
       className="fixed right-4 top-4 z-[70]"
@@ -192,7 +223,11 @@ export function ThemeLangSwitcher() {
         onClick={() => setOpen((current) => !current)}
         onPointerDown={(event) => dragControls.start(event)}
         whileTap={{ scale: 0.94 }}
-        className="inline-flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full border border-[#f0eef8]/25 bg-[#1f2030]/90 text-[#f0eef8] shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur active:cursor-grabbing"
+        className={`inline-flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full border shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur active:cursor-grabbing ${
+          isLight
+            ? "border-[#202020]/22 bg-[#f8f3ea]/95 text-[#202020]"
+            : "border-[#f0eef8]/25 bg-[#1f2030]/90 text-[#f0eef8]"
+        }`}
         aria-label={copy[locale].open}
       >
         {open ? <X size={18} /> : <Sparkles size={18} className="text-[#FFD166]" />}

@@ -101,11 +101,12 @@ const heroVideoUrl =
   process.env.NEXT_PUBLIC_HERO_VIDEO_URL ?? "/media/video/mirokai-hero-loop.mp4";
 
 export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
   const [activeScenario, setActiveScenario] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const t = heroCopy[locale];
+  const isLight = theme === "nimira-light";
   const scenarios = t.scenarios;
   const scenarioCount = scenarios.length;
 
@@ -139,14 +140,20 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           transition={{ duration: 0.7, ease: "easeInOut" }}
           className="section-shell space-y-6"
         >
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#a3337c]/25 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/85">
+          <p
+            className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs uppercase tracking-[0.18em] ${
+              isLight
+                ? "border-[#a37a98]/40 bg-[#e7cfe0] text-[#3f3550]"
+                : "border-white/20 bg-[#a3337c]/25 text-white/85"
+            }`}
+          >
             <Sparkles size={12} className="text-[#f09803]" />
             {t.label}
           </p>
 
           <h1 className="text-4xl leading-tight sm:text-5xl md:text-6xl">{t.headlines[profile]}</h1>
 
-          <p className="max-w-xl text-base text-white/80 sm:text-lg">{t.description}</p>
+          <p className={`max-w-xl text-base sm:text-lg ${isLight ? "text-[#202020]/82" : "text-white/80"}`}>{t.description}</p>
 
           <div className="flex flex-wrap gap-3">
             <button type="button" onClick={onPrimaryCTA} className="cta-primary">
@@ -190,9 +197,15 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
           />
 
           <div className="relative flex h-full min-h-[560px] flex-col gap-4 sm:min-h-[620px] lg:min-h-[680px]">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.liveTitle}</p>
+            <p className={`text-xs uppercase tracking-[0.2em] ${isLight ? "text-[#202020]/68" : "text-white/70"}`}>{t.liveTitle}</p>
 
-            <div className="relative flex-1 overflow-hidden rounded-[26px] border border-white/15 bg-[linear-gradient(160deg,#24334e_0%,#2a2752_45%,#332343_100%)] p-3 sm:p-4">
+            <div
+              className={`relative flex-1 overflow-hidden rounded-[26px] border p-3 sm:p-4 ${
+                isLight
+                  ? "border-[#202020]/12 bg-[linear-gradient(160deg,#f8f2e8_0%,#f5efe6_45%,#efe9de_100%)]"
+                  : "border-white/15 bg-[linear-gradient(160deg,#24334e_0%,#2a2752_45%,#332343_100%)]"
+              }`}
+            >
               <video
                 className="absolute inset-0 h-full w-full object-cover opacity-24"
                 autoPlay
@@ -203,7 +216,13 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               >
                 <source src={heroVideoUrl} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,8,24,0.36),rgba(7,8,24,0.86))]" />
+              <div
+                className={`absolute inset-0 ${
+                  isLight
+                    ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.5),rgba(242,235,226,0.78))]"
+                    : "bg-[linear-gradient(180deg,rgba(7,8,24,0.36),rgba(7,8,24,0.86))]"
+                }`}
+              />
 
               <div className="relative z-10 flex h-full min-h-[360px] flex-col sm:min-h-[420px]">
                 <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -212,12 +231,14 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="rounded-2xl border border-white/15 bg-[#1f2030]/70 p-3.5"
+                    className={`rounded-2xl border p-3.5 ${
+                      isLight ? "border-[#202020]/12 bg-white/85" : "border-white/15 bg-[#1f2030]/70"
+                    }`}
                   >
                     <p className="text-xs uppercase tracking-[0.18em] text-[#0eaa92]">
                       {t.activeScenario} • {scenarios[activeScenario].name}
                     </p>
-                    <p className="mt-2 text-sm text-white/85">{scenarios[activeScenario].description}</p>
+                    <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/84" : "text-white/85"}`}>{scenarios[activeScenario].description}</p>
                   </motion.div>
 
                   <div className="flex gap-2 sm:flex-col">
@@ -230,7 +251,11 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                   </div>
                 </div>
 
-                <div className="relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#1f2030]/50 sm:min-h-[240px]">
+                <div
+                  className={`relative mt-4 flex-1 min-h-[190px] overflow-hidden rounded-2xl border sm:min-h-[240px] ${
+                    isLight ? "border-[#202020]/10 bg-white/70" : "border-white/10 bg-[#1f2030]/50"
+                  }`}
+                >
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,74,173,0.22),transparent_40%),radial-gradient(circle_at_75%_78%,rgba(163,51,124,0.18),transparent_45%)]" />
 
                   <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pb-6 pt-4">
@@ -254,7 +279,11 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                     />
 
                     <motion.div
-                      className="mt-2 grid h-28 w-28 place-items-center rounded-full border border-[#0eaa92]/45 bg-[radial-gradient(circle,#2f3560_0%,#1f2030_65%,#1a1a2b_100%)]"
+                      className={`mt-2 grid h-28 w-28 place-items-center rounded-full border border-[#0eaa92]/45 ${
+                        isLight
+                          ? "bg-[radial-gradient(circle,#d7f5ed_0%,#eef8f5_65%,#f7fbf9_100%)]"
+                          : "bg-[radial-gradient(circle,#2f3560_0%,#1f2030_65%,#1a1a2b_100%)]"
+                      }`}
                       animate={prefersReducedMotion ? undefined : { y: [0, -6, 0], rotate: [0, 1.5, -1.5, 0] }}
                       transition={{ duration: 3.1, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
                     >
@@ -272,7 +301,9 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                             className={`rounded-full border px-2 py-1 text-center text-xs transition ${
                               isActive
                                 ? "border-[#f09803]/75 bg-[#f09803]/20 text-[#f09803]"
-                                : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
+                                : isLight
+                                  ? "border-[#202020]/20 bg-[#202020]/10 text-[#202020]/82 hover:bg-[#202020]/14"
+                                  : "border-white/30 bg-white/[0.08] text-white/85 hover:bg-white/15"
                             }`}
                           >
                             {scenarioKeywords[index]}
@@ -284,8 +315,8 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
                 </div>
 
                 <div className="mt-3 space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.16em] text-white/65">{t.scenarioHint}</p>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <p className={`text-[11px] uppercase tracking-[0.16em] ${isLight ? "text-[#202020]/65" : "text-white/65"}`}>{t.scenarioHint}</p>
+                  <div className={`h-1.5 overflow-hidden rounded-full ${isLight ? "bg-[#202020]/12" : "bg-white/10"}`}>
                     <motion.div
                       key={activeScenario}
                       className="h-full bg-gradient-to-r from-[#004aad] via-[#a3337c] to-[#f09803]"
@@ -298,7 +329,13 @@ export function Hero({ profile, remainingSlots, onPrimaryCTA }: HeroProps) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-white/15 bg-black/20 px-3 py-2 text-xs text-white/70">
+            <div
+              className={`rounded-2xl border px-3 py-2 text-xs ${
+                isLight
+                  ? "border-[#202020]/12 bg-white/75 text-[#202020]/72"
+                  : "border-white/15 bg-black/20 text-white/70"
+              }`}
+            >
               {t.capsule}
             </div>
           </div>
