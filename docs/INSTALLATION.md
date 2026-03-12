@@ -59,6 +59,7 @@ Note:
 
 - `/experience` et `/game*` redirigent vers `/profile` si aucune session visiteur n'est active.
 - Segment `b2b` ouvre un jeu dedie KPI/ROI sur `/game`.
+- Sur mobile, la landing utilise une barre fixe a 4 onglets: `Accueil / Reserver / Jeu / Profil`.
 
 ## 5) Verification qualite
 

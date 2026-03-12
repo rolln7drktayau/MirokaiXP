@@ -78,5 +78,5 @@ Payload API `POST /api/profile-session`:
 - Audios FR: `public/media/audio/fr/*`
 - Audios EN: `public/media/audio/en/*`
 - Mapping audio guide: `lib/audioguideContent.ts`
-- Galerie landing: `public/media/gallery/*`
+- Assets moodboard (optionnels, non affiches par defaut): `public/media/gallery/*`
 - Visuels profils: `public/media/profiles/*`

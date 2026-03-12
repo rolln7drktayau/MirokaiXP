@@ -29,7 +29,7 @@ Plateforme conversion B2B/B2C + PWA visiteurs immersive pour la Mirokai Experien
 ## Fonctionnalites clefs
 
 - Landing conversion B2B/B2C avec UTM Eventbrite
-- Section galerie immersive (images moodboard)
+- Navigation mobile par onglets: `Accueil / Reserver / Jeu / Profil`
 - Profil gateway `/profile`:
   - Connexion visiteur (segment `b2c` / `b2b`)
   - Connexion admin
@@ -93,7 +93,7 @@ Variables importantes:
 - Seed modules: `supabase/seed/modules_seed.json`
 - Migration SQL: `supabase/migrations/20260311_000001_init_mirokai.sql`
 - Videos/audios: `public/media/` et mapping `lib/audioguideContent.ts`
-- Galerie landing: `public/media/gallery/*`
+- Assets moodboard (non affiches sur la landing): `public/media/gallery/*`
 - Visuels profils: `public/media/profiles/*`
 
 ## Deploiement

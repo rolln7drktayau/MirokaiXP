@@ -68,4 +68,4 @@ La solution couvre deux parcours:
 - PWA + service worker (`next-pwa`)
 - Media charges en `preload=metadata`
 - UI mobile-first
-- Galerie optimisee via `next/image` (`public/media/gallery/*`)
+- Navigation mobile a onglets (`Accueil`, `Reserver`, `Jeu`, `Profil`) avec switch instantane
