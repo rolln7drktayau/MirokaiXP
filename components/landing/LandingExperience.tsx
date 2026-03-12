@@ -2,18 +2,15 @@
 
 import { motion } from "framer-motion";
 import { Bot, CalendarClock, Building2, Sparkles } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
-import { useEventbrite } from "@/hooks/useEventbrite";
 import { useProfile } from "@/hooks/useProfile";
 import { trackEvent, trackPageView } from "@/lib/analytics";
-import { getUpcomingSlots } from "@/services/bookingService";
-import type { B2BFormData, VisitorProfile, VisitorSession } from "@/types/profile";
+import type { VisitorProfile, VisitorSession } from "@/types/profile";
 
-import { B2BForm } from "./B2BForm";
-import { BookingCalendar } from "./BookingCalendar";
 import { ConfirmationBanner } from "./ConfirmationBanner";
+import { ContactSection } from "./ContactSection";
 import { ExitPopup } from "./ExitPopup";
 import { FAQ } from "./FAQ";
 import { Hero } from "./Hero";
@@ -23,9 +20,6 @@ import { Testimonials } from "./Testimonials";
 import { UseCases } from "./UseCases";
 import { ArcadeSection } from "./ArcadeSection";
 
-const EVENTBRITE_URL =
-  process.env.NEXT_PUBLIC_EVENTBRITE_URL ??
-  "https://www.eventbrite.fr/e/lexperience-mirokai-musee-robotique-et-ia-tickets-1837425843159?aff=ebdsoporgprofile";
 const DEPLOYED_ROBOTS = Number(process.env.NEXT_PUBLIC_DEPLOYED_ROBOTS ?? "24");
 const MOBILE_TAB_EVENT = "mirokai-mobile-tab-change";
 
@@ -35,14 +29,11 @@ interface LandingExperienceProps {
 
 export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const { locale } = useAppPreferences();
-  const bookingRef = useRef<HTMLElement | null>(null);
-  const b2bFormRef = useRef<HTMLElement | null>(null);
+  const contactsRef = useRef<HTMLElement | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [activeMobileTab, setActiveMobileTab] = useState<"home" | "booking" | "game">("home");
+  const [activeMobileTab, setActiveMobileTab] = useState<"home" | "contacts" | "game">("home");
 
   const { profile, hydrated, setProfile } = useProfile("team");
-  const { redirectToEventbrite } = useEventbrite(EVENTBRITE_URL);
-  const slots = useMemo(() => getUpcomingSlots(), []);
   const resolvedProfile: VisitorProfile = profile === "solo" ? "team" : profile;
 
   useEffect(() => {
@@ -66,8 +57,8 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
 
     const getTabFromHash = () => {
       const hash = window.location.hash;
-      if (hash === "#booking") {
-        return "booking" as const;
+      if (hash === "#contacts") {
+        return "contacts" as const;
       }
       if (hash === "#game") {
         return "game" as const;
@@ -80,7 +71,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
     };
 
     const syncFromEvent = (event: Event) => {
-      const customEvent = event as CustomEvent<{ tab?: "home" | "booking" | "game" }>;
+      const customEvent = event as CustomEvent<{ tab?: "home" | "contacts" | "game" }>;
       if (customEvent.detail?.tab) {
         setActiveMobileTab(customEvent.detail.tab);
       }
@@ -108,60 +99,30 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
 
   const openSlotsForProfile = (nextProfile: VisitorProfile) => {
     handleProfileChange(nextProfile);
-    if (nextProfile === "b2b") {
-      onRequestPrivateSlot();
-      return;
-    }
-    scrollToBooking();
+    scrollToContacts();
   };
 
-  const scrollToBooking = () => {
+  const scrollToContacts = () => {
     if (isMobile) {
-      setActiveMobileTab("booking");
-      window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: "booking" } }));
-      window.location.hash = "booking";
+      setActiveMobileTab("contacts");
+      window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: "contacts" } }));
+      window.location.hash = "contacts";
       return;
     }
-    bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const onBookSlot = () => {
-    const attendees = resolvedProfile === "b2b" ? 8 : 4;
-    redirectToEventbrite(resolvedProfile, {
-      attendees,
-      company:
-        resolvedProfile === "b2b" ? (locale === "fr" ? "Entreprise invitée" : "Invited company") : undefined,
-    });
-  };
-
-  const onB2BQualified = (formData: B2BFormData) => {
-    redirectToEventbrite("b2b", formData);
-  };
-
-  const onRequestPrivateSlot = () => {
-    setProfile("b2b");
-    if (isMobile) {
-      setActiveMobileTab("booking");
-      window.dispatchEvent(new CustomEvent(MOBILE_TAB_EVENT, { detail: { tab: "booking" } }));
-      window.location.hash = "booking";
-      return;
-    }
-    window.setTimeout(() => {
-      b2bFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 150);
+    contactsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const copy = {
     fr: {
       orbitTitle: "Votre parcours Mirokaï en 3 temps",
       orbit1: "Choisissez votre profil",
-      orbit2: "Réservez ou demandez un créneau privé",
+      orbit2: "Laissez vos coordonnées de contact",
       orbit3: "Vivez la narration Nimira sur place",
     },
     en: {
       orbitTitle: "Your Mirokaï journey in 3 steps",
       orbit1: "Choose your profile",
-      orbit2: "Book or request a private slot",
+      orbit2: "Share your contact details",
       orbit3: "Experience Nimira storytelling on site",
     },
   } as const;
@@ -169,7 +130,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const t = copy[locale];
   const showAll = !isMobile;
   const showHome = showAll || activeMobileTab === "home";
-  const showBooking = showAll || activeMobileTab === "booking";
+  const showContacts = showAll || activeMobileTab === "contacts";
   const showGame = showAll || activeMobileTab === "game";
 
   return (
@@ -180,7 +141,7 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
             profile={hydrated ? resolvedProfile : "team"}
             deployedRobots={DEPLOYED_ROBOTS}
             visitorSession={visitorSession}
-            onPrimaryCTA={scrollToBooking}
+            onPrimaryCTA={scrollToContacts}
           />
 
           <section className="section-wrap pb-1">
@@ -224,21 +185,10 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
           <ExitPopup profile={hydrated ? resolvedProfile : "team"} />
       </div>
 
-      <div className={showBooking ? undefined : "hidden"}>
-        <section ref={bookingRef} id="booking">
-            <BookingCalendar
-              profile={hydrated ? resolvedProfile : "team"}
-              slots={slots}
-              onBookSlot={onBookSlot}
-              onRequestPrivateSlot={onRequestPrivateSlot}
-            />
+      <div className={showContacts ? undefined : "hidden"}>
+        <section ref={contactsRef} id="contacts">
+          <ContactSection profile={hydrated ? resolvedProfile : "team"} />
         </section>
-
-        {resolvedProfile === "b2b" ? (
-          <section ref={b2bFormRef}>
-            <B2BForm onQualified={onB2BQualified} />
-          </section>
-        ) : null}
       </div>
 
       <section id="game" className={showGame ? undefined : "hidden"}>

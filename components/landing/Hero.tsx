@@ -24,7 +24,7 @@ const heroCopy = {
     label: "Mirokaï Experience 2026 • Paris",
     description:
       "Venez vivre une expérience immersive où robotique sociale, IA émotionnelle et narration Nimira convergent pour créer un moment à fort impact humain.",
-    reserve: "Réserver un créneau",
+    reserve: "Contacter l'équipe",
     profileAccess: "Mon profil & accès",
     liveTitle: "Mirokaï en situation réelle",
     activeScenario: "Scénario actif",
@@ -72,7 +72,7 @@ const heroCopy = {
     label: "Mirokaï Experience 2026 • Paris",
     description:
       "Live an immersive journey where social robotics, emotional AI, and Nimira storytelling create a memorable human-first experience.",
-    reserve: "Book a slot",
+    reserve: "Contact the team",
     profileAccess: "My profile & access",
     liveTitle: "Mirokaï in real situations",
     activeScenario: "Active scenario",
