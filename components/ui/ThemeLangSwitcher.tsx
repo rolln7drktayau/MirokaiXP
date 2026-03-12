@@ -48,9 +48,9 @@ function ControlsPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.96 }}
       transition={{ duration: 0.22, ease: "easeInOut" }}
-      className="rounded-2xl border border-white/20 bg-black/35 p-2 backdrop-blur-xl"
+      className="rounded-2xl border border-[#f0eef8]/20 bg-[#1f2030]/92 p-2 text-[#f0eef8] backdrop-blur-xl"
     >
-      <div className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-[0.12em] text-white/75">
+      <div className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-[0.12em] text-[#f0eef8]/75">
         <span className="inline-flex items-center gap-2">
           <Sparkles size={12} className="text-[#FFD166]" />
           Mirokai controls
@@ -59,7 +59,7 @@ function ControlsPanel({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2 py-1 text-[10px] text-white/80"
+            className="inline-flex items-center gap-1 rounded-full border border-[#f0eef8]/25 bg-[#f0eef8]/10 px-2 py-1 text-[10px] text-[#f0eef8]/90"
           >
             <X size={11} />
             {t.close}
@@ -69,16 +69,16 @@ function ControlsPanel({
 
       <div className="mt-2 grid gap-2">
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 text-xs text-white/70">
+          <span className="inline-flex items-center gap-1 text-xs text-[#f0eef8]/70">
             <Languages size={14} />
             {t.language}
           </span>
-          <div className="ml-auto inline-flex rounded-full border border-white/20 bg-white/5 p-0.5">
+          <div className="ml-auto inline-flex rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 p-0.5">
             <button
               type="button"
               onClick={() => setLocale("fr")}
               className={`rounded-full px-2.5 py-1 text-xs ${
-                locale === "fr" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-white/70"
+                locale === "fr" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-[#f0eef8]/70"
               }`}
             >
               FR
@@ -87,7 +87,7 @@ function ControlsPanel({
               type="button"
               onClick={() => setLocale("en")}
               className={`rounded-full px-2.5 py-1 text-xs ${
-                locale === "en" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-white/70"
+                locale === "en" ? "bg-[#00F5C4]/20 text-[#00F5C4]" : "text-[#f0eef8]/70"
               }`}
             >
               EN
@@ -96,14 +96,14 @@ function ControlsPanel({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 text-xs text-white/70">
+          <span className="inline-flex items-center gap-1 text-xs text-[#f0eef8]/70">
             {theme === "nimira-dark" ? <MoonStar size={14} /> : <SunMedium size={14} />}
             {t.theme}
           </span>
           <button
             type="button"
             onClick={toggleTheme}
-            className="ml-auto inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/85"
+            className="ml-auto inline-flex items-center gap-2 rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1 text-xs text-[#f0eef8]/90"
           >
             <motion.span
               key={theme}
@@ -129,7 +129,7 @@ export function ThemeLangSwitcher() {
   const { locale, theme, setLocale, toggleTheme } = useAppPreferences();
   const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
-  const [dragBounds, setDragBounds] = useState({ left: -280, right: 0, top: 0, bottom: 560 });
+  const [dragBounds, setDragBounds] = useState({ top: 0, bottom: 560 });
   const dragControls = useDragControls();
 
   useEffect(() => {
@@ -142,8 +142,6 @@ export function ThemeLangSwitcher() {
         const margin = 16;
         const bubbleSize = 48;
         setDragBounds({
-          left: -(window.innerWidth - bubbleSize - margin * 2),
-          right: 0,
           top: 0,
           bottom: Math.max(0, window.innerHeight - bubbleSize - margin * 2),
         });
@@ -166,7 +164,7 @@ export function ThemeLangSwitcher() {
   return (
     <motion.div
       className="fixed right-4 top-4 z-[70]"
-      drag
+      drag="y"
       dragListener={false}
       dragControls={dragControls}
       dragMomentum={false}
@@ -194,7 +192,7 @@ export function ThemeLangSwitcher() {
         onClick={() => setOpen((current) => !current)}
         onPointerDown={(event) => dragControls.start(event)}
         whileTap={{ scale: 0.94 }}
-        className="inline-flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full border border-white/25 bg-[#1f2030]/85 text-white shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur active:cursor-grabbing"
+        className="inline-flex h-12 w-12 touch-none cursor-grab items-center justify-center rounded-full border border-[#f0eef8]/25 bg-[#1f2030]/90 text-[#f0eef8] shadow-[0_10px_24px_rgba(0,0,0,0.35)] backdrop-blur active:cursor-grabbing"
         aria-label={copy[locale].open}
       >
         {open ? <X size={18} /> : <Sparkles size={18} className="text-[#FFD166]" />}

@@ -54,9 +54,9 @@ export function CookieConsentBanner() {
   }
 
   return (
-    <aside className="fixed bottom-[5.8rem] left-1/2 z-[80] w-[min(95vw,42rem)] -translate-x-1/2 rounded-2xl border border-white/20 bg-[#1f2030]/92 p-4 shadow-[0_18px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl md:bottom-4">
-      <h2 className="text-sm font-semibold text-white/95">{t.title}</h2>
-      <p className="mt-1 text-sm text-white/80">{t.description}</p>
+    <aside className="fixed bottom-[5.8rem] left-1/2 z-[80] w-[min(95vw,42rem)] -translate-x-1/2 rounded-2xl border border-[#f0eef8]/20 bg-[#1f2030]/92 p-4 shadow-[0_18px_34px_rgba(0,0,0,0.45)] backdrop-blur-xl md:bottom-4">
+      <h2 className="text-sm font-semibold text-[#f0eef8]/95">{t.title}</h2>
+      <p className="mt-1 text-sm text-[#f0eef8]/80">{t.description}</p>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <button type="button" onClick={acceptCookies} className="cta-primary">
@@ -67,13 +67,13 @@ export function CookieConsentBanner() {
         </button>
         <Link
           href="/cookies"
-          className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition hover:bg-white/10"
+          className="rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1.5 text-xs text-[#f0eef8]/85 transition hover:bg-[#f0eef8]/18"
         >
           {t.policy}
         </Link>
         <Link
           href="/privacy"
-          className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition hover:bg-white/10"
+          className="rounded-full border border-[#f0eef8]/20 bg-[#f0eef8]/10 px-3 py-1.5 text-xs text-[#f0eef8]/85 transition hover:bg-[#f0eef8]/18"
         >
           {t.privacy}
         </Link>

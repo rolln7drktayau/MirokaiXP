@@ -43,23 +43,23 @@ html[data-theme="nimira-dark"] {
 }
 
 html[data-theme="nimira-light"] {
-  --background: #f3efe4;
+  --background: #eeeadf;
   --foreground: #202020;
-  --surface: #fff8ee;
-  --surface-2: #f8e9d6;
+  --surface: #f7f2ea;
+  --surface-2: #efe7da;
   --accent: #004aad;
   --accent-2: #f09803;
   --accent-3: #0eaa92;
   --accent-4: #a3337c;
   --accent-5: #9e63a5;
-  --border-soft: rgba(32, 32, 32, 0.18);
-  --glass-bg: rgba(255, 248, 238, 0.84);
-  --glass-border: rgba(163, 51, 124, 0.24);
+  --border-soft: rgba(39, 33, 46, 0.2);
+  --glass-bg: rgba(249, 244, 236, 0.9);
+  --glass-border: rgba(163, 51, 124, 0.2);
   --bg-mesh:
-    radial-gradient(70% 55% at 12% 18%, rgba(0, 74, 173, 0.14), transparent 68%),
-    radial-gradient(76% 58% at 90% 16%, rgba(163, 51, 124, 0.14), transparent 68%),
-    radial-gradient(86% 62% at 52% 90%, rgba(14, 170, 146, 0.12), transparent 72%),
-    linear-gradient(160deg, #f3efe4 0%, #f8f1e8 56%, #fbf5eb 100%);
+    radial-gradient(70% 55% at 12% 18%, rgba(95, 141, 198, 0.18), transparent 68%),
+    radial-gradient(76% 58% at 90% 16%, rgba(203, 145, 182, 0.16), transparent 68%),
+    radial-gradient(86% 62% at 52% 90%, rgba(14, 170, 146, 0.1), transparent 72%),
+    linear-gradient(160deg, #ece7dc 0%, #f3ede3 56%, #f8f3ea 100%);
 }
 
 body {

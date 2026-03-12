@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+const EXIT_POPUP_DISMISSED_KEY = "mirokai_exit_popup_dismissed";
+
 export const useExitIntent = (enabled = true) => {
   const [isTriggered, setIsTriggered] = useState(false);
 
   useEffect(() => {
     if (!enabled) {
+      return;
+    }
+
+    if (window.localStorage.getItem(EXIT_POPUP_DISMISSED_KEY) === "1") {
       return;
     }
 
@@ -33,6 +39,9 @@ export const useExitIntent = (enabled = true) => {
 
   return {
     isTriggered,
-    dismiss: () => setIsTriggered(false),
+    dismiss: () => {
+      window.localStorage.setItem(EXIT_POPUP_DISMISSED_KEY, "1");
+      setIsTriggered(false);
+    },
   };
 };
