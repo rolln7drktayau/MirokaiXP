@@ -92,7 +92,7 @@ export function GallerySection() {
   const t = copy[locale];
 
   return (
-    <section className="section-wrap py-8">
+    <section className="section-wrap py-8" id="gallery">
       <div
         className={`relative overflow-hidden rounded-3xl border p-5 sm:p-6 ${
           isLight

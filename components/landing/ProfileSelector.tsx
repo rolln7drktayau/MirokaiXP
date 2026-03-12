@@ -9,6 +9,7 @@ import type { ProfileOption, VisitorProfile } from "@/types/profile";
 interface ProfileSelectorProps {
   profile: VisitorProfile;
   onSelect: (profile: VisitorProfile) => void;
+  onOpenSlots?: (profile: VisitorProfile) => void;
 }
 
 type ProfileVisualOption = ProfileOption & {
@@ -16,7 +17,7 @@ type ProfileVisualOption = ProfileOption & {
   imageAlt: string;
 };
 
-export function ProfileSelector({ profile, onSelect }: ProfileSelectorProps) {
+export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelectorProps) {
   const { locale } = useAppPreferences();
 
   const copy = {
@@ -113,7 +114,17 @@ export function ProfileSelector({ profile, onSelect }: ProfileSelectorProps) {
                 </div>
                 <p className="mt-3 text-base font-medium">{option.label}</p>
                 <p className="mt-2 text-sm text-white/75">{option.description}</p>
-                <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[#53B3FF]">{option.ctaLabel}</p>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onSelect(option.id);
+                    onOpenSlots?.(option.id);
+                  }}
+                  className="mt-4 rounded-full border border-[#53B3FF]/35 bg-[#53B3FF]/10 px-3 py-1.5 text-xs uppercase tracking-[0.16em] text-[#53B3FF] transition hover:bg-[#53B3FF]/18"
+                >
+                  {option.ctaLabel}
+                </button>
               </motion.button>
             );
           })}

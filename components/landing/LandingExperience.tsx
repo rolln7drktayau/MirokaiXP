@@ -52,6 +52,15 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
     trackEvent("profile_selected", { profile: nextProfile });
   };
 
+  const openSlotsForProfile = (nextProfile: VisitorProfile) => {
+    handleProfileChange(nextProfile);
+    if (nextProfile === "b2b") {
+      onRequestPrivateSlot();
+      return;
+    }
+    scrollToBooking();
+  };
+
   const scrollToBooking = () => {
     bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -130,7 +139,11 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
         </motion.div>
       </section>
 
-      <ProfileSelector profile={hydrated ? profile : "solo"} onSelect={handleProfileChange} />
+      <ProfileSelector
+        profile={hydrated ? profile : "solo"}
+        onSelect={handleProfileChange}
+        onOpenSlots={openSlotsForProfile}
+      />
 
       <UseCases />
       <GallerySection />

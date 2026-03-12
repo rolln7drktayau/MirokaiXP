@@ -59,9 +59,20 @@ export function Testimonials() {
 
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isCarouselMode, setIsCarouselMode] = useState(false);
 
   useEffect(() => {
-    if (isPaused) {
+    const syncMode = () => {
+      setIsCarouselMode(window.innerWidth >= 1024);
+    };
+
+    syncMode();
+    window.addEventListener("resize", syncMode);
+    return () => window.removeEventListener("resize", syncMode);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused || !isCarouselMode) {
       return;
     }
 
@@ -69,7 +80,7 @@ export function Testimonials() {
       setIndex((current) => (current + 1) % testimonials.length);
     }, 11000);
     return () => window.clearInterval(timer);
-  }, [isPaused, testimonials.length]);
+  }, [isCarouselMode, isPaused, testimonials.length]);
 
   const item = testimonials[index];
 
@@ -85,7 +96,7 @@ export function Testimonials() {
       <h2 className="mt-2 text-2xl sm:text-3xl">{t.title}</h2>
       <p className="mt-2 max-w-3xl text-sm text-white/75">{t.subtitle}</p>
 
-      <div className="mt-4 grid gap-3 md:hidden">
+      <div className="mt-4 grid gap-3 lg:hidden">
         {testimonials.map((testimonial) => (
           <article key={testimonial.company} className="glass-panel rounded-2xl p-4">
             <p className="text-[#FFD166]">{"★ ★ ★ ★ ★"}</p>
@@ -105,7 +116,7 @@ export function Testimonials() {
         ))}
       </div>
 
-      <div className="mt-4 hidden md:block">
+      <div className="mt-4 hidden lg:block">
         <motion.figure
           key={item.company}
           initial={{ opacity: 0, x: 12 }}

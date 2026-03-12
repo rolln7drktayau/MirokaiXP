@@ -135,7 +135,7 @@ export function Hero({ profile, remainingSlots, deployedRobots, visitorSession, 
     visitorSession?.segment === "b2b" ? t.profileB2B[activeScenario] : t.profileB2C[activeScenario];
 
   useEffect(() => {
-    const onResize = () => setIsDesktop(window.innerWidth >= 768);
+    const onResize = () => setIsDesktop(window.innerWidth >= 1024);
     onResize();
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);

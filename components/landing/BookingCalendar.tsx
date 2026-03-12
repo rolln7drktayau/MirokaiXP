@@ -39,7 +39,8 @@ export function BookingCalendar({
   onBookSlot,
   onRequestPrivateSlot,
 }: BookingCalendarProps) {
-  const { locale } = useAppPreferences();
+  const { locale, theme } = useAppPreferences();
+  const isLight = theme === "nimira-light";
   const [showPrivateForm, setShowPrivateForm] = useState(false);
   const [privateStatus, setPrivateStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -189,14 +190,14 @@ export function BookingCalendar({
 
       <div className="glass-panel rounded-2xl p-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm uppercase tracking-[0.14em] text-white/75">{t.calendarTitle}</p>
-          <p className="text-sm text-white/75">
+          <p className={`text-sm uppercase tracking-[0.14em] ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>{t.calendarTitle}</p>
+          <p className={`text-sm ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>
             {activeMonthDate.toLocaleDateString(t.weekdays, { month: "long", year: "numeric" })}
           </p>
         </div>
-        <p className="mt-2 text-xs text-white/70">{t.calendarHint}</p>
+        <p className={`mt-2 text-xs ${isLight ? "text-[#202020]/72" : "text-white/70"}`}>{t.calendarHint}</p>
 
-        <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] uppercase tracking-[0.14em] text-white/60">
+        <div className={`mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] uppercase tracking-[0.14em] ${isLight ? "text-[#202020]/65" : "text-white/60"}`}>
           {t.weekdayLabels.map((label) => (
             <span key={label}>{label}</span>
           ))}
@@ -209,6 +210,19 @@ export function BookingCalendar({
             const hasSlots = daySlots.length > 0;
             const isSelected = selectedDay === dayKey;
             const inActiveMonth = isSameMonth(day, activeMonthDate);
+            const selectedClass = isLight
+              ? "border-[#F5C842]/70 bg-[#F5C842]/18 text-[#A86A00]"
+              : "border-[#F5C842]/70 bg-[#F5C842]/18 text-[#F5C842]";
+            const dayClass = isSelected
+              ? selectedClass
+              : hasSlots
+                ? isLight
+                  ? "border-[#202020]/18 bg-[#fff8ee] text-[#202020] hover:bg-[#f4ebde]"
+                  : "border-white/20 bg-white/5 text-white/85 hover:bg-white/10"
+                : isLight
+                  ? "border-[#202020]/10 bg-[#ece4d8] text-[#202020]/45"
+                  : "border-white/10 bg-white/[0.03] text-white/35";
+            const countClass = isLight ? "text-[10px] text-[#202020]/62" : "text-[10px] text-white/65";
 
             return (
               <button
@@ -216,16 +230,10 @@ export function BookingCalendar({
                 type="button"
                 disabled={!hasSlots}
                 onClick={() => setSelectedDay(dayKey)}
-                className={`min-h-[56px] rounded-xl border px-1 py-1 text-center transition ${
-                  isSelected
-                    ? "border-[#F5C842]/70 bg-[#F5C842]/18 text-[#F5C842]"
-                    : hasSlots
-                      ? "border-white/20 bg-white/5 text-white/85 hover:bg-white/10"
-                      : "border-white/10 bg-white/[0.03] text-white/35"
-                } ${inActiveMonth ? "" : "opacity-55"} disabled:cursor-not-allowed`}
+                className={`min-h-[56px] rounded-xl border px-1 py-1 text-center transition ${dayClass} ${inActiveMonth ? "" : "opacity-55"} disabled:cursor-not-allowed`}
               >
                 <span className="block text-sm font-medium">{day.getDate()}</span>
-                {hasSlots ? <span className="text-[10px] text-white/65">{daySlots.length}</span> : null}
+                {hasSlots ? <span className={countClass}>{daySlots.length}</span> : null}
               </button>
             );
           })}
@@ -233,7 +241,7 @@ export function BookingCalendar({
       </div>
 
       <div className="mt-4">
-        <p className="text-sm text-white/75">
+        <p className={`text-sm ${isLight ? "text-[#202020]/75" : "text-white/75"}`}>
           {t.selectDate}:{" "}
           {selectedDay
             ? fromDayKey(selectedDay).toLocaleDateString(t.weekdays, {
@@ -254,14 +262,18 @@ export function BookingCalendar({
                   </p>
                   <span className="text-xs uppercase tracking-[0.14em]">{slot.language}</span>
                 </div>
-                <p className="mt-1 text-sm text-white/75">
+                <p className={`mt-1 text-sm ${isLight ? "text-[#202020]/78" : "text-white/75"}`}>
                   {slot.seatsRemaining} / {slot.seatsTotal} {t.seatsLeft}
                 </p>
                 <button
                   type="button"
                   disabled={slot.seatsRemaining <= 0}
                   onClick={() => onBookSlot(slot)}
-                  className="mt-3 w-full rounded-full border border-white/20 bg-white/10 px-3 py-2 text-sm transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`mt-3 w-full rounded-full border px-3 py-2 text-sm transition disabled:cursor-not-allowed disabled:opacity-50 ${
+                    isLight
+                      ? "border-[#202020]/18 bg-white hover:bg-[#f4ebde]"
+                      : "border-white/20 bg-white/10 hover:bg-white/15"
+                  }`}
                 >
                   {t.bookSlot}
                 </button>
@@ -269,7 +281,7 @@ export function BookingCalendar({
             ))}
           </div>
         ) : (
-          <p className="mt-2 text-sm text-white/70">{t.noSlotsForDate}</p>
+          <p className={`mt-2 text-sm ${isLight ? "text-[#202020]/72" : "text-white/70"}`}>{t.noSlotsForDate}</p>
         )}
       </div>
 

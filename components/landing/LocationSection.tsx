@@ -104,7 +104,7 @@ export function LocationSection() {
   ];
 
   return (
-    <section className="section-wrap py-10">
+    <section className="section-wrap py-10" id="info">
       <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-[linear-gradient(140deg,#f7f1e8_0%,#f2e7d8_45%,#eee0d2_100%)] p-5 text-[#202020] shadow-[0_16px_36px_rgba(32,32,32,0.14)] sm:p-6">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(0,74,173,0.18),transparent_45%),radial-gradient(circle_at_87%_82%,rgba(163,51,124,0.16),transparent_45%)]" />
         <div className="relative">
