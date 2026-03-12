@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Bot, CalendarClock, Building2, Sparkles } from "lucide-react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 import { useEventbrite } from "@/hooks/useEventbrite";
@@ -37,15 +37,57 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   const { locale } = useAppPreferences();
   const bookingRef = useRef<HTMLElement | null>(null);
   const b2bFormRef = useRef<HTMLElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeMobileTab, setActiveMobileTab] = useState<"home" | "booking" | "gallery">("home");
 
-  const { profile, hydrated, setProfile } = useProfile("solo");
+  const { profile, hydrated, setProfile } = useProfile("team");
   const { redirectToEventbrite } = useEventbrite(EVENTBRITE_URL);
   const slots = useMemo(() => getUpcomingSlots(), []);
-  const remainingSlots = useMemo(() => getRemainingSlotCount(profile), [profile]);
+  const resolvedProfile: VisitorProfile = profile === "solo" ? "team" : profile;
+  const remainingSlots = useMemo(() => getRemainingSlotCount(resolvedProfile), [resolvedProfile]);
 
   useEffect(() => {
     trackPageView("/");
   }, []);
+
+  useEffect(() => {
+    const syncViewport = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    syncViewport();
+    window.addEventListener("resize", syncViewport);
+    return () => window.removeEventListener("resize", syncViewport);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setActiveMobileTab("home");
+      return;
+    }
+
+    const syncFromHash = () => {
+      const hash = window.location.hash;
+      if (hash === "#booking") {
+        setActiveMobileTab("booking");
+        return;
+      }
+      if (hash === "#gallery") {
+        setActiveMobileTab("gallery");
+        return;
+      }
+      setActiveMobileTab("home");
+    };
+
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (hydrated && profile === "solo") {
+      setProfile("team");
+    }
+  }, [hydrated, profile, setProfile]);
 
   const handleProfileChange = (nextProfile: VisitorProfile) => {
     setProfile(nextProfile);
@@ -62,14 +104,19 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   };
 
   const scrollToBooking = () => {
+    if (isMobile) {
+      window.location.hash = "booking";
+      return;
+    }
     bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const onBookSlot = () => {
-    const attendees = profile === "team" ? 4 : 1;
-    redirectToEventbrite(profile, {
+    const attendees = resolvedProfile === "b2b" ? 8 : 4;
+    redirectToEventbrite(resolvedProfile, {
       attendees,
-      company: profile === "b2b" ? (locale === "fr" ? "Entreprise invitée" : "Invited company") : undefined,
+      company:
+        resolvedProfile === "b2b" ? (locale === "fr" ? "Entreprise invitée" : "Invited company") : undefined,
     });
   };
 
@@ -79,6 +126,10 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
 
   const onRequestPrivateSlot = () => {
     setProfile("b2b");
+    if (isMobile) {
+      window.location.hash = "booking";
+      return;
+    }
     window.setTimeout(() => {
       b2bFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 150);
@@ -100,74 +151,87 @@ export function LandingExperience({ visitorSession }: LandingExperienceProps) {
   } as const;
 
   const t = copy[locale];
+  const showAll = !isMobile;
+  const showHome = showAll || activeMobileTab === "home";
+  const showBooking = showAll || activeMobileTab === "booking";
+  const showGallery = showAll || activeMobileTab === "gallery";
 
   return (
     <main className="pb-14">
       <ConfirmationBanner />
-      <Hero
-        profile={hydrated ? profile : "solo"}
-        remainingSlots={remainingSlots}
-        deployedRobots={DEPLOYED_ROBOTS}
-        visitorSession={visitorSession}
-        onPrimaryCTA={scrollToBooking}
-      />
+      {showHome ? (
+        <>
+          <Hero
+            profile={hydrated ? resolvedProfile : "team"}
+            remainingSlots={remainingSlots}
+            deployedRobots={DEPLOYED_ROBOTS}
+            visitorSession={visitorSession}
+            onPrimaryCTA={scrollToBooking}
+          />
 
-      <section className="section-wrap pb-1">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.35, ease: "easeInOut" }}
-          className="section-shell flex flex-wrap items-center gap-2"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.15em] text-white/75">
-            <Sparkles size={12} className="text-[#FFD166]" />
-            {t.orbitTitle}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
-            <Bot size={13} className="text-[#00F5C4]" />
-            {t.orbit1}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
-            <CalendarClock size={13} className="text-[#53B3FF]" />
-            {t.orbit2}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
-            <Building2 size={13} className="text-[#FF6B9D]" />
-            {t.orbit3}
-          </span>
-        </motion.div>
-      </section>
+          <section className="section-wrap pb-1">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
+              className="section-shell flex flex-wrap items-center gap-2"
+            >
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.15em] text-white/75">
+                <Sparkles size={12} className="text-[#FFD166]" />
+                {t.orbitTitle}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
+                <Bot size={13} className="text-[#00F5C4]" />
+                {t.orbit1}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
+                <CalendarClock size={13} className="text-[#53B3FF]" />
+                {t.orbit2}
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs text-white/80">
+                <Building2 size={13} className="text-[#FF6B9D]" />
+                {t.orbit3}
+              </span>
+            </motion.div>
+          </section>
 
-      <ProfileSelector
-        profile={hydrated ? profile : "solo"}
-        onSelect={handleProfileChange}
-        onOpenSlots={openSlotsForProfile}
-      />
+          <ProfileSelector
+            profile={hydrated ? resolvedProfile : "team"}
+            onSelect={handleProfileChange}
+            onOpenSlots={openSlotsForProfile}
+          />
 
-      <UseCases />
-      <GallerySection />
-      <ArcadeSection />
+          <UseCases />
+          <ArcadeSection />
 
-      <section ref={bookingRef}>
-        <BookingCalendar
-          profile={hydrated ? profile : "solo"}
-          slots={slots}
-          onBookSlot={onBookSlot}
-          onRequestPrivateSlot={onRequestPrivateSlot}
-        />
-      </section>
-
-      {profile === "b2b" ? (
-        <section ref={b2bFormRef}>
-          <B2BForm onQualified={onB2BQualified} />
-        </section>
+          <Testimonials />
+          <FAQ />
+          <LocationSection />
+          <ExitPopup profile={hydrated ? resolvedProfile : "team"} />
+        </>
       ) : null}
 
-      <Testimonials />
-      <FAQ />
-      <LocationSection />
-      <ExitPopup profile={hydrated ? profile : "solo"} />
+      {showGallery ? <GallerySection /> : null}
+
+      {showBooking ? (
+        <>
+          <section ref={bookingRef}>
+            <BookingCalendar
+              profile={hydrated ? resolvedProfile : "team"}
+              slots={slots}
+              onBookSlot={onBookSlot}
+              onRequestPrivateSlot={onRequestPrivateSlot}
+            />
+          </section>
+
+          {resolvedProfile === "b2b" ? (
+            <section ref={b2bFormRef}>
+              <B2BForm onQualified={onB2BQualified} />
+            </section>
+          ) : null}
+        </>
+      ) : null}
     </main>
   );
 }

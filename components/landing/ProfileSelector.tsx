@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
+import { Building2, Users, type LucideIcon } from "lucide-react";
 
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
-import type { ProfileOption, VisitorProfile } from "@/types/profile";
+import type { VisitorProfile } from "@/types/profile";
 
 interface ProfileSelectorProps {
   profile: VisitorProfile;
@@ -12,9 +12,13 @@ interface ProfileSelectorProps {
   onOpenSlots?: (profile: VisitorProfile) => void;
 }
 
-type ProfileVisualOption = ProfileOption & {
-  image: string;
-  imageAlt: string;
+type ProfileVisualOption = {
+  id: "team" | "b2b";
+  label: string;
+  description: string;
+  ctaLabel: string;
+  icon: LucideIcon;
+  badgeClass: string;
 };
 
 export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelectorProps) {
@@ -26,27 +30,19 @@ export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelec
       options: [
         {
           id: "team",
-          label: "Équipe",
+          label: "Groupe",
           description: "Idéal pour les sorties d'équipe, onboarding et inspiration collective.",
           ctaLabel: "Voir les créneaux groupe",
-          image: "/media/profiles/team.svg",
-          imageAlt: "Visuel profil équipe",
-        },
-        {
-          id: "solo",
-          label: "Solo",
-          description: "Parfait pour découvrir l'univers Mirokaï à votre rythme.",
-          ctaLabel: "Voir les créneaux solo",
-          image: "/media/profiles/solo.svg",
-          imageAlt: "Visuel profil solo",
+          icon: Users,
+          badgeClass: "border-[#53B3FF]/45 bg-[#53B3FF]/12 text-[#53B3FF]",
         },
         {
           id: "b2b",
           label: "Entreprise",
           description: "Explorez les cas d'usage concrets pour votre activité.",
           ctaLabel: "Lancer ma pré-qualification",
-          image: "/media/profiles/enterprise.svg",
-          imageAlt: "Visuel profil entreprise",
+          icon: Building2,
+          badgeClass: "border-[#F5C842]/45 bg-[#F5C842]/14 text-[#F5C842]",
         },
       ] as ProfileVisualOption[],
     },
@@ -58,24 +54,16 @@ export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelec
           label: "Team",
           description: "Great for team outings, onboarding, and collective inspiration.",
           ctaLabel: "View team slots",
-          image: "/media/profiles/team.svg",
-          imageAlt: "Team profile visual",
-        },
-        {
-          id: "solo",
-          label: "Solo",
-          description: "Perfect to discover the Mirokaï universe at your own pace.",
-          ctaLabel: "View solo slots",
-          image: "/media/profiles/solo.svg",
-          imageAlt: "Solo profile visual",
+          icon: Users,
+          badgeClass: "border-[#53B3FF]/45 bg-[#53B3FF]/12 text-[#53B3FF]",
         },
         {
           id: "b2b",
           label: "Business",
           description: "Explore concrete use cases for your business.",
           ctaLabel: "Start qualification",
-          image: "/media/profiles/enterprise.svg",
-          imageAlt: "Business profile visual",
+          icon: Building2,
+          badgeClass: "border-[#F5C842]/45 bg-[#F5C842]/14 text-[#F5C842]",
         },
       ] as ProfileVisualOption[],
     },
@@ -87,9 +75,10 @@ export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelec
     <section className="section-wrap py-4">
       <div className="glass-panel rounded-3xl p-4 sm:p-6">
         <p className="text-xs uppercase tracking-[0.2em] text-white/70">{t.title}</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
           {t.options.map((option) => {
             const isActive = option.id === profile;
+            const Icon = option.icon;
             return (
               <motion.button
                 key={option.id}
@@ -103,14 +92,8 @@ export function ProfileSelector({ profile, onSelect, onOpenSlots }: ProfileSelec
                     : "border-white/15 bg-white/5 hover:bg-white/10"
                 }`}
               >
-                <div className="relative overflow-hidden rounded-xl border border-white/15">
-                  <Image
-                    src={option.image}
-                    alt={option.imageAlt}
-                    width={640}
-                    height={360}
-                    className="h-28 w-full object-cover sm:h-32"
-                  />
+                <div className={`inline-flex rounded-full border p-2.5 ${option.badgeClass}`}>
+                  <Icon size={18} />
                 </div>
                 <p className="mt-3 text-base font-medium">{option.label}</p>
                 <p className="mt-2 text-sm text-white/75">{option.description}</p>

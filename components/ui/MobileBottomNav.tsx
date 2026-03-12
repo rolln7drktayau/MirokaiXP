@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CalendarDays, House, Images, Info, UserRound, type LucideIcon } from "lucide-react";
+import { CalendarDays, House, Images, UserRound, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useAppPreferences } from "@/components/providers/AppPreferencesProvider";
 
 type NavItem = {
-  key: "home" | "booking" | "gallery" | "info" | "profile";
+  key: "home" | "booking" | "gallery" | "profile";
   href: string;
   icon: LucideIcon;
 };
@@ -18,7 +18,6 @@ const navItems: NavItem[] = [
   { key: "home", href: "/", icon: House },
   { key: "booking", href: "/#booking", icon: CalendarDays },
   { key: "gallery", href: "/#gallery", icon: Images },
-  { key: "info", href: "/#info", icon: Info },
   { key: "profile", href: "/profile", icon: UserRound },
 ];
 
@@ -27,7 +26,6 @@ const labels = {
     home: "Accueil",
     booking: "Réserver",
     gallery: "Galerie",
-    info: "Infos",
     profile: "Profil",
     nav: "Navigation mobile",
   },
@@ -35,7 +33,6 @@ const labels = {
     home: "Home",
     booking: "Book",
     gallery: "Gallery",
-    info: "Info",
     profile: "Profile",
     nav: "Mobile navigation",
   },
@@ -89,7 +86,7 @@ export function MobileBottomNav() {
     >
       <div className="mx-auto max-w-3xl px-3 pt-2 [padding-bottom:calc(0.5rem+env(safe-area-inset-bottom))]">
         <ul
-          className={`flex gap-1 overflow-x-auto rounded-2xl border p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+          className={`grid grid-cols-4 gap-1 rounded-2xl border p-1.5 ${
             isLight ? "border-[#202020]/12 bg-white/95" : "border-[#f0eef8]/15 bg-[#1f2030]/88"
           }`}
         >
@@ -98,7 +95,7 @@ export function MobileBottomNav() {
             const active = isItemActive(item);
 
             return (
-              <li key={item.key} className="min-w-[4.45rem] flex-1">
+              <li key={item.key}>
                 <motion.div whileTap={{ scale: 0.96 }}>
                   <Link
                     href={item.href}
