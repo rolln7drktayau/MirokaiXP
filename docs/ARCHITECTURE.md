@@ -13,29 +13,25 @@ La plateforme est construite en **monolithe modulaire Next.js 14** (App Router) 
 
 ```mermaid
 flowchart LR
-  Visitor[Visiteur Mobile/Desktop] --> NextApp[Next.js App Router]
+  Visitor[Visiteur Mobile Desktop] --> NextApp[Next.js App Router]
   Admin[Equipe Admin] --> NextApp
-  NextApp --> API[API Routes /api/*]
-  NextApp --> Profile["/profile gateway"]
-  Profile --> VisitorSession["Cookie visiteur + localStorage"]
-  Profile --> AdminSession["Cookie admin HTTP-only"]
-
+  NextApp --> API[API Routes]
+  NextApp --> Profile[Profile gateway]
+  Profile --> VisitorSession[Cookie visiteur + localStorage]
+  Profile --> AdminSession[Cookie admin HTTP-only]
   API --> Supabase[(Supabase Postgres)]
   API --> Resend[Resend API]
-  API --> Eventbrite[Eventbrite URL + UTM]
-  API --> Analytics[GA4/GTM/Hotjar]
-
-  NextApp --> PWA[PWA Shell + SW (/experience)]
-  PWA --> LocalState["localStorage / sessionStorage"]
-
-  API --> Cron["/api/cron/email-sequence"]
-  Cron --> Queue["email_queue"]
+  API --> Eventbrite[Eventbrite UTM]
+  API --> Analytics[GA4 GTM Hotjar]
+  NextApp --> PWA[PWA Shell SW]
+  PWA --> LocalState[localStorage sessionStorage]
+  API --> Cron[cron email-sequence]
+  Cron --> Queue[email_queue]
   Queue --> Resend
-
-  NextApp --> Game["/game"]
+  NextApp --> Game[game]
   VisitorSession --> Game
-  Game --> B2BGame["B2B KPI simulation"]
-  Game --> B2CGame["Quiz + Memory"]
+  Game --> B2BGame[B2B KPI simulation]
+  Game --> B2CGame[Quiz + Memory]
 ```
 
 ## Couches logiques
